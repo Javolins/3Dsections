@@ -1,3 +1,6 @@
+// testowa aplikacja w wxWidgets - do pobrania i sprawdzenia czy wszystko dzia³a
+// nie zapomnijcie dodaæ odpowiednie œcie¿ki do biblioteki w properties!
+
 #include <wx/wxprec.h>
 
 class MyApp : public wxApp
