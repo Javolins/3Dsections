@@ -10,7 +10,7 @@ the intersection - points of the walls forming the solid.
 # BASIC FUNCTION
 --------------
 
-The project provide following basic facilities: 
+## The project provide following basic facilities: 
 	* 1) Read the data of 3D solid from a text file and display on the screen.
 	* 2) Set the framework speed by user along X, Y or Z axis. 
 	* 3) Smooth display moving 3D animation.
