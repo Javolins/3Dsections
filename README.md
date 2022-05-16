@@ -1,5 +1,5 @@
-## INTRODUCTION
-------------
+# INTRODUCTION
+--------------
 
 Our university project "3Dsections" is a C++ project based on well-known graphic libraries like "wxWidgets Library"
 which provide display animation on a computer screen. By "animation" we mean a section of a three-dimensional solid 
@@ -7,8 +7,8 @@ framework which is moving at a constant speed through a plane. That solid framew
 the intersection - points of the walls forming the solid.
 
 
-## BASIC FUNCTION
---------------
+# BASIC FUNCTION
+----------------
 
  The project provide following basic facilities: 
 	 1) Read the data of 3D solid from a text file and display on the screen.
@@ -18,7 +18,7 @@ the intersection - points of the walls forming the solid.
 	...
 
 
-## EXTENDED FUNCTION
+# EXTENDED FUNCTION
 
 The project provide following extended facilities:
 	  1) Selecting extended plane option (for example: plane normal vector)
@@ -28,10 +28,14 @@ The project provide following extended facilities:
 
 
 
-## TECHONOLOGIES
+# TECHONOLOGIES
 ---------------
 
+## Technologies
+Project is created with:
+* Lorem version: 12.3
+* Ipsum version: 2.33
+* Ament library version: 999
 
-
-## STRUCTURE OF PROJECT
+# STRUCTURE OF PROJECT
 ----------------------
