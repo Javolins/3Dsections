@@ -9,18 +9,18 @@ the intersection - points of the walls forming the solid.
 
 ## BASIC FUNCTION
 The project provide following basic facilities: 
-	 * Read the data of 3D solid from a text file and display on the screen.
-	 * Set the framework speed by user along X, Y or Z axis. 
-	 * Smooth display moving 3D animation.
-	...
+* Read the data of 3D solid from a text file and display on the screen.
+* Set the framework speed by user along X, Y or Z axis. 
+* Smooth display moving 3D animation.
+	
 
 
 ## EXTENDED FUNCTION
 The project provide following extended facilities:
-	  * Selecting extended plane option (for example: plane normal vector)
-	  * Drawing various solid, placed one inside other respectively, which are indicated by different colors.
-	  * Possibility of saving the sequence of animation frames to graphic files in BMP format
-	  * ...
+* Selecting extended plane option (for example: plane normal vector)
+* Drawing various solid, placed one inside other respectively, which are indicated by different colors.
+* Possibility of saving the sequence of animation frames to graphic files in BMP format
+	  
 
 
 
