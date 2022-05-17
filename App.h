@@ -1,11 +1,18 @@
 /*****************************************************************//**
- * @file   main.cpp
- * @brief  File needed to implement 3Dsections app, wxWidgets requirement
+ * @file   App.h
+ * @brief  Class representing 3Dsections app
  * 
  * @author Micha³ Rutkowski @P4ndaM1x
  * @date   May 2022
  *********************************************************************/
 
-#include "App.h"
+#pragma once
+#include <wx/wxprec.h>
 
-wxIMPLEMENT_APP(App);
+#include "MainFrame.h"
+
+class App : public wxApp
+{
+	public:
+		virtual bool OnInit();
+};
