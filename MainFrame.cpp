@@ -1,7 +1,13 @@
-///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
-// http://www.wxformbuilder.org/
-///////////////////////////////////////////////////////////////////////////
+/*****************************************************************//**
+ * @file   MainFrame.cpp
+ * @brief  Implementation of methods used in the class
+ * 
+ * C++ constructor and destructor generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+ * http://www.wxformbuilder.org/
+ * 
+ * @author Micha³ Rutkowski @P4ndaM1x
+ * @date   May 2022
+ *********************************************************************/
 
 #include "MainFrame.h"
 

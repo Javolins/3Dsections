@@ -1,13 +1,17 @@
-///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
-// http://www.wxformbuilder.org/
-///////////////////////////////////////////////////////////////////////////
+/*****************************************************************//**
+ * @file   MainFrame.h
+ * @brief  Hedear file of the class representing main 3Dsections app window.
+ * 
+ * C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+ * http://www.wxformbuilder.org/
+ * 
+ * @author Micha³ Rutkowski @P4ndaM1x
+ * @date   May 2022
+ *********************************************************************/
 
 #pragma once
 
-/**
- * All needed wxWidgets' modules.
- */
+// All needed wxWidgets' modules.
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/string.h>
@@ -31,9 +35,7 @@
 #include <wx/statusbr.h>
 #include <wx/frame.h>
 
-/**
- * Identifiers of all UI items.
- */
+// Identifiers of all UI items.
 #define MAIN_FRAME_ID 1000
 #define TOP_MENU_BAR_ID 1001
 #define VIEW_HELP_ID 1002
@@ -59,67 +61,79 @@
 #define SPEED_SLIDER_ID 1022
 #define STATUS_BAR_ID 1023
 
-/**
- * Represents the only app's window.
- */
-class MainFrame : public wxFrame
-{
-private:
+//! Represents the only app's window.
+class MainFrame : public wxFrame {
+	
+	public:
+		/**
+		 * @brief Creates an instance of the class - main window.
+		 *
+		 * @param parent Pointer to the parent window.
+		 * @param id Unique identifier of the window.
+		 * @param title Text displayed on the top windows' bar.
+		 * @param pos Positioning after the window show up.
+		 * @param size Dimensions after the window show up.
+		 * @param style Style properties of the window.
+		 */
+		MainFrame(wxWindow* parent = nullptr, wxWindowID id = MAIN_FRAME_ID, const wxString& title = wxT("3Dsections"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize(960, 640), long style = wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL);
 
-protected:
-	wxMenuBar* topMenuBar;
-	wxMenu* quitMenu;
-	wxMenu* helpMenu;
-	wxPanel* leftPanel;
-	wxPanel* rightPanel;
-	wxStaticLine* horizontalStaticLine;
-	wxGauge* progressGauge;
-	wxButton* backwardButton;
-	wxButton* prevFrameButton;
-	wxToggleButton* playToggle;
-	wxButton* nextFrameButton;
-	wxButton* forewardButton;
-	wxStaticLine* verticalStaticLine;
-	wxStaticText* fileLoadLabel;
-	wxButton* fileLoadButton;
-	wxStaticText* saveAnimationLabel;
-	wxButton* saveAnimationButton;
-	wxStaticText* planeChoiceLabel;
-	wxChoice* planeChoice;
-	wxStaticText* speedChoiceLabel;
-	wxSlider* speedSlider;
-	wxStatusBar* statusBar;
+		/**
+		 * @brief Frees used memory.
+		 *
+		 */
+		~MainFrame();
 
-	// Virtual event handlers, override them in your derived class
-	void backwardButtonOnClick(wxCommandEvent& event) { event.Skip(); }
-	void prevFrameButtonOnClick(wxCommandEvent& event) { event.Skip(); }
+	protected:
 
-	/**
-	 * @brief Deals with all actions that should be managed after clicking @ref playToggle button.
-	 * 
-	 * Actions include:
-	 *	- changing button's label
-	 *	- changing @ref progressGauge visibility
-	 * 
-	 * @param event
-	 * @see playToggle
-	 * @note Function will execute every time button is clicked, no matter of button being a toggle type.
-	 */
-	void playToggleOnToggle(wxCommandEvent& event);
+		// Virtual event handlers, override them in your derived class
+		virtual void backwardButtonOnClick(wxCommandEvent& event) { event.Skip(); }
+		virtual void prevFrameButtonOnClick(wxCommandEvent& event) { event.Skip(); }
 
-	void nextFrameButtonOnClick(wxCommandEvent& event) { event.Skip(); }
-	void forewardButtonOnClick(wxCommandEvent& event) { event.Skip(); }
-	void fileLoadButtonOnClick(wxCommandEvent& event) { event.Skip(); }
-	void saveAnimationButtonOnClick(wxCommandEvent& event) { event.Skip(); }
-	void planeChoiceOnChoice(wxCommandEvent& event) { event.Skip(); }
-	void speedSliderOnScroll(wxScrollEvent& event) { event.Skip(); }
+		/**
+		 * @brief Deals with all actions that should be managed after clicking @ref playToggle button.
+		 *
+		 * Actions include:
+		 *	- changing @ref playToggle label,
+		 *	- changing @ref progressGauge visibility.
+		 *
+		 * @param event In our case: wxEVT_COMMAND_TOGGLEBUTTON_CLICKED.
+		 * @see playToggle
+		 * @note Function will execute every time button is clicked, no matter of button being a toggle type.
+		 */
+		virtual void playToggleOnToggle(wxCommandEvent& event);
 
-
-public:
-
-	MainFrame(wxWindow* parent, wxWindowID id = MAIN_FRAME_ID, const wxString& title = wxT("3Dsections"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize(960, 640), long style = wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL);
-
-	~MainFrame();
+		virtual void nextFrameButtonOnClick(wxCommandEvent& event) { event.Skip(); }
+		virtual void forewardButtonOnClick(wxCommandEvent& event) { event.Skip(); }
+		virtual void fileLoadButtonOnClick(wxCommandEvent& event) { event.Skip(); }
+		virtual void saveAnimationButtonOnClick(wxCommandEvent& event) { event.Skip(); }
+		virtual void planeChoiceOnChoice(wxCommandEvent& event) { event.Skip(); }
+		virtual void speedSliderOnScroll(wxScrollEvent& event) { event.Skip(); }
+	
+	//private:
+		wxMenuBar* topMenuBar;
+		wxMenu* quitMenu;
+		wxMenu* helpMenu;
+		wxPanel* leftPanel;
+		wxPanel* rightPanel;
+		wxStaticLine* horizontalStaticLine;
+		//! Indicates state of the played animation.
+		wxGauge* progressGauge;
+		wxButton* backwardButton;
+		wxButton* prevFrameButton;
+		//! Controls if animation is being played.
+		wxToggleButton* playToggle;
+		wxButton* nextFrameButton;
+		wxButton* forewardButton;
+		wxStaticLine* verticalStaticLine;
+		wxStaticText* fileLoadLabel;
+		wxButton* fileLoadButton;
+		wxStaticText* saveAnimationLabel;
+		wxButton* saveAnimationButton;
+		wxStaticText* planeChoiceLabel;
+		wxChoice* planeChoice;
+		wxStaticText* speedChoiceLabel;
+		wxSlider* speedSlider;
+		wxStatusBar* statusBar;
 
 };
 
