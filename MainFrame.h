@@ -1,12 +1,13 @@
 ///////////////////////////////////////////////////////////////////////////
 // C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
-//
-// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #pragma once
 
+/**
+ * All needed wxWidgets' modules.
+ */
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/string.h>
@@ -30,8 +31,9 @@
 #include <wx/statusbr.h>
 #include <wx/frame.h>
 
-///////////////////////////////////////////////////////////////////////////
-
+/**
+ * Identifiers of all UI items.
+ */
 #define MAIN_FRAME_ID 1000
 #define TOP_MENU_BAR_ID 1001
 #define VIEW_HELP_ID 1002
@@ -57,9 +59,9 @@
 #define SPEED_SLIDER_ID 1022
 #define STATUS_BAR_ID 1023
 
-///////////////////////////////////////////////////////////////////////////////
-/// Class MainFrame
-///////////////////////////////////////////////////////////////////////////////
+/**
+ * Represents the only app's window.
+ */
 class MainFrame : public wxFrame
 {
 private:
@@ -89,15 +91,28 @@ protected:
 	wxStatusBar* statusBar;
 
 	// Virtual event handlers, override them in your derived class
-	virtual void backwardButtonOnButtonClick(wxCommandEvent& event) { event.Skip(); }
-	virtual void prevFrameButtonOnButtonClick(wxCommandEvent& event) { event.Skip(); }
-	virtual void playToggleOnToggleButton(wxCommandEvent& event) { event.Skip(); }
-	virtual void nextFrameButtonOnButtonClick(wxCommandEvent& event) { event.Skip(); }
-	virtual void forewardButtonOnButtonClick(wxCommandEvent& event) { event.Skip(); }
-	virtual void fileLoadButtonOnButtonClick(wxCommandEvent& event) { event.Skip(); }
-	virtual void saveAnimationButtonOnButtonClick(wxCommandEvent& event) { event.Skip(); }
-	virtual void planeChoiceOnChoice(wxCommandEvent& event) { event.Skip(); }
-	virtual void speedSliderOnScroll(wxScrollEvent& event) { event.Skip(); }
+	void backwardButtonOnClick(wxCommandEvent& event) { event.Skip(); }
+	void prevFrameButtonOnClick(wxCommandEvent& event) { event.Skip(); }
+
+	/**
+	 * @brief Deals with all actions that should be managed after clicking @ref playToggle button.
+	 * 
+	 * Actions include:
+	 *	- changing button's label
+	 *	- changing @ref progressGauge visibility
+	 * 
+	 * @param event
+	 * @see playToggle
+	 * @note Function will execute every time button is clicked, no matter of button being a toggle type.
+	 */
+	void playToggleOnToggle(wxCommandEvent& event);
+
+	void nextFrameButtonOnClick(wxCommandEvent& event) { event.Skip(); }
+	void forewardButtonOnClick(wxCommandEvent& event) { event.Skip(); }
+	void fileLoadButtonOnClick(wxCommandEvent& event) { event.Skip(); }
+	void saveAnimationButtonOnClick(wxCommandEvent& event) { event.Skip(); }
+	void planeChoiceOnChoice(wxCommandEvent& event) { event.Skip(); }
+	void speedSliderOnScroll(wxScrollEvent& event) { event.Skip(); }
 
 
 public:

@@ -145,6 +145,7 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="doctest.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MainFrame-Test.cpp" />
     <ClCompile Include="MainFrame.cpp" />
   </ItemGroup>
   <ItemGroup>
