@@ -11,8 +11,8 @@
 
 #include "MainFrame.h"
 
-class App : public wxApp
-{
+class App : public wxApp {
 	public:
 		virtual bool OnInit();
+		void initializeTests();
 };

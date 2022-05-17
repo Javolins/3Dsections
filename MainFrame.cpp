@@ -9,8 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style) : wxFrame(parent, id, title, pos, size, style)
-{
+MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style) : wxFrame(parent, id, title, pos, size, style) {
 	this->SetSizeHints(wxSize(960, 640), wxDefaultSize);
 
 	topMenuBar = new wxMenuBar(0);
@@ -191,8 +190,7 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 	speedSlider->Connect(wxEVT_SCROLL_CHANGED, wxScrollEventHandler(MainFrame::speedSliderOnScroll), NULL, this);
 }
 
-MainFrame::~MainFrame()
-{
+MainFrame::~MainFrame() {
 	// Disconnect Events
 	backwardButton->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::backwardButtonOnButtonClick), NULL, this);
 	prevFrameButton->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::prevFrameButtonOnButtonClick), NULL, this);
