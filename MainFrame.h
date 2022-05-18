@@ -36,6 +36,9 @@
 #include <wx/frame.h>
 #include <wx/utils.h>
 #include <wx/msgdlg.h>
+#include <wx/filedlg.h>
+#include <wx/msgdlg.h>
+#include <wx/dcbuffer.h>
 
 // Identifiers of all UI items.
 #define MAIN_FRAME_ID 1000
@@ -136,9 +139,15 @@ class MainFrame : public wxFrame {
 		 */
 		virtual void playToggleOnToggle(wxCommandEvent& event);
 
+		/**
+		 * @brief Draw a geo file contents
+		 *
+		 */
+		virtual void repaintGeo();
+
 		virtual void nextFrameButtonOnClick(wxCommandEvent& event) { event.Skip(); }
 		virtual void forewardButtonOnClick(wxCommandEvent& event) { event.Skip(); }
-		virtual void fileLoadButtonOnClick(wxCommandEvent& event) { event.Skip(); }
+		virtual void fileLoadButtonOnClick(wxCommandEvent& event);
 		virtual void saveAnimationButtonOnClick(wxCommandEvent& event) { event.Skip(); }
 		virtual void planeChoiceOnChoice(wxCommandEvent& event) { event.Skip(); }
 		virtual void speedSliderOnScroll(wxScrollEvent& event) { event.Skip(); }
