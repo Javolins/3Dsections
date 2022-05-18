@@ -34,6 +34,8 @@
 #include <wx/slider.h>
 #include <wx/statusbr.h>
 #include <wx/frame.h>
+#include <wx/utils.h>
+#include <wx/msgdlg.h>
 
 // Identifiers of all UI items.
 #define MAIN_FRAME_ID 1000
@@ -78,14 +80,46 @@ class MainFrame : public wxFrame {
 		MainFrame(wxWindow* parent = nullptr, wxWindowID id = MAIN_FRAME_ID, const wxString& title = wxT("3Dsections"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize(960, 640), long style = wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL);
 
 		/**
-		 * @brief Frees used memory.
+		 * @brief Disconnects all event handlers.
 		 *
 		 */
 		~MainFrame();
 
 	protected:
 
-		// Virtual event handlers, override them in your derived class
+		/**
+		 * @brief After clicking @ref viewDocumentation menu item, 
+		 * launches default browser and opens code documentation site of the project.
+		 * 
+		 * If the browser wasn't successfully launched, a modal dialog with error message would be shown.
+		 * 
+		 * @param event Binded event, in this case: wxEVT_COMMAND_MENU_SELECTED.
+		 * @see viewDocumentation
+		 */
+		virtual void viewDocumentationOnMenuSelection(wxCommandEvent& event);
+
+		/**
+		 * @brief After clicking @ref sendFeedback menu item, 
+		 * launches default mail client with a new letter to the project authors.
+		 * 
+		 * If the client wasn't successfully launched, a modal dialog with error message would be shown.
+		 * 
+		 * @param event Binded event, in this case: wxEVT_COMMAND_MENU_SELECTED.
+		 * @see sendFeedback
+		 */
+		virtual void sendFeedbackOnMenuSelection(wxCommandEvent& event);
+
+		/**
+		 * @brief After clicking @ref about3Dsections menu item, 
+		 * launches default browser and opens a site with basic info about the project.
+		 * 
+		 * If the browser wasn't successfully launched, a modal dialog with error message would be shown.
+		 * 
+		 * @param event Binded event, in this case: wxEVT_COMMAND_MENU_SELECTED.
+		 * @see about3Dsections
+		 */
+		virtual void about3DsectionsOnMenuSelection(wxCommandEvent& event);
+
 		virtual void backwardButtonOnClick(wxCommandEvent& event) { event.Skip(); }
 		virtual void prevFrameButtonOnClick(wxCommandEvent& event) { event.Skip(); }
 
@@ -96,7 +130,7 @@ class MainFrame : public wxFrame {
 		 *	- changing @ref playToggle label,
 		 *	- changing @ref progressGauge visibility.
 		 *
-		 * @param event In our case: wxEVT_COMMAND_TOGGLEBUTTON_CLICKED.
+		 * @param event Connected event, in this case: wxEVT_COMMAND_TOGGLEBUTTON_CLICKED.
 		 * @see playToggle
 		 * @note Function will execute every time button is clicked, no matter of button being a toggle type.
 		 */
@@ -110,8 +144,10 @@ class MainFrame : public wxFrame {
 		virtual void speedSliderOnScroll(wxScrollEvent& event) { event.Skip(); }
 	
 	//private:
+		//! A bar on top of the window, contains: @ref quitMenu, @ref helpMenu.
 		wxMenuBar* topMenuBar;
 		wxMenu* quitMenu;
+		//! Expands to the list of menu items: @ref viewDocumentation, @ref sendFeedback, @ref about3Dsections.
 		wxMenu* helpMenu;
 		wxPanel* leftPanel;
 		wxPanel* rightPanel;

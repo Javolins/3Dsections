@@ -19,9 +19,9 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 	topMenuBar->Append(quitMenu, wxT("&Quit"));
 
 	helpMenu = new wxMenu();
-	wxMenuItem* viewHelp;
-	viewHelp = new wxMenuItem(helpMenu, VIEW_HELP_ID, wxString(wxT("View Help")), wxEmptyString, wxITEM_NORMAL);
-	helpMenu->Append(viewHelp);
+	wxMenuItem* viewDocumentation;
+	viewDocumentation = new wxMenuItem(helpMenu, VIEW_HELP_ID, wxString(wxT("View Documentation")), wxEmptyString, wxITEM_NORMAL);
+	helpMenu->Append(viewDocumentation);
 
 	wxMenuItem* sendFeedback;
 	sendFeedback = new wxMenuItem(helpMenu, SEND_FEEDBACK_ID, wxString(wxT("Send Feedback")), wxEmptyString, wxITEM_NORMAL);
@@ -173,6 +173,9 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 	this->Centre(wxBOTH);
 
 	// Connect Events
+	helpMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MainFrame::viewDocumentationOnMenuSelection), this, viewDocumentation->GetId());
+	helpMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MainFrame::sendFeedbackOnMenuSelection), this, sendFeedback->GetId());
+	helpMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MainFrame::about3DsectionsOnMenuSelection), this, about3Dsections->GetId());
 	backwardButton->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::backwardButtonOnClick), NULL, this);
 	prevFrameButton->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::prevFrameButtonOnClick), NULL, this);
 	playToggle->Connect(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler(MainFrame::playToggleOnToggle), NULL, this);
@@ -213,6 +216,28 @@ MainFrame::~MainFrame() {
 	speedSlider->Disconnect(wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler(MainFrame::speedSliderOnScroll), NULL, this);
 	speedSlider->Disconnect(wxEVT_SCROLL_CHANGED, wxScrollEventHandler(MainFrame::speedSliderOnScroll), NULL, this);
 
+}
+
+void MainFrame::viewDocumentationOnMenuSelection(wxCommandEvent& event) {
+	if (!wxLaunchDefaultBrowser("https://3dsections.p4m1.top/")) {
+		wxMessageDialog* dialog = new wxMessageDialog(nullptr, "Przegl¹darka nie mog³a zostaæ otwarta.", "B³¹d", wxICON_ERROR | wxSTAY_ON_TOP);
+		dialog->ShowModal();
+		delete dialog;
+	}
+}
+void MainFrame::sendFeedbackOnMenuSelection(wxCommandEvent& event) {
+	if (!wxLaunchDefaultBrowser("mailto:3dsections@p4m1.top")) {
+		wxMessageDialog* dialog = new wxMessageDialog(nullptr, "Klient pocztowy nie móg³ zostaæ otwarty.", "B³¹d", wxICON_ERROR | wxSTAY_ON_TOP);
+		dialog->ShowModal();
+		delete dialog;
+	}
+}
+void MainFrame::about3DsectionsOnMenuSelection(wxCommandEvent& event) {
+	if (!wxLaunchDefaultBrowser("https://github.com/Javolins/3Dsections#readme")) {
+		wxMessageDialog* dialog = new wxMessageDialog(nullptr, "Przegl¹darka nie mog³a zostaæ otwarta.", "B³¹d", wxICON_ERROR | wxSTAY_ON_TOP);
+		dialog->ShowModal();
+		delete dialog;
+	}
 }
 
 void MainFrame::playToggleOnToggle(wxCommandEvent& event) {
