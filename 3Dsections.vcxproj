@@ -152,6 +152,7 @@
     <ClInclude Include="App.h" />
     <ClInclude Include="doctest.h" />
     <ClInclude Include="MainFrame.h" />
+    <ClInclude Include="SimpleLib.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

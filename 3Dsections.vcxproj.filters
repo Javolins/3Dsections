@@ -44,5 +44,8 @@
     <ClInclude Include="doctest.h">
       <Filter>Test Files</Filter>
     </ClInclude>
+    <ClInclude Include="SimpleLib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
