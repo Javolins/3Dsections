@@ -141,20 +141,41 @@ class MainFrame : public wxFrame {
 		virtual void playToggleOnToggle(wxCommandEvent& event);
 
 		/**
-		 * @brief Show a exit dialog window
+		 * @brief Show a exit dialog window with a question whether user is sure to quit.
+		 * 
+		 * Actions include:
+		 *	- accept exit, then main window and dialog window is closed
+		 *	- cancel exit, then only dialog window is closed 
 		 *
 		 */
 		virtual void onExit();
 
 		/**
-		 * @brief Draw a geo file contents
+		 * @brief Draw a .geo file contents
+		 * 
+		 * @note Function display .geo file content on the left main window panel.
+		 * It is executed every time .geo file to load is chosen, no matter of graphic is
+		 * already loaded.
 		 *
 		 */
 		virtual void repaintGeo();
 
 		virtual void nextFrameButtonOnClick(wxCommandEvent& event) { event.Skip(); }
 		virtual void forewardButtonOnClick(wxCommandEvent& event) { event.Skip(); }
+
+
+			
+		/**
+		 * @brief After clicking @ref fileLoadButton open a default folder browser dialog 
+		 * to select .geo file which is expected to load.
+		 * 
+		 * @param event Connected event, in this case: wxEVT_COMMAND_BUTTON_CLICKED.
+		 * @see fileLoadButton
+		 * @note Function will execute every time button is clicked, no matter .geo file loaded before.
+		 * .
+		 */
 		virtual void fileLoadButtonOnClick(wxCommandEvent& event);
+
 		virtual void saveAnimationButtonOnClick(wxCommandEvent& event) { event.Skip(); }
 		virtual void planeChoiceOnChoice(wxCommandEvent& event) { event.Skip(); }
 		virtual void speedSliderOnScroll(wxScrollEvent& event) { event.Skip(); }

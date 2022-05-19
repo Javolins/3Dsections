@@ -7,27 +7,36 @@
  *********************************************************************/
 
 /**
-* @brief .Auxiliary class representing a R,G,B color
+* @brief Auxiliary class representing a R,G,B color.
+* 
+* @note RGB components represent by three integer value
 */
-struct Color {
+struct Color 
+{
 	int R, G, B;
 	Color(int _R, int _G, int _B) : R(_R), G(_G), B(_B) {}
 };
 
 
 /**
- * @brief .Class representing a math point in three-dimensional space X,Y,Z
+ * @brief Simple class representing a math point in three-dimensional space X,Y,Z.
+ * 
+ * @note Point coordinates are represented by three float value and one for every dimension
  */
 
-struct Point {
+struct Point 
+{
 	float x, y, z;
 	Point(float _x, float _y, float _z) : x(_x), y(_y), z(_z) {}
 };
 
  /**
-  * @brief .Class representing a math section in three-dimensional space X,Y,Z
+  * @brief Simple class representing a math section in three-dimensional space X,Y,Z.
+  * 
+  * @note Section is indicated by start and end point @ref Point ans its color
   */
-struct Segment {
+struct Segment 
+{
 	Point begin, end;
 	Color color;
 	Segment(Point _begin, Point _end, Color _color) : begin(_begin), end(_end), color(_color) {}
@@ -38,17 +47,68 @@ struct Segment {
  * @brief .Class representing a math vector in three-dimensional space X,Y,Z
  */
 
+
 class Vector4
 {
 public:
+	/**  
+	* @brief One dimensional Array of double which contains a vector coordinates X,Y,Z 
+	*/
 	double data[4];
+	/** 
+	* @brief Creates an instance of the class - Vector4.
+	*/
 	Vector4();
+	/**
+	 * @brief Print Vector4 content
+	 * 
+	 */
 	void Print(void);
+	/**
+	 * @brief Set a Vector4 coordinates.
+	 * 
+	 * @param X coordinate
+	 * @param Y coordinate
+	 * @param Z coordinate
+	 */
 	void Set(double d1, double d2, double d3);
+	/**
+	 * .@brief Get method
+	 * 
+	 * @return X coordinate 
+	 */
 	double GetX();
+	/**
+	 * .@brief Get method
+	 *
+	 * @return Y coordinate
+	 */
 	double GetY();
+	/**
+	 * .@brief Get method
+	 *
+	 * @return Z coordinate
+	 */
 	double GetZ();
+	/**
+	 * @brief Overloaded "-" operator
+	 * 
+	 * @note Operator allow substraction Vector4 coordinates 
+	 * from other Vector4 coordinates
+	 * 
+	 * @param const reference to Vector4 object
+	 * @return Vector4 object
+	 */
 	Vector4 operator-(const Vector4&);
+	/**
+	 * @brief The friend delaration beetwen class Vector4 
+	 * and overloaded "*" operator
+	 * 
+	 * @param const reference to Vector4 object,
+	 * @param vector multiplier
+	 * 
+	 * @return Vector4 object
+	 */
 	friend Vector4 operator*(const Vector4&, double);
 };
 
@@ -58,10 +118,38 @@ public:
 class Matrix4
 {
 public:
+	/**
+	* @brief Two-dimensional Array of double which represent math matrix
+	*/
 	double data[4][4];
+	/**
+	* @brief Creates an instance of the class - Matrix4.
+	*/
 	Matrix4();
+	/**
+	 * @brief Print Matrix4 content
+	 *
+	 */
 	void Print(void);
+	/**
+	 * @brief Overloaded "*" operator as a member function
+	 *
+	 * @note Operator allow multiplication Matrix4 elements
+	 *
+	 * @param const Matrix4 object
+	 * @return Matrix4 object
+	 */
 	Matrix4 operator*(const Matrix4);
+	/**
+	 * @brief The friend declaration beetwen class Matrix4 
+	 * and overloaded "*" operator defined outside the class 
+	 *
+	 * @note Operator allow multiplication Matrix4 by Vector4
+	 *
+	 * @param const Matrix4 object
+	 * @param const Vector4 object
+	 * @return Vector4 object
+	 */
 	friend Vector4 operator*(const Matrix4, const Vector4);
 };
 
