@@ -65,6 +65,7 @@
 #define SPEED_CHOICE_LABEL_ID 1021
 #define SPEED_SLIDER_ID 1022
 #define STATUS_BAR_ID 1023
+#define TOP_MENU_QUIT_WOUT_SAVE_ID 1024
 
 //! Represents the only app's window.
 class MainFrame : public wxFrame {
@@ -138,6 +139,12 @@ class MainFrame : public wxFrame {
 		 * @note Function will execute every time button is clicked, no matter of button being a toggle type.
 		 */
 		virtual void playToggleOnToggle(wxCommandEvent& event);
+
+		/**
+		 * @brief Show a exit dialog window
+		 *
+		 */
+		virtual void onExit();
 
 		/**
 		 * @brief Draw a geo file contents

@@ -21,6 +21,8 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 	topMenuBar = new wxMenuBar(0);
 	quitMenu = new wxMenu();
 	topMenuBar->Append(quitMenu, wxT("&Quit"));
+	quitMenu->Append(TOP_MENU_QUIT_WOUT_SAVE_ID, wxT("Quit Without Saving"), wxEmptyString, wxITEM_NORMAL);
+
 
 	helpMenu = new wxMenu();
 	wxMenuItem* viewDocumentation;
@@ -169,7 +171,7 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 
 	mainFrameSizer->Add(mainFrameRightSizer, 0, wxALIGN_CENTER_VERTICAL | wxALL | wxEXPAND, 5);
 
-
+	this->Bind(wxEVT_MENU, [&, this](wxCommandEvent&) { onExit(); }, TOP_MENU_QUIT_WOUT_SAVE_ID);
 	this->SetSizer(mainFrameSizer);
 	this->Layout();
 	statusBar = this->CreateStatusBar(1, wxSTB_SIZEGRIP, STATUS_BAR_ID);
@@ -220,6 +222,10 @@ MainFrame::~MainFrame() {
 	speedSlider->Disconnect(wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler(MainFrame::speedSliderOnScroll), NULL, this);
 	speedSlider->Disconnect(wxEVT_SCROLL_CHANGED, wxScrollEventHandler(MainFrame::speedSliderOnScroll), NULL, this);
 
+}
+
+void MainFrame::onExit(){
+	if (wxMessageDialog(NULL, "Are you sure to quit?", "Question", wxOK | wxCANCEL).ShowModal() == wxID_OK) Destroy();
 }
 
 void MainFrame::viewDocumentationOnMenuSelection(wxCommandEvent& event) {
