@@ -21,17 +21,3 @@ The project provide following extended facilities:
 * Drawing various solid, placed one inside other respectively, which are indicated by different colors.
 * Possibility of saving the sequence of animation frames to graphic files in BMP format
 	  
-
-
-
-# TECHONOLOGIES
----------------
-
-## Technologies
-Project is created with:
-* Lorem version: 12.3
-* Ipsum version: 2.33
-* Ament library version: 999
-
-# STRUCTURE OF PROJECT
-----------------------
