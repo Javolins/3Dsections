@@ -39,6 +39,8 @@
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
 #include <wx/dcbuffer.h>
+#include <vector>
+#include "DataClasses.h"
 
 // Identifiers of all UI items.
 #define MAIN_FRAME_ID 1000
@@ -158,7 +160,7 @@ class MainFrame : public wxFrame {
 		 * already loaded.
 		 *
 		 */
-		virtual void repaintGeo();
+		virtual void repaintGeo(std::vector<Segment>);
 
 		virtual void nextFrameButtonOnClick(wxCommandEvent& event) { event.Skip(); }
 		virtual void forewardButtonOnClick(wxCommandEvent& event) { event.Skip(); }

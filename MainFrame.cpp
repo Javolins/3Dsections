@@ -10,7 +10,9 @@
  *********************************************************************/
 
 #include "MainFrame.h"
-#include "SimpleLib.h"
+#include "DataClasses.h"
+#include "Vector4.h"
+#include "Matrix4.h"
 #include <fstream>
 #include <vector>
 
@@ -261,10 +263,9 @@ void MainFrame::playToggleOnToggle(wxCommandEvent& event) {
 	}
 }
 
-std::vector<Segment> dataSegment;
-
-
 void MainFrame::fileLoadButtonOnClick(wxCommandEvent& event) {
+	std::vector<Segment> dataSegment;
+
 	wxFileDialog WxOpenFileDialog(this, wxT("Choose a file"), wxT(""), wxT(""), wxT("Geometry file (*.geo)|*.geo"), wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 	if (WxOpenFileDialog.ShowModal() == wxID_OK) {
 		double xStartPoint, yStartPoint, zStartPoint, xEndPoint, yEndPoint, zEndPoint;
@@ -275,7 +276,7 @@ void MainFrame::fileLoadButtonOnClick(wxCommandEvent& event) {
 			dataSegment.clear();
 			while (!in.eof()) {
 				in >> xStartPoint >> yStartPoint >> zStartPoint >> xEndPoint >> yEndPoint >> zEndPoint >> r >> g >> b;
-				dataSegment.push_back(Segment(Point(xStartPoint, yStartPoint, zStartPoint), Point(xEndPoint, yEndPoint, zEndPoint), Color(r, g, b)));
+				dataSegment.push_back(Segment(Point(xStartPoint, yStartPoint, zStartPoint), Point(xEndPoint, yEndPoint, zEndPoint), Rgb(r, g, b)));
 			}
 			in.close();
 		}
@@ -283,12 +284,11 @@ void MainFrame::fileLoadButtonOnClick(wxCommandEvent& event) {
 		event.Skip();
 	}
 
-	repaintGeo();
-
+	repaintGeo(dataSegment);
 }
 
 
-void MainFrame::repaintGeo() {
+void MainFrame::repaintGeo(std::vector<Segment> dataSegment) {
 	Matrix4 scaleMatrix;
 	Matrix4 rotationX;
 	Matrix4 rotationY;
@@ -298,53 +298,52 @@ void MainFrame::repaintGeo() {
 	Matrix4 transformationMatrix;
 	double angle = 0;
 
-	scaleMatrix.data[0][0] = 1; // scale X
-	scaleMatrix.data[1][1] = 1; // scale Y;
-	scaleMatrix.data[2][2] = 1; // scale Z;
+	scaleMatrix.setElement(0, 0, 1);
+	scaleMatrix.setElement(1, 1, 1);
+	scaleMatrix.setElement(2, 2, 1);
 
 	angle = 180 * M_PI / 180.0;
-	rotationX.data[0][0] = 1;
-	rotationX.data[1][1] = cos(angle);
-	rotationX.data[1][2] = -sin(angle);
-	rotationX.data[2][1] = sin(angle);
-	rotationX.data[2][2] = cos(angle);
-	rotationX.data[3][3] = 1;
-
-
-	angle = 180 * M_PI / 180.0;
-	rotationY.data[0][0] = cos(angle);
-	rotationY.data[0][2] = sin(angle);
-	rotationY.data[1][1] = 1;
-	rotationY.data[2][0] = -sin(angle);
-	rotationY.data[2][2] = cos(angle);
-	rotationY.data[3][3] = 1;
+	rotationX.setElement(0, 0, 1);
+	rotationX.setElement(1, 1, cos(angle));
+	rotationX.setElement(1, 2, -sin(angle));
+	rotationX.setElement(2, 1, sin(angle));
+	rotationX.setElement(2, 2, cos(angle));
+	rotationX.setElement(3, 3, 1);
 
 	angle = 180 * M_PI / 180.0;
-	rotationZ.data[0][0] = cos(angle);
-	rotationZ.data[0][1] = -sin(angle);
-	rotationZ.data[1][0] = sin(angle);
-	rotationZ.data[1][1] = cos(angle);
-	rotationZ.data[2][2] = 1;
-	rotationZ.data[3][3] = 1;
+	rotationY.setElement(0, 0, cos(angle));
+	rotationY.setElement(0, 2, sin(angle));
+	rotationY.setElement(1, 1, 1);
+	rotationY.setElement(2, 0, -sin(angle));
+	rotationY.setElement(2, 2, cos(angle));
+	rotationY.setElement(3, 3, 1);
 
-	translationMatrix.data[0][0] = 1;
-	translationMatrix.data[0][3] = 0.10; // translation X
-	translationMatrix.data[1][1] = 1;
-	translationMatrix.data[1][3] = 0.10; // translation Y
-	translationMatrix.data[2][2] = 1;
-	translationMatrix.data[2][3] = 0.25; // translation Z
-	translationMatrix.data[3][3] = 1;
+	angle = 180 * M_PI / 180.0;
+	rotationZ.setElement(0, 0, cos(angle));
+	rotationZ.setElement(0, 1, -sin(angle));
+	rotationZ.setElement(1, 0, sin(angle));
+	rotationZ.setElement(1, 1, cos(angle));
+	rotationZ.setElement(2, 2, 1);
+	rotationZ.setElement(3, 3, 1);
+
+	translationMatrix.setElement(0, 0, 1);
+	translationMatrix.setElement(0, 3, 0.10);
+	translationMatrix.setElement(1, 1, 1);
+	translationMatrix.setElement(1, 3, 0.10);
+	translationMatrix.setElement(2, 2, 1);
+	translationMatrix.setElement(2, 3, 0.25);
+	translationMatrix.setElement(3, 3, 1);
 
 	transformationMatrix = translationMatrix * rotationZ * rotationY * rotationX * scaleMatrix;
 
-	perspectiveMatrix.data[0][0] = 0.5 * leftPanel->GetSize().GetWidth();
-	perspectiveMatrix.data[0][2] = 0.5 * leftPanel->GetSize().GetWidth();
-	perspectiveMatrix.data[0][3] = 0.5 * leftPanel->GetSize().GetWidth();
-	perspectiveMatrix.data[1][1] = -0.5 * leftPanel->GetSize().GetHeight();
-	perspectiveMatrix.data[1][2] = 0.5 * leftPanel->GetSize().GetHeight();
-	perspectiveMatrix.data[1][3] = 0.5 * leftPanel->GetSize().GetHeight();
-	perspectiveMatrix.data[3][2] = 1;
-	perspectiveMatrix.data[3][3] = 1;
+	perspectiveMatrix.setElement(0, 0, (0.5 * leftPanel->GetSize().GetWidth()));
+	perspectiveMatrix.setElement(0, 2, (0.5 * leftPanel->GetSize().GetWidth()));
+	perspectiveMatrix.setElement(0, 3, (0.5 * leftPanel->GetSize().GetWidth()));
+	perspectiveMatrix.setElement(1, 1, (-0.5 * leftPanel->GetSize().GetHeight()));
+	perspectiveMatrix.setElement(1, 2, (0.5 * leftPanel->GetSize().GetHeight()));
+	perspectiveMatrix.setElement(1, 3, (0.5 * leftPanel->GetSize().GetHeight()));
+	perspectiveMatrix.setElement(3, 2, 1);
+	perspectiveMatrix.setElement(3, 3, 1);
 
 	wxClientDC  dc(leftPanel);
 	wxBufferedDC buffer(&dc);
@@ -352,39 +351,36 @@ void MainFrame::repaintGeo() {
 	buffer.Clear();
 
 	for (auto& segment : dataSegment) {
-		buffer.SetPen(wxPen(wxColour(segment.color.R, segment.color.G, segment.color.B)));
+		buffer.SetPen(wxPen(wxColour(segment.getRgb().getR(), segment.getRgb().getG(), segment.getRgb().getB())));
 
 		Vector4 beginVec, endVec;
-		beginVec.Set(segment.begin.x, segment.begin.y, segment.begin.z);
-		endVec.Set(segment.end.x, segment.end.y, segment.end.z);
-
-
+		beginVec.set(segment.getStart().getX(), segment.getStart().getY(), segment.getStart().getZ());
+		endVec.set(segment.getEnd().getX(), segment.getEnd().getY(), segment.getEnd().getZ());
 
 		beginVec = transformationMatrix * beginVec;
 		endVec = transformationMatrix * endVec;
 
-
 		beginVec = perspectiveMatrix * beginVec;
 		endVec = perspectiveMatrix * endVec;
 
-		if (beginVec.data[3] >= 0) {
-			beginVec.data[0] /= beginVec.data[3];
-			beginVec.data[1] /= beginVec.data[3];
+		if (beginVec.getElement(3) >= 0) {
+			beginVec.setElement(0, beginVec.getElement(0) / beginVec.getElement(3));
+			beginVec.setElement(1, beginVec.getElement(1) / beginVec.getElement(3));
 		}
 		else {
-			beginVec.data[0] /= -beginVec.data[3];
-			beginVec.data[1] /= -beginVec.data[3];
+			beginVec.setElement(0, beginVec.getElement(0) / -beginVec.getElement(3));
+			beginVec.setElement(1, beginVec.getElement(1) / -beginVec.getElement(3));
 		}
 
-		if (endVec.data[3] >= 0) {
-			endVec.data[0] /= endVec.data[3];
-			endVec.data[1] /= endVec.data[3];
+		if (endVec.getElement(3) >= 0) {
+			endVec.setElement(0, endVec.getElement(0) / endVec.getElement(3));
+			endVec.setElement(1, endVec.getElement(1) / endVec.getElement(3));
 		}
 		else {
-			endVec.data[0] /= -endVec.data[3];
-			endVec.data[1] /= -endVec.data[3];
+			endVec.setElement(0, endVec.getElement(0) / -endVec.getElement(3));
+			endVec.setElement(1, endVec.getElement(1) / -endVec.getElement(3));
 		}
 
-		buffer.DrawLine(beginVec.GetX(), beginVec.GetY(), endVec.GetX(), endVec.GetY());
+		buffer.DrawLine(beginVec.getX(), beginVec.getY(), endVec.getX(), endVec.getY());
 	}
 }
