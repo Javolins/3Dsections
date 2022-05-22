@@ -2,7 +2,7 @@
  * @file   App.cpp
  * @brief  Implementation of methods used in the class
  * 
- * @author Micha³ Rutkowski @P4ndaM1x
+ * @author Micha³ Rutkowski @P4ndaM1x, Aleksander Bartoszek @AleksanderBartoszek
  * @date   May 2022
  *********************************************************************/
 
@@ -18,11 +18,10 @@ bool App::OnInit() {
 
 	initializeTests();
 
-	MainFrame* mainFrame = new MainFrame(nullptr);
+	MainFrame* mainFrame = new MainFrame();
 	mainFrame->Show(true);
 	return true;
 }
-
 
 /**
  * @brief Opens console for logging and runs all tests

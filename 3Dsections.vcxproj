@@ -145,12 +145,20 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="doctest.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MainFrame-Test.cpp" />
     <ClCompile Include="MainFrame.cpp" />
+    <ClCompile Include="Matrix4-Test.cpp" />
+    <ClCompile Include="Matrix4.cpp" />
+    <ClCompile Include="Vector4-Test.cpp" />
+    <ClCompile Include="Vector4.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
     <ClInclude Include="doctest.h" />
     <ClInclude Include="MainFrame.h" />
+    <ClInclude Include="DataClasses.h" />
+    <ClInclude Include="Matrix4.h" />
+    <ClInclude Include="Vector4.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
