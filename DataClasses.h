@@ -1,10 +1,11 @@
-#pragma once
 /*****************************************************************//**
  * @file   DataClasses.h
  * @brief  classes decomposing loaded file for processing
  *
  * @author Aleksander Bartoszek
  *********************************************************************/
+
+#pragma once
 
 /**
 * @brief Auxiliary class representing a R,G,B color.

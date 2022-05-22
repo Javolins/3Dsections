@@ -1,4 +1,3 @@
-#pragma once
 /*****************************************************************//**
  * @file   Edge.h
  * @brief  Base class for describing edges of processed solid
@@ -6,6 +5,7 @@
  * @author Aleksander Bartoszek
  *********************************************************************/
 
+#pragma once
 #include "DataClasses.h"
 #include <utility>
 #include <array>

@@ -1,4 +1,3 @@
-#pragma once
 /*****************************************************************//**
  * @file   Matrix4-Test.cpp
  * @brief  Matrix4-Testing
@@ -6,6 +5,7 @@
  * @author Aleksander Bartoszek
  *********************************************************************/
 
+#pragma once
 #include "doctest.h"
 #include "Matrix4.h"
 #include "Vector4.h"
