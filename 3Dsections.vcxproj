@@ -155,9 +155,12 @@
   <ItemGroup>
     <ClInclude Include="App.h" />
     <ClInclude Include="doctest.h" />
+    <ClInclude Include="Edge.h" />
     <ClInclude Include="MainFrame.h" />
     <ClInclude Include="DataClasses.h" />
     <ClInclude Include="Matrix4.h" />
+    <ClInclude Include="MeshEdge.h" />
+    <ClInclude Include="OriginalEdge.h" />
     <ClInclude Include="Vector4.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
