@@ -2,7 +2,7 @@
  * @file   DataClasses.h
  * @brief  classes decomposing loaded file for processing
  *
- * @author Aleksander Bartoszek
+ * @author Aleksander Bartoszek, Micha³ Rutkowski
  *********************************************************************/
 
 #pragma once
@@ -31,10 +31,19 @@ class Rgb {
  */
 class Point {
 	public:
-		Point(float _x, float _y, float _z) : x(_x), y(_y), z(_z) {}
-		int getX() { return x; };
-		int getY() { return y; };
-		int getZ() { return z; };
+		Point(float _x = 0, float _y = 0, float _z = 0) : x(_x), y(_y), z(_z) {}
+		bool operator==(const Point& point) const{
+			if (this != nullptr && x == point.getX() && y == point.getY() && z == point.getZ())
+				return true;
+			else
+				return false;
+		}
+		void operator()(float x, float y, float z) {
+			this->x = x; this->y = y; this->z = z;
+		}
+		int getX() const { return x; };
+		int getY() const { return y; };
+		int getZ() const { return z; };
 	private:
 		float x;
 		float y;

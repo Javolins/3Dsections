@@ -48,6 +48,9 @@
     <ClCompile Include="Plane-Test.cpp">
       <Filter>Test Files</Filter>
     </ClCompile>
+    <ClCompile Include="stout-Test.cpp">
+      <Filter>Test Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainFrame.h">
