@@ -83,5 +83,8 @@
     <ClInclude Include="ClosedPolygonalChains.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="stout.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
