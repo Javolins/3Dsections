@@ -11,6 +11,7 @@
 
 #include "MainFrame.h"
 #include "DataClasses.h"
+#include "OriginalEdge.h"
 #include "Vector4.h"
 #include "Matrix4.h"
 #include <fstream>
@@ -264,7 +265,7 @@ void MainFrame::playToggleOnToggle(wxCommandEvent& event) {
 }
 
 void MainFrame::fileLoadButtonOnClick(wxCommandEvent& event) {
-	std::vector<Segment> dataSegment;
+	std::vector<OriginalEdge> dataSegment;
 
 	wxFileDialog WxOpenFileDialog(this, wxT("Choose a file"), wxT(""), wxT(""), wxT("Geometry file (*.geo)|*.geo"), wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 	if (WxOpenFileDialog.ShowModal() == wxID_OK) {
@@ -276,7 +277,7 @@ void MainFrame::fileLoadButtonOnClick(wxCommandEvent& event) {
 			dataSegment.clear();
 			while (!in.eof()) {
 				in >> xStartPoint >> yStartPoint >> zStartPoint >> xEndPoint >> yEndPoint >> zEndPoint >> r >> g >> b;
-				dataSegment.push_back(Segment(Point(xStartPoint, yStartPoint, zStartPoint), Point(xEndPoint, yEndPoint, zEndPoint), Rgb(r, g, b)));
+				dataSegment.push_back(OriginalEdge(Point(xStartPoint, yStartPoint, zStartPoint), Point(xEndPoint, yEndPoint, zEndPoint), Rgb(r, g, b)));
 			}
 			in.close();
 		}
@@ -288,7 +289,7 @@ void MainFrame::fileLoadButtonOnClick(wxCommandEvent& event) {
 }
 
 
-void MainFrame::repaintGeo(std::vector<Segment> dataSegment) {
+void MainFrame::repaintGeo(std::vector<OriginalEdge> dataSegment) {
 	Matrix4 scaleMatrix;
 	Matrix4 rotationX;
 	Matrix4 rotationY;

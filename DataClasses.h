@@ -1,10 +1,11 @@
-#pragma once
 /*****************************************************************//**
  * @file   DataClasses.h
  * @brief  classes decomposing loaded file for processing
  *
  * @author Aleksander Bartoszek
  *********************************************************************/
+
+#pragma once
 
 /**
 * @brief Auxiliary class representing a R,G,B color.
@@ -38,23 +39,6 @@ class Point {
 		float x;
 		float y;
 		float z;
-};
-
- /**
-  * @brief Simple class representing a math section in three-dimensional space X,Y,Z.
-  * 
-  * @note Section is indicated by starting Point and ending Point with its color as RGB
-  */
-class Segment {
-	public:
-		Segment(Point _begin, Point _end, Rgb _rgb) : begin(_begin), end(_end), rgb(_rgb) {}
-		Point getStart() { return begin; };
-		Point getEnd() { return end; };
-		Rgb getRgb() { return rgb; };
-	private:
-		Point begin;
-		Point end;
-		Rgb rgb;
 };
 
 
