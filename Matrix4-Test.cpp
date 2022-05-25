@@ -42,16 +42,12 @@ TEST_CASE("Matrix testing") {
 			else
 				REQUIRE(testMatrix.getElement(i, j) == 0);
 
-	/*Vector4 v;
+	Vector4 v;
 	v.printVector();
 	testMatrix.printMatrix();
 	v = testMatrix * v;
 	v.printVector();
 	testMatrix.printMatrix();
 	for (int i = 0; i < 4; i++)
-		if (i == 3)
-			REQUIRE(v.getElement(i) == 5);
-		else
-			REQUIRE(v.getElement(i) == 0);*/
-
+		REQUIRE(v.getElement(i) == 5);
 }
