@@ -277,7 +277,7 @@ void MainFrame::fileLoadButtonOnClick(wxCommandEvent& event) {
 			dataSegment.clear();
 			while (!in.eof()) {
 				in >> xStartPoint >> yStartPoint >> zStartPoint >> xEndPoint >> yEndPoint >> zEndPoint >> r >> g >> b;
-				dataSegment.push_back(OriginalEdge(Point(xStartPoint, yStartPoint, zStartPoint), Point(xEndPoint, yEndPoint, zEndPoint), Rgb(r, g, b)));
+				dataSegment.push_back(OriginalEdge(Point(xStartPoint, yStartPoint, zStartPoint), Point(xEndPoint, yEndPoint, zEndPoint), Color(r, g, b)));
 			}
 			in.close();
 		}

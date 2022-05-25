@@ -12,10 +12,10 @@
 
 class Edge {
 	public:
-		Edge(Point start, Point end, Rgb rgb): ends(std::pair<Point, Point>(start, end)), color(rgb) {}
+		Edge(Point start, Point end, Color rgb): ends(std::pair<Point, Point>(start, end)), color(rgb) {}
 		Point getStart() const { return ends.first; }
 		Point getEnd() const { return ends.second; }
-		Rgb getRgb() const { return color; }
+		Color getRgb() const { return color; }
 		std::array<double, 3> getDirectionalVector() const { 
 			return std::array<double, 3>{
 				static_cast<double>(getEnd().getX() - getStart().getX()),
@@ -25,5 +25,5 @@ class Edge {
 		}
 	private:
 		std::pair<Point, Point>	ends;
-		Rgb color;
+		Color color;
 };

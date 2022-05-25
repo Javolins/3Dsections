@@ -10,6 +10,6 @@
 
 class OriginalEdge : public Edge {
 	public:
-		OriginalEdge(Point start, Point end, Rgb rgb) : Edge(start, end, rgb) {};
+		OriginalEdge(Point start, Point end, Color rgb) : Edge(start, end, rgb) {};
 };
 
