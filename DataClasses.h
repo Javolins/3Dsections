@@ -41,9 +41,9 @@ class Point {
 		void operator()(float x, float y, float z) {
 			this->x = x; this->y = y; this->z = z;
 		}
-		int getX() const { return x; };
-		int getY() const { return y; };
-		int getZ() const { return z; };
+		float getX() const { return x; };
+		float getY() const { return y; };
+		float getZ() const { return z; };
 	private:
 		float x;
 		float y;

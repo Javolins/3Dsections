@@ -26,7 +26,7 @@ void Matrix4::printMatrix() {
 	printf("\n|%2.3lf,%2.3lf,%2.3lf,%2.3lf|\n", data[0][0], data[0][1], data[0][2], data[0][3]);
 	printf("|%2.3lf,%2.3lf,%2.3lf,%2.3lf|\n", data[1][0], data[1][1], data[1][2], data[1][3]);
 	printf("|%2.3lf,%2.3lf,%2.3lf,%2.3lf|\n", data[2][0], data[2][1], data[2][2], data[2][3]);
-	printf("|%2.3lf,%2.3lf,%2.3lf,%2.3lf|\n", data[3][0], data[3][1], data[3][2], data[2][3]);
+	printf("|%2.3lf,%2.3lf,%2.3lf,%2.3lf|\n\n", data[3][0], data[3][1], data[3][2], data[2][3]);
 }
 
 /**
@@ -62,7 +62,7 @@ Vector4 operator* (const Matrix4 gMatrix, const Vector4 gVector) {
 	for (i = 0; i < 4; i++) {
 		tmp.setElement(i, 0.0);
 		for (j = 0; j < 4; j++)
-			tmp.setElement(i, tmp.getElement(i) + (gMatrix.getElement(j, i) * gVector.getElement(j)));
+			tmp.setElement(i, tmp.getElement(i) + (gMatrix.getElement(i, j) * gVector.getElement(j)));
 	}
 	return tmp;
 }
