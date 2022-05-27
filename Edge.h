@@ -12,7 +12,7 @@
 
 class Edge {
 	public:
-		Edge(Point start, Point end, Color rgb): ends(std::pair<Point, Point>(start, end)), color(rgb) {}
+	Edge(Point start, Point end, Color rgb = {0,0,0}) : ends(std::pair<Point, Point>(start, end)), color(rgb){}
 		Point getStart() const { return ends.first; }
 		Point getEnd() const { return ends.second; }
 		Color getRgb() const { return color; }
