@@ -14,11 +14,11 @@
 #include <map>
 #include <memory>
 #include <cmath>
-#include "OriginalEdge.h"
-#include "MeshEdge.h"
-#include "Edge.h"
-#include "Plane.h"
-#include "ClosedPolygonalChains.h"
+#include "../include/OriginalEdge.h"
+#include "../include/MeshEdge.h"
+#include "../include/Edge.h"
+#include "../include/Plane.h"
+#include "../include/ClosedPolygonalChains.h"
 
 
 /**

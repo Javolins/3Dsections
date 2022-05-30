@@ -7,7 +7,7 @@
  *********************************************************************/
 
 #pragma once
-#include "MeshEdge.h"
+#include "../include/MeshEdge.h"
 #include <vector>
 
 class ClosedPolygonalChains {

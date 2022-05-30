@@ -6,7 +6,7 @@
  *********************************************************************/
 
 #pragma once
-#include "Vector4.h"
+#include "../include/Vector4.h"
 
 class Matrix4 {
 	

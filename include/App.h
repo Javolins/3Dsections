@@ -8,7 +8,7 @@
 
 #pragma once
 #include <wx/wxprec.h>
-#include "MainFrame.h"
+#include "../include/MainFrame.h"
 
 /**
  * Simple class with actions that are happening right after opening an app.

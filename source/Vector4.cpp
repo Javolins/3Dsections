@@ -6,8 +6,8 @@
  * @date   May 2022
  *********************************************************************/
 
-#include "Vector4.h"
-#include "Matrix4.h"
+#include "../include/Vector4.h"
+#include "../include/Matrix4.h"
 #include <stdio.h>
 
 /**

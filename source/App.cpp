@@ -6,8 +6,8 @@
  * @date   May 2022
  *********************************************************************/
 
-#include "App.h"
-#include "doctest.h"
+#include "../include/App.h"
+#include "../test/doctest.h"
 
 /**
  * @brief Defines behavior of the app, right after launching
