@@ -128,3 +128,25 @@ TEST_CASE("polygonalChain() testing") {
 
 	//TODO add requires
 }
+
+TEST_CASE("removeReversed() testing") {
+	std::vector<Edge> testEdges;
+
+	testEdges.push_back(OriginalEdge(Point(1, 1, 1), Point(-1, -1, -1), Color(0, 0, 0)));
+	testEdges.push_back(OriginalEdge(Point(-1, -1, -1), Point(1, 1, 1), Color(0, 0, 0)));
+
+	testEdges.push_back(OriginalEdge(Point(2, 2, 2), Point(-2, -2, -2), Color(0, 0, 0)));
+
+	testEdges.push_back(OriginalEdge(Point(3, 3, 3), Point(-3, -3, -3), Color(0, 0, 0)));
+	testEdges.push_back(OriginalEdge(Point(-3, -3, -3), Point(3, 3, 3), Color(0, 0, 0)));
+
+	testEdges.push_back(OriginalEdge(Point(4, 4, 4), Point(-4, -4, -4), Color(0, 0, 0)));
+
+	testEdges.push_back(OriginalEdge(Point(5, 5, 5), Point(-5, -5, -5), Color(0, 0, 0)));
+
+	std::vector<Edge> outTest = removeReversed(testEdges);
+
+	//for (auto e : outTest) std::cout << e << std::endl;
+
+	//TODO add requires
+}

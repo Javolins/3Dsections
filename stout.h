@@ -178,3 +178,15 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 	 std::vector<Edge> out(polyLine.begin(), polyLine.end());
 	 return out;
  }
+
+ inline std::vector<Edge> removeReversed(std::vector<Edge> edges) {
+	 std::vector<Edge> unique;
+	 for (auto& x : edges) {
+		bool only = true;
+		for (auto &y : unique)
+			if (y.getStart() == x.getEnd() && y.getEnd() == x.getStart())
+				only = false;
+		if (only) unique.push_back(x);
+	 }
+	 return unique;
+ }
