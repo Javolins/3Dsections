@@ -160,7 +160,7 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 	 for (auto const& x : intersections) {
 		 for (auto const& y : intersections) {
 			 if (!(x == y)) {
-				 for (auto e : origin) {
+				 for (auto& e : origin) {
 					 // 4 possible connections, both ways
 					 if			(e.getStart() == x.first->getStart()	&& e.getEnd() == y.first->getStart())	polyLine.insert(Edge(x.second, y.second, Color(0, 0, 0)));
 					 else if	(e.getStart() == x.first->getStart()	&& e.getEnd() == y.first->getEnd())		polyLine.insert(Edge(x.second, y.second, Color(0, 0, 0)));
