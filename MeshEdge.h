@@ -10,6 +10,6 @@
 
 class MeshEdge : public Edge {
 	public:
-		MeshEdge(Point start, Point end, Rgb rgb) : Edge(start, end, rgb) {};
+		MeshEdge(Point start, Point end, Color rgb) : Edge(start, end, rgb) {};
 };
 

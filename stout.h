@@ -12,27 +12,57 @@
 #include <array>
 #include <set>
 #include <map>
-#include <utility>
 #include <memory>
 #include <cmath>
 #include "OriginalEdge.h"
+#include "MeshEdge.h"
+#include "Edge.h"
 #include "Plane.h"
 
+
 /**
- * Robi mi siê niedobrze od z³o¿onoœci tej funkcji, ale wmawiam sobie ¿e to tymczasowe.
+ * .@brief function triangulating given solid for processing
+ * 
+ * @param origin vector of edges from the file
+ * @return vector of all original and virtual edges
+ * 
+ * //TODO proper color of new Edge
  */
-// zakomentowa³em, bo powodowa³a problemy przy kompilacji
-/*std::vector<Edge> mesh(std::vector<OriginalEdge> origin) {
-	
-	std::set<Point> uniquePoints;
-	for (auto a : origin) {
+inline std::vector<Edge> mesh(std::vector<OriginalEdge>& origin) {
+	std::set<Point, comparePoints> uniquePoints;
+	for (const auto& a : origin) {
 		uniquePoints.insert(a.getStart());
 		uniquePoints.insert(a.getEnd());
 	}
+	std::set<Edge, compareEdges> allEdges;
 
-	std::pair<OriginalEdge, OriginalEdge> pair();
-	//TODO
-};*/
+	//foreach point
+	for (const auto& p : uniquePoints) {
+		//filter appropriate edges
+		std::vector<Edge> temp;
+		for (auto& e : origin) {
+			if (e.getStart() == p || e.getEnd() == p) {
+				temp.push_back(e);
+			}
+		}
+		//foreach pair of edges
+		for (auto& x : temp) {
+			for (const auto& y : temp) {
+				if (!(x == y)) {
+					//find 3 edge to form triangle
+					//add edges
+					if (x.getStart() == p && y.getStart() == p)		allEdges.insert(MeshEdge(x.getEnd(), y.getEnd(), Color(0,0,0)));
+					else if (x.getStart() == p && y.getEnd() == p)	allEdges.insert(MeshEdge(x.getEnd(), y.getStart(), Color(0, 0, 0)));
+					else if (x.getEnd() == p && y.getStart() == p)	allEdges.insert(MeshEdge(x.getStart(), y.getEnd(), Color(0, 0, 0)));
+					else if (x.getEnd() == p && y.getEnd() == p)	allEdges.insert(MeshEdge(x.getStart(), y.getStart(), Color(0, 0, 0)));
+					// else throw new Exception :P
+				}
+			}
+		}
+	}
+	std::vector<Edge> out(allEdges.begin(), allEdges.end());
+	return out;
+};
 
 /**
  * @brief Calculates the dot product of two vectors.

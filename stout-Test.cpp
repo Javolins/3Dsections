@@ -2,13 +2,15 @@
  * @file   stout-Test.h
  * @brief
  *
- * @author Micha³ Rutkowski @P4ndaM1x
+ * @author Micha³ Rutkowski @P4ndaM1x Aleksander Bartoszek
  * @date   May 2022
  *********************************************************************/
 
 #pragma once
 #include "doctest.h"
 #include "stout.h"
+#include "Edge.h"
+#include "DataClasses.h"
 #include <iostream>
 
 TEST_CASE("intersection() testing") {
@@ -67,4 +69,28 @@ TEST_CASE("intersection() testing") {
 
 TEST_CASE("intersectionPoints() testing") {
 	//TODO
+}
+
+TEST_CASE("Mesh() testing") {
+	std::vector<OriginalEdge> testEdges;
+
+	testEdges.push_back(OriginalEdge(Point(1, 1, 1), Point(1, 1, -1), Color(0, 0, 0)));
+	testEdges.push_back(OriginalEdge(Point(1, -1, 1), Point(1, -1, -1), Color(0, 0, 0)));
+	testEdges.push_back(OriginalEdge(Point(-1, 1, 1), Point(-1, 1, -1), Color(0, 0, 0)));
+	testEdges.push_back(OriginalEdge(Point(-1, -1, 1), Point(-1, -1, -1), Color(0, 0, 0)));
+
+	testEdges.push_back(OriginalEdge(Point(1, 1, 1), Point(1, -1, 1), Color(0, 0, 0)));
+	testEdges.push_back(OriginalEdge(Point(1, -1, 1), Point(-1, -1, 1), Color(0, 0, 0)));
+	testEdges.push_back(OriginalEdge(Point(-1, -1, 1), Point(-1, 1, 1), Color(0, 0, 0)));
+	testEdges.push_back(OriginalEdge(Point(-1, 1, 1), Point(1, 1, 1), Color(0, 0, 0)));
+
+	testEdges.push_back(OriginalEdge(Point(1, 1, -1), Point(1, -1, -1), Color(0, 0, 0)));
+	testEdges.push_back(OriginalEdge(Point(1, -1, -1), Point(-1, -1, -1), Color(0, 0, 0)));
+	testEdges.push_back(OriginalEdge(Point(-1, -1, -1), Point(-1, 1, -1), Color(0, 0, 0)));
+	testEdges.push_back(OriginalEdge(Point(-1, 1, -1), Point(1, 1, -1), Color(0, 0, 0)));
+
+	std::vector<Edge> meshedEdges = mesh(testEdges);
+	for (auto& e : meshedEdges) {
+		std::cout << e << std::endl;
+	}
 }

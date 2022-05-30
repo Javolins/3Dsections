@@ -6,6 +6,7 @@
  *********************************************************************/
 
 #pragma once
+#include <iostream>
 
 /**
 * @brief Simple class representing a R,G,B color.
@@ -22,6 +23,7 @@ class Color {
 		unsigned short getR() const { return _r; }
 		unsigned short getG() const { return _g; }
 		unsigned short getB() const { return _b; }
+		friend std::ostream& operator<<(std::ostream& os, const Color& p);
 
 	private:
 		unsigned short _r, _g, _b;
@@ -48,7 +50,39 @@ class Point {
 		float getX() const { return _x; }
 		float getY() const { return _y; }
 		float getZ() const { return _z; }
+		friend std::ostream& operator<<(std::ostream& os, const Point& p);
 
 	private:
 		float _x, _y, _z;
 };
+
+struct comparePoints {
+	bool operator()(const Point& a, const Point& b) const {
+		if (a.getX() < b.getX()) return true;
+		if (b.getX() < a.getX()) return false;
+
+		if (a.getY() < b.getY()) return true;
+		if (b.getY() < a.getY()) return false;
+
+		if (a.getZ() < b.getZ()) return true;
+		if (b.getZ() < a.getZ()) return false;
+		
+		return false;
+	}
+};
+
+inline std::ostream& operator<< (std::ostream& os, const Point& p) {
+	os << "<";
+	os << p.getX() << ", ";
+	os << p.getY() << ", ";
+	os << p.getZ() << "> ";
+	return os;
+}
+
+inline std::ostream& operator<< (std::ostream& os, const Color& c) {
+	os << "<";
+	os << c.getR() << ", ";
+	os << c.getG() << ", ";
+	os << c.getB() << "> ";
+	return os;
+}
