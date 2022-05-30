@@ -39,9 +39,17 @@
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
 #include <wx/dcbuffer.h>
+
+#include <fstream>
 #include <vector>
+#include <map>
+#include <limits>
+
+#include "stout.h"
 #include "DataClasses.h"
 #include "OriginalEdge.h"
+#include "Vector4.h"
+#include "Matrix4.h"
 
 // Identifiers of all UI items.
 #define MAIN_FRAME_ID 1000
@@ -163,11 +171,16 @@ class MainFrame : public wxFrame {
 		 */
 		virtual void repaintGeo();
 
+		/**
+		 * @brief Draws points where edges are intersecting with a plane, on the @ref rightPanel
+		 * 
+		 * @param foundPoints Edges which are causing the intersections and Points representing coordinates of those
+		 */
+		virtual void repaintSec(std::map<const Edge*, Point> foundPoints);
+
 		virtual void nextFrameButtonOnClick(wxCommandEvent& event) { event.Skip(); }
 		virtual void forewardButtonOnClick(wxCommandEvent& event) { event.Skip(); }
 
-
-			
 		/**
 		 * @brief After clicking @ref fileLoadButton open a default folder browser dialog 
 		 * to select .geo file which is expected to load.
@@ -220,7 +233,8 @@ class MainFrame : public wxFrame {
 		wxSlider* speedSlider;
 		wxStatusBar* statusBar;
 
-		std::vector<OriginalEdge> dataSegment;
+		//! Stores edges of loaded solid
+		std::vector<OriginalEdge> dataSegments;
 
 };
 

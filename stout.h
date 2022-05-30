@@ -72,7 +72,7 @@ inline int sgn(double val){
  * @param plane Plane used in an algorithm.
  * @return If there is exactly one point of itersection it will be returned, in other case - nullptr.
  */
-std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane) {
+inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane){
 
 	Point start = line.getStart();
 	Point end = line.getEnd();
@@ -106,7 +106,7 @@ std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane) {
  * @param plane
  * @return 
  */
-std::map<const Edge*, Point> intersectionPoints(const std::vector<OriginalEdge>& originalEdges, const Plane& plane) {
+ inline std::map<const Edge*, Point> intersectionPoints(const std::vector<OriginalEdge>& originalEdges, const Plane& plane){
 	
 	std::map<const Edge*, Point> intersections;
 	for( auto& edge : originalEdges ){

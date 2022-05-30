@@ -10,12 +10,6 @@
  *********************************************************************/
 
 #include "MainFrame.h"
-#include "DataClasses.h"
-#include "OriginalEdge.h"
-#include "Vector4.h"
-#include "Matrix4.h"
-#include <fstream>
-#include <vector>
 
 
 MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style) : wxFrame(parent, id, title, pos, size, style) {
@@ -257,15 +251,34 @@ void MainFrame::about3DsectionsOnMenuSelection(wxCommandEvent& event) {
 
 void MainFrame::playToggleOnToggle(wxCommandEvent& event) {
 	if (playToggle->GetValue()) {
+
 		progressGauge->Show();
 		playToggle->SetLabel("Stop");
+
+		unsigned planeIndex = planeChoice->GetSelection();
+		Plane plane;
+		// plane: xOy
+		if( planeIndex == 0 )
+			plane.setC(1);
+		// plane: xOz
+		if( planeIndex == 1 )
+			plane.setB(1);
+		// plane: yOz
+		if( planeIndex == 2 )
+			plane.setA(1);
+
+		repaintSec(intersectionPoints(dataSegments, plane));
 	}
 	else {
 		progressGauge->Hide();
 		playToggle->SetLabel("Play");
+
+		wxClientDC dc(rightPanel);
+		wxBufferedDC buffer(&dc);
+		buffer.SetBackground(*wxWHITE_BRUSH);
+		buffer.Clear();
 	}
 }
-
 
 void MainFrame::fileLoadButtonOnClick(wxCommandEvent& event) {
 	wxFileDialog WxOpenFileDialog(this, wxT("Choose a file"), wxT(""), wxT(""), wxT("Geometry file (*.geo)|*.geo"), wxFD_OPEN | wxFD_FILE_MUST_EXIST);
@@ -275,10 +288,10 @@ void MainFrame::fileLoadButtonOnClick(wxCommandEvent& event) {
 
 		std::ifstream in(WxOpenFileDialog.GetPath().ToStdString());
 		if (in.is_open()) {
-			dataSegment.clear();
+			dataSegments.clear();
 			while (!in.eof()) {
 				in >> xStartPoint >> yStartPoint >> zStartPoint >> xEndPoint >> yEndPoint >> zEndPoint >> r >> g >> b;
-				dataSegment.push_back(OriginalEdge(Point(xStartPoint, yStartPoint, zStartPoint), Point(xEndPoint, yEndPoint, zEndPoint), Color(r, g, b)));
+				dataSegments.push_back(OriginalEdge(Point(xStartPoint, yStartPoint, zStartPoint), Point(xEndPoint, yEndPoint, zEndPoint), Color(r, g, b)));
 			}
 			in.close();
 		}
@@ -289,19 +302,14 @@ void MainFrame::fileLoadButtonOnClick(wxCommandEvent& event) {
 	repaintGeo();
 }
 
-
 void MainFrame::wxPanelRepaint(wxUpdateUIEvent& event) {
 	repaintGeo();
 }
 
 void MainFrame::repaintGeo() {
 	Matrix4 scaleMatrix;
-	Matrix4 rotationX;
-	Matrix4 rotationY;
-	Matrix4 rotationZ;
-	Matrix4 translationMatrix;
-	Matrix4 perspectiveMatrix;
-	Matrix4 transformationMatrix;
+	Matrix4 rotationX, rotationY, rotationZ;
+	Matrix4 translationMatrix, perspectiveMatrix, transformationMatrix;
 	double angle = 0;
 
 	scaleMatrix.setElement(0, 0, 1);
@@ -356,7 +364,7 @@ void MainFrame::repaintGeo() {
 	buffer.SetBackground(*wxWHITE_BRUSH);
 	buffer.Clear();
 
-	for (auto& segment : dataSegment) {
+	for (auto& segment : dataSegments) {
 		buffer.SetPen(wxPen(wxColour(segment.getRgb().getR(), segment.getRgb().getG(), segment.getRgb().getB())));
 
 		Vector4 beginVec, endVec;
@@ -388,5 +396,60 @@ void MainFrame::repaintGeo() {
 		}
 
 		buffer.DrawLine(beginVec.getX(), beginVec.getY(), endVec.getX(), endVec.getY());
+	}
+}
+
+void MainFrame::repaintSec(std::map<const Edge*, Point> foundPoints){
+
+	wxClientDC dc(rightPanel);
+	wxBufferedDC buffer(&dc);
+	buffer.SetBackground(*wxWHITE_BRUSH);
+	buffer.SetPen(*wxBLACK_PEN);
+	buffer.Clear();
+
+	double min_x = std::numeric_limits<double>::max(), min_y = std::numeric_limits<double>::max(),
+		max_x = std::numeric_limits<double>::min(), max_y = std::numeric_limits<double>::min();
+
+
+	unsigned planeIndex = planeChoice->GetSelection();
+	// plane: xOy
+	float (Point::* get_x)() const = &Point::getX;
+	float (Point::* get_y)() const = &Point::getY;
+	// plane: xOz
+	if( planeIndex == 1 ){
+		get_y = &Point::getZ;
+	}
+	// plane: yOz
+	if( planeIndex == 2 ){
+		get_x = &Point::getY;
+		get_y = &Point::getZ;
+	}
+
+	for( const auto& element : foundPoints ) {
+		
+		if( (element.second.*get_x)() > max_x )
+			max_x = (element.second.*get_x)();
+		if( (element.second.*get_y)() > max_y )
+			max_y = (element.second.*get_y)();
+		if( (element.second.*get_x)() < min_x )
+			min_x = (element.second.*get_x)();
+		if( (element.second.*get_y)() < min_y )
+			min_y = (element.second.*get_y)();
+	}
+
+	float reduction = 1.1;
+	double w = abs(max_x - min_x);
+	double h = abs(max_y - min_y);
+	double scale = std::min(rightPanel->GetSize().GetWidth(), rightPanel->GetSize().GetHeight())
+		/ std::max(w, h) / reduction;
+	float margin_x = (rightPanel->GetSize().GetWidth()-w*scale)/2.0;
+	float margin_y = (rightPanel->GetSize().GetHeight()-h*scale)/2.0;
+
+	for( const auto& element : foundPoints ){
+
+		double x = (element.second.*get_x)() - min_x;
+		double y = (element.second.*get_y)() - min_y;
+		buffer.DrawCircle(abs(x)*scale + margin_x, abs(y)*scale + margin_y, 2);
+		buffer.DrawCircle(abs(x)*scale + margin_x, abs(y)*scale + margin_y, 2);
 	}
 }
