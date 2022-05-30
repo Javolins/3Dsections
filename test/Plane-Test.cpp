@@ -7,8 +7,8 @@
  *********************************************************************/
 
 #pragma once
-#include "doctest.h"
-#include "Plane.h"
+#include "../test/doctest.h"
+#include "../include/Plane.h"
 
 TEST_CASE("Plane testing") {
 

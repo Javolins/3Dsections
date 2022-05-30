@@ -6,9 +6,9 @@
  *********************************************************************/
 
 #pragma once
-#include "doctest.h"
-#include "Matrix4.h"
-#include "Vector4.h"
+#include "../test/doctest.h"
+#include "../include/Matrix4.h"
+#include "../include/Vector4.h"
 
 TEST_CASE("Matrix testing") {
 

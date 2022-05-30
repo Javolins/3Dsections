@@ -45,11 +45,11 @@
 #include <map>
 #include <limits>
 
-#include "stout.h"
-#include "DataClasses.h"
-#include "OriginalEdge.h"
-#include "Vector4.h"
-#include "Matrix4.h"
+#include "../include/stout.h"
+#include "../include/DataClasses.h"
+#include "../include/OriginalEdge.h"
+#include "../include/Vector4.h"
+#include "../include/Matrix4.h"
 
 // Identifiers of all UI items.
 #define MAIN_FRAME_ID 1000

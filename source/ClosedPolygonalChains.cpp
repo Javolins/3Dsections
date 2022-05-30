@@ -1,2 +1,2 @@
 
-#include "ClosedPolygonalChains.h"
+#include "../include/ClosedPolygonalChains.h"

@@ -6,7 +6,7 @@
  *********************************************************************/
 
 #pragma once
-#include "Edge.h"
+#include "../include/Edge.h"
 
 class MeshEdge : public Edge {
 	public:

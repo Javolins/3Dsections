@@ -6,6 +6,6 @@
  * @date   May 2022
  *********************************************************************/
 
-#include "App.h"
+#include "../include/App.h"
 
 wxIMPLEMENT_APP(App);
