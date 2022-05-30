@@ -18,6 +18,7 @@
 #include "MeshEdge.h"
 #include "Edge.h"
 #include "Plane.h"
+#include "ClosedPolygonalChains.h"
 
 
 /**
@@ -155,7 +156,7 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
   * @param origin - original edges from file
   * @return polygonal chain to be drawn as intersection border
   */
- inline std::vector<Edge> polygonalChain(const std::map<const Edge*, Point> intersections, const std::vector<OriginalEdge> origin) {
+ inline ClosedPolygonalChains polygonalChain(const std::map<const Edge*, Point> intersections, const std::vector<OriginalEdge> origin) {
 	 std::set<Edge, compareEdges> polyLine;
 	 for (auto const& x : intersections) {
 		 for (auto const& y : intersections) {
@@ -176,7 +177,8 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 		 }
 	 }
 	 std::vector<Edge> out(polyLine.begin(), polyLine.end());
-	 return out;
+	 ClosedPolygonalChains cpc = ClosedPolygonalChains(out);
+	 return cpc;
  }
 
  inline std::vector<Edge> removeReversed(std::vector<Edge> edges) {

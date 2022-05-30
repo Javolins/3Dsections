@@ -12,6 +12,7 @@
 #include "Edge.h"
 #include "DataClasses.h"
 #include <iostream>
+#include "ClosedPolygonalChains.h"
 
 TEST_CASE("intersection() testing") {
 
@@ -122,9 +123,9 @@ TEST_CASE("polygonalChain() testing") {
 	testEdges.push_back(OriginalEdge(Point(-1, -1, -1), Point(-1, 1, -1), Color(0, 0, 0)));
 	testEdges.push_back(OriginalEdge(Point(-1, 1, -1), Point(1, 1, -1), Color(0, 0, 0)));
 
-	std::vector<Edge> outTest = polygonalChain(testMap, testEdges);
+	ClosedPolygonalChains testCpc = polygonalChain(testMap, testEdges);
 
-	//for (auto a : outTest) std::cout << a << std::endl;
+	for (auto a : testCpc.getEdges()) std::cout << a << std::endl;
 
 	//TODO add requires
 }

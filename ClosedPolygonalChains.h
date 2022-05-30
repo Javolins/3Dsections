@@ -14,11 +14,12 @@ class ClosedPolygonalChains {
 
 	public:
 		ClosedPolygonalChains() = default;
+		ClosedPolygonalChains(std::vector<Edge> in) : edges(in) {};
 		~ClosedPolygonalChains() = default;
 
-		void addEdge(const MeshEdge edge) { edges.push_back(edge); }
-		std::vector<MeshEdge> getEdges() const { return edges; }
+		void addEdge(const Edge edge) { edges.push_back(edge); }
+		std::vector<Edge> getEdges() const { return edges; }
 
 	private:
-		std::vector<MeshEdge> edges;
+		std::vector<Edge> edges;
 };
