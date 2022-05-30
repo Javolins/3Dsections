@@ -146,3 +146,40 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 	}
 	return intersections;
 }
+
+
+ /**
+  * @brief Functions checking which intersections with a plane would create a section
+  * 
+  * @param intersections - map of intersections with appropriate point of intersection and edge intersecting
+  * @param origin - original edges from file
+  * @return polygonal chain to be drawn as intersection border
+  */
+ inline std::vector<Edge> polygonalChain(const std::map<const Edge*, Point> intersections, const std::vector<OriginalEdge> origin) {
+	 std::set<Edge, compareEdges> polyLine;
+	 for (auto const& x : intersections) {
+		 for (auto const& y : intersections) {
+			 if (!(x == y)) {
+				 for (auto e : origin) {
+					 // 4 possible connections, both ways
+					 if			(e.getStart() == x.first->getStart()	&& e.getEnd() == y.first->getStart())	polyLine.insert(Edge(x.second, y.second, Color(0, 0, 0)));
+					 else if	(e.getStart() == x.first->getStart()	&& e.getEnd() == y.first->getEnd())		polyLine.insert(Edge(x.second, y.second, Color(0, 0, 0)));
+					 else if	(e.getStart() == x.first->getEnd()		&& e.getEnd() == y.first->getStart())	polyLine.insert(Edge(x.second, y.second, Color(0, 0, 0)));
+					 else if	(e.getStart() == x.first->getEnd()		&& e.getEnd() == y.first->getEnd())		polyLine.insert(Edge(x.second, y.second, Color(0, 0, 0)));
+
+					 else if	(e.getStart() == y.first->getStart()	&& e.getEnd() == x.first->getStart())	polyLine.insert(Edge(x.second, y.second, Color(0, 0, 0)));
+					 else if	(e.getStart() == y.first->getStart()	&& e.getEnd() == x.first->getEnd())		polyLine.insert(Edge(x.second, y.second, Color(0, 0, 0)));
+					 else if	(e.getStart() == y.first->getEnd()		&& e.getEnd() == x.first->getStart())	polyLine.insert(Edge(x.second, y.second, Color(0, 0, 0)));
+					 else if	(e.getStart() == y.first->getEnd()		&& e.getEnd() == x.first->getEnd())		polyLine.insert(Edge(x.second, y.second, Color(0, 0, 0)));
+				 }
+				 // 4 possible connections
+				 OriginalEdge(x.first->getStart(), y.first->getStart(), Color(0, 0, 0));
+				 OriginalEdge(x.first->getStart(), y.first->getEnd(), Color(0, 0, 0));
+				 OriginalEdge(x.first->getEnd(), y.first->getStart(), Color(0, 0, 0));
+				 OriginalEdge(x.first->getEnd(), y.first->getEnd(), Color(0, 0, 0));
+			 }
+		 }
+	 }
+	 std::vector<Edge> out(polyLine.begin(), polyLine.end());
+	 return out;
+ }
