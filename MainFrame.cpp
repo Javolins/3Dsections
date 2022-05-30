@@ -185,6 +185,7 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 	helpMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MainFrame::viewDocumentationOnMenuSelection), this, viewDocumentation->GetId());
 	helpMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MainFrame::sendFeedbackOnMenuSelection), this, sendFeedback->GetId());
 	helpMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MainFrame::about3DsectionsOnMenuSelection), this, about3Dsections->GetId());
+	leftPanel->Connect(wxEVT_UPDATE_UI, wxUpdateUIEventHandler(MainFrame::wxPanelRepaint), NULL, this);
 	backwardButton->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::backwardButtonOnClick), NULL, this);
 	prevFrameButton->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::prevFrameButtonOnClick), NULL, this);
 	playToggle->Connect(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler(MainFrame::playToggleOnToggle), NULL, this);
@@ -207,6 +208,7 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 
 MainFrame::~MainFrame() {
 	// Disconnect Events
+	leftPanel->Disconnect(wxEVT_UPDATE_UI, wxUpdateUIEventHandler(MainFrame::wxPanelRepaint), NULL, this);
 	backwardButton->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::backwardButtonOnClick), NULL, this);
 	prevFrameButton->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::prevFrameButtonOnClick), NULL, this);
 	playToggle->Disconnect(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler(MainFrame::playToggleOnToggle), NULL, this);
@@ -264,9 +266,8 @@ void MainFrame::playToggleOnToggle(wxCommandEvent& event) {
 	}
 }
 
-void MainFrame::fileLoadButtonOnClick(wxCommandEvent& event) {
-	std::vector<OriginalEdge> dataSegment;
 
+void MainFrame::fileLoadButtonOnClick(wxCommandEvent& event) {
 	wxFileDialog WxOpenFileDialog(this, wxT("Choose a file"), wxT(""), wxT(""), wxT("Geometry file (*.geo)|*.geo"), wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 	if (WxOpenFileDialog.ShowModal() == wxID_OK) {
 		double xStartPoint, yStartPoint, zStartPoint, xEndPoint, yEndPoint, zEndPoint;
@@ -285,11 +286,15 @@ void MainFrame::fileLoadButtonOnClick(wxCommandEvent& event) {
 		event.Skip();
 	}
 
-	repaintGeo(dataSegment);
+	repaintGeo();
 }
 
 
-void MainFrame::repaintGeo(std::vector<OriginalEdge> dataSegment) {
+void MainFrame::wxPanelRepaint(wxUpdateUIEvent& event) {
+	repaintGeo();
+}
+
+void MainFrame::repaintGeo() {
 	Matrix4 scaleMatrix;
 	Matrix4 rotationX;
 	Matrix4 rotationY;

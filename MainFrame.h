@@ -161,7 +161,7 @@ class MainFrame : public wxFrame {
 		 * already loaded.
 		 *
 		 */
-		virtual void repaintGeo(std::vector<OriginalEdge>);
+		virtual void repaintGeo();
 
 		virtual void nextFrameButtonOnClick(wxCommandEvent& event) { event.Skip(); }
 		virtual void forewardButtonOnClick(wxCommandEvent& event) { event.Skip(); }
@@ -182,6 +182,15 @@ class MainFrame : public wxFrame {
 		virtual void saveAnimationButtonOnClick(wxCommandEvent& event) { event.Skip(); }
 		virtual void planeChoiceOnChoice(wxCommandEvent& event) { event.Skip(); }
 		virtual void speedSliderOnScroll(wxScrollEvent& event) { event.Skip(); }
+
+
+		/**
+		 * @brief Handler for class event
+		 * 
+		 * @param event Connected event, in this case: wxEVT_UPDATE_UI.
+		 * @note Refresh wxPanel when updating UIEvent
+		 */
+		virtual void wxPanelRepaint(wxUpdateUIEvent& event);
 	
 	//private:
 		//! A bar on top of the window, contains: @ref quitMenu, @ref helpMenu.
@@ -210,6 +219,8 @@ class MainFrame : public wxFrame {
 		wxStaticText* speedChoiceLabel;
 		wxSlider* speedSlider;
 		wxStatusBar* statusBar;
+
+		std::vector<OriginalEdge> dataSegment;
 
 };
 
