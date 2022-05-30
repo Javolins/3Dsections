@@ -190,7 +190,7 @@ class MainFrame : public wxFrame {
 		 * @param event Connected event, in this case: wxEVT_UPDATE_UI.
 		 * @note Refresh wxPanel when updating UIEvent
 		 */
-		virtual void wxPanelRepaint(wxUpdateUIEvent& event);
+		virtual void wxPanelRepaint(wxPaintEvent& event);
 	
 	//private:
 		//! A bar on top of the window, contains: @ref quitMenu, @ref helpMenu.
@@ -221,6 +221,7 @@ class MainFrame : public wxFrame {
 		wxStatusBar* statusBar;
 
 		std::vector<OriginalEdge> dataSegment;
+		std::vector<std::array<wxCoord, 4>> cordData;
 
 };
 
