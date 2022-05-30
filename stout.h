@@ -172,11 +172,6 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 					 else if	(e.getStart() == y.first->getEnd()		&& e.getEnd() == x.first->getStart())	polyLine.insert(Edge(x.second, y.second, Color(0, 0, 0)));
 					 else if	(e.getStart() == y.first->getEnd()		&& e.getEnd() == x.first->getEnd())		polyLine.insert(Edge(x.second, y.second, Color(0, 0, 0)));
 				 }
-				 // 4 possible connections
-				 OriginalEdge(x.first->getStart(), y.first->getStart(), Color(0, 0, 0));
-				 OriginalEdge(x.first->getStart(), y.first->getEnd(), Color(0, 0, 0));
-				 OriginalEdge(x.first->getEnd(), y.first->getStart(), Color(0, 0, 0));
-				 OriginalEdge(x.first->getEnd(), y.first->getEnd(), Color(0, 0, 0));
 			 }
 		 }
 	 }
