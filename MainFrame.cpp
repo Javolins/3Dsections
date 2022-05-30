@@ -175,11 +175,12 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 
 	this->Centre(wxBOTH);
 
+	Bind(wxEVT_PAINT, &MainFrame::wxPanelRepaint, this);
+
 	// Connect Events
 	helpMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MainFrame::viewDocumentationOnMenuSelection), this, viewDocumentation->GetId());
 	helpMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MainFrame::sendFeedbackOnMenuSelection), this, sendFeedback->GetId());
 	helpMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MainFrame::about3DsectionsOnMenuSelection), this, about3Dsections->GetId());
-	leftPanel->Connect(wxEVT_UPDATE_UI, wxUpdateUIEventHandler(MainFrame::wxPanelRepaint), NULL, this);
 	backwardButton->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::backwardButtonOnClick), NULL, this);
 	prevFrameButton->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::prevFrameButtonOnClick), NULL, this);
 	playToggle->Connect(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler(MainFrame::playToggleOnToggle), NULL, this);
@@ -202,7 +203,6 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 
 MainFrame::~MainFrame() {
 	// Disconnect Events
-	leftPanel->Disconnect(wxEVT_UPDATE_UI, wxUpdateUIEventHandler(MainFrame::wxPanelRepaint), NULL, this);
 	backwardButton->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::backwardButtonOnClick), NULL, this);
 	prevFrameButton->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::prevFrameButtonOnClick), NULL, this);
 	playToggle->Disconnect(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler(MainFrame::playToggleOnToggle), NULL, this);
@@ -267,7 +267,7 @@ void MainFrame::playToggleOnToggle(wxCommandEvent& event) {
 		if( planeIndex == 2 )
 			plane.setA(1);
 
-		repaintSec(intersectionPoints(dataSegments, plane));
+		repaintSec(intersectionPoints(dataSegment, plane));
 	}
 	else {
 		progressGauge->Hide();
@@ -288,10 +288,10 @@ void MainFrame::fileLoadButtonOnClick(wxCommandEvent& event) {
 
 		std::ifstream in(WxOpenFileDialog.GetPath().ToStdString());
 		if (in.is_open()) {
-			dataSegments.clear();
+			dataSegment.clear();
 			while (!in.eof()) {
 				in >> xStartPoint >> yStartPoint >> zStartPoint >> xEndPoint >> yEndPoint >> zEndPoint >> r >> g >> b;
-				dataSegments.push_back(OriginalEdge(Point(xStartPoint, yStartPoint, zStartPoint), Point(xEndPoint, yEndPoint, zEndPoint), Color(r, g, b)));
+				dataSegment.push_back(OriginalEdge(Point(xStartPoint, yStartPoint, zStartPoint), Point(xEndPoint, yEndPoint, zEndPoint), Color(r, g, b)));
 			}
 			in.close();
 		}
@@ -302,7 +302,8 @@ void MainFrame::fileLoadButtonOnClick(wxCommandEvent& event) {
 	repaintGeo();
 }
 
-void MainFrame::wxPanelRepaint(wxUpdateUIEvent& event) {
+
+void MainFrame::wxPanelRepaint(wxPaintEvent& event) {
 	repaintGeo();
 }
 
@@ -364,7 +365,7 @@ void MainFrame::repaintGeo() {
 	buffer.SetBackground(*wxWHITE_BRUSH);
 	buffer.Clear();
 
-	for (auto& segment : dataSegments) {
+	for (auto& segment : dataSegment) {
 		buffer.SetPen(wxPen(wxColour(segment.getRgb().getR(), segment.getRgb().getG(), segment.getRgb().getB())));
 
 		Vector4 beginVec, endVec;
@@ -373,7 +374,7 @@ void MainFrame::repaintGeo() {
 
 		beginVec = transformationMatrix * beginVec;
 		endVec = transformationMatrix * endVec;
-
+		
 		beginVec = perspectiveMatrix * beginVec;
 		endVec = perspectiveMatrix * endVec;
 
@@ -395,6 +396,8 @@ void MainFrame::repaintGeo() {
 			endVec.setElement(1, endVec.getElement(1) / -endVec.getElement(3));
 		}
 
+		std::array<wxCoord, 4> cordArr{ beginVec.getX(), beginVec.getY(), endVec.getX(), endVec.getY() } ;
+		cordData.push_back(cordArr);
 		buffer.DrawLine(beginVec.getX(), beginVec.getY(), endVec.getX(), endVec.getY());
 	}
 }
