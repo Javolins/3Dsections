@@ -268,6 +268,9 @@ void MainFrame::playToggleOnToggle(wxCommandEvent& event) {
 			plane.setA(1);
 
 		repaintSec(intersectionPoints(dataSegment, plane));
+
+		connectionPoints(secPoint);
+		secPoint.clear();
 	}
 	else {
 		progressGauge->Hide();
@@ -448,11 +451,38 @@ void MainFrame::repaintSec(std::map<const Edge*, Point> foundPoints){
 	float margin_x = (rightPanel->GetSize().GetWidth()-w*scale)/2.0;
 	float margin_y = (rightPanel->GetSize().GetHeight()-h*scale)/2.0;
 
+	double x0 = 0;
+	double y0 = 0;
+	bool first = true;
+
 	for( const auto& element : foundPoints ){
 
 		double x = (element.second.*get_x)() - min_x;
 		double y = (element.second.*get_y)() - min_y;
 		buffer.DrawCircle(abs(x)*scale + margin_x, abs(y)*scale + margin_y, 2);
 		buffer.DrawCircle(abs(x)*scale + margin_x, abs(y)*scale + margin_y, 2);
+
+		//gathered point cordinates to container
+		if(first){ x0 = x; y0 = y; first = false;}
+		std::array<double, 4> arr{ abs(x) * scale + margin_x, abs(y) * scale + margin_y, abs(x0) * scale + margin_x, abs(y0) * scale + margin_y };
+		secPoint.push_back(arr);
+		x0 = x;
+		y0 = y;
 	}
+}
+
+
+
+void MainFrame::connectionPoints(std::vector<std::array<double, 4>> secPoint){
+
+	wxClientDC dc(rightPanel);
+	wxBufferedDC buffer(&dc);
+	buffer.SetBackground(*wxWHITE_BRUSH);
+	buffer.SetPen(*wxBLACK_PEN);
+	buffer.Clear();
+
+	for( const auto& element : secPoint ){
+		buffer.DrawLine(element[0], element[1], element[2], element[3]);
+	}
+
 }
