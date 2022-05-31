@@ -23,6 +23,7 @@
     <None Include="resource\.geo files\szescian.geo">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include=".editorconfig" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\App.cpp">

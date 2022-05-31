@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <None Include=".editorconfig" />
     <None Include="resource\.geo files\a10a_4.geo" />
     <None Include="resource\.geo files\szescian.geo" />
   </ItemGroup>
