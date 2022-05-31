@@ -2,17 +2,17 @@
  * @file   stout-Test.h
  * @brief
  *
- * @author Micha≥ Rutkowski @P4ndaM1x Aleksander Bartoszek
+ * @author Micha≈Ç Rutkowski @P4ndaM1x Aleksander Bartoszek
  * @date   May 2022
  *********************************************************************/
 
 #pragma once
-#include "doctest.h"
-#include "stout.h"
-#include "Edge.h"
-#include "DataClasses.h"
+#include "../test/doctest.h"
+#include "../include/stout.h"
+#include "../include/Edge.h"
+#include "../include/DataClasses.h"
 #include <iostream>
-#include "ClosedPolygonalChains.h"
+#include "../include/ClosedPolygonalChains.h"
 
 TEST_CASE("intersection() testing") {
 

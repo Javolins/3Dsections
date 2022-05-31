@@ -2,7 +2,7 @@
  * @file   stout.h
  * @brief  small lib for algorithms used during calculating sections
  *
- * @author Micha³ Rutkowski, Aleksander Bartoszek
+ * @author MichaÅ‚ Rutkowski, Aleksander Bartoszek
  * @date   May 2022
  *********************************************************************/
 
@@ -14,11 +14,11 @@
 #include <map>
 #include <memory>
 #include <cmath>
-#include "OriginalEdge.h"
-#include "MeshEdge.h"
-#include "Edge.h"
-#include "Plane.h"
-#include "ClosedPolygonalChains.h"
+#include "../include/OriginalEdge.h"
+#include "../include/MeshEdge.h"
+#include "../include/Edge.h"
+#include "../include/Plane.h"
+#include "../include/ClosedPolygonalChains.h"
 
 
 /**
@@ -131,7 +131,7 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 }
 
 /**
- * @brief DO TESTÓW!!!
+ * @brief DO TESTï¿½W!!!
  * 
  * @param originalEdges
  * @param plane

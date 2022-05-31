@@ -18,6 +18,40 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <None Include=".editorconfig" />
+    <None Include="resource\.geo files\a10a_4.geo" />
+    <None Include="resource\.geo files\szescian.geo" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\App.cpp" />
+    <ClCompile Include="source\ClosedPolygonalChains.cpp" />
+    <ClCompile Include="source\doctest.cpp" />
+    <ClCompile Include="source\main.cpp" />
+    <ClCompile Include="source\MainFrame.cpp" />
+    <ClCompile Include="source\Matrix4.cpp" />
+    <ClCompile Include="source\Plane.cpp" />
+    <ClCompile Include="source\Vector4.cpp" />
+    <ClCompile Include="test\MainFrame-Test.cpp" />
+    <ClCompile Include="test\Matrix4-Test.cpp" />
+    <ClCompile Include="test\Plane-Test.cpp" />
+    <ClCompile Include="test\stout-Test.cpp" />
+    <ClCompile Include="test\Vector4-Test.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\App.h" />
+    <ClInclude Include="include\ClosedPolygonalChains.h" />
+    <ClInclude Include="include\DataClasses.h" />
+    <ClInclude Include="include\Edge.h" />
+    <ClInclude Include="include\MainFrame.h" />
+    <ClInclude Include="include\Matrix4.h" />
+    <ClInclude Include="include\MeshEdge.h" />
+    <ClInclude Include="include\OriginalEdge.h" />
+    <ClInclude Include="include\Plane.h" />
+    <ClInclude Include="include\stout.h" />
+    <ClInclude Include="include\Vector4.h" />
+    <ClInclude Include="test\doctest.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -141,33 +175,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="App.cpp" />
-    <ClCompile Include="doctest.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="MainFrame-Test.cpp" />
-    <ClCompile Include="MainFrame.cpp" />
-    <ClCompile Include="Matrix4-Test.cpp" />
-    <ClCompile Include="Matrix4.cpp" />
-    <ClCompile Include="Plane-Test.cpp" />
-    <ClCompile Include="stout-Test.cpp" />
-    <ClCompile Include="Vector4-Test.cpp" />
-    <ClCompile Include="Vector4.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="App.h" />
-    <ClInclude Include="ClosedPolygonalChains.h" />
-    <ClInclude Include="doctest.h" />
-    <ClInclude Include="Edge.h" />
-    <ClInclude Include="MainFrame.h" />
-    <ClInclude Include="DataClasses.h" />
-    <ClInclude Include="Matrix4.h" />
-    <ClInclude Include="MeshEdge.h" />
-    <ClInclude Include="OriginalEdge.h" />
-    <ClInclude Include="Plane.h" />
-    <ClInclude Include="stout.h" />
-    <ClInclude Include="Vector4.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

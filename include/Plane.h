@@ -2,7 +2,7 @@
  * @file   Plane.h
  * @brief  class representing plane used in 3D transformations
  *
- * @author Micha≥ Rutkowski @P4ndaM1x
+ * @author Micha≈Ç Rutkowski @P4ndaM1x
  * @date   May 2022
  *********************************************************************/
 

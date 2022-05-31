@@ -2,12 +2,12 @@
  * @file   ClosedPolygonalChains.h
  * @brief  class representing edges of a drawn section
  *
- * @author Micha≥ Rutkowski @P4ndaM1x
+ * @author Micha≈Ç Rutkowski @P4ndaM1x
  * @date   May 2022
  *********************************************************************/
 
 #pragma once
-#include "MeshEdge.h"
+#include "../include/MeshEdge.h"
 #include <vector>
 
 class ClosedPolygonalChains {

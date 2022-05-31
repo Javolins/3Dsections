@@ -2,12 +2,12 @@
  * @file   App.cpp
  * @brief  Implementation of methods used in the class
  * 
- * @author Micha≥ Rutkowski @P4ndaM1x, Aleksander Bartoszek @AleksanderBartoszek
+ * @author Micha≈Ç Rutkowski @P4ndaM1x, Aleksander Bartoszek @AleksanderBartoszek
  * @date   May 2022
  *********************************************************************/
 
-#include "App.h"
-#include "doctest.h"
+#include "../include/App.h"
+#include "../test/doctest.h"
 
 /**
  * @brief Defines behavior of the app, right after launching
