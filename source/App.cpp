@@ -2,7 +2,7 @@
  * @file   App.cpp
  * @brief  Implementation of methods used in the class
  * 
- * @author Micha≥ Rutkowski @P4ndaM1x, Aleksander Bartoszek @AleksanderBartoszek
+ * @author Micha≈Ç Rutkowski @P4ndaM1x, Aleksander Bartoszek @AleksanderBartoszek
  * @date   May 2022
  *********************************************************************/
 

@@ -2,7 +2,7 @@
  * @file   stout-Test.h
  * @brief
  *
- * @author Micha≥ Rutkowski @P4ndaM1x Aleksander Bartoszek
+ * @author Micha≈Ç Rutkowski @P4ndaM1x Aleksander Bartoszek
  * @date   May 2022
  *********************************************************************/
 

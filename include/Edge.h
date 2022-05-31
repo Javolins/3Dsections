@@ -2,7 +2,7 @@
  * @file   Edge.h
  * @brief  Base class for describing edges of processed solid
  *
- * @author Aleksander Bartoszek, Micha≥ Rutkowski
+ * @author Aleksander Bartoszek, Micha≈Ç Rutkowski
  *********************************************************************/
 
 #pragma once

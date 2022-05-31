@@ -2,7 +2,7 @@
  * @file   Plane-Test.cpp
  * @brief  Plane testing
  *
- * @author Micha≥ Rutkowski @P4ndaM1x
+ * @author Micha≈Ç Rutkowski @P4ndaM1x
  * @date   May 2022
  *********************************************************************/
 

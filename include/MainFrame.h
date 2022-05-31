@@ -5,7 +5,7 @@
  * C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
  * http://www.wxformbuilder.org/
  * 
- * @author Micha≥ Rutkowski @P4ndaM1x
+ * @author Micha≈Ç Rutkowski @P4ndaM1x
  * @date   May 2022
  *********************************************************************/
 

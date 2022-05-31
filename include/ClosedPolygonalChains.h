@@ -2,7 +2,7 @@
  * @file   ClosedPolygonalChains.h
  * @brief  class representing edges of a drawn section
  *
- * @author Micha≥ Rutkowski @P4ndaM1x
+ * @author Micha≈Ç Rutkowski @P4ndaM1x
  * @date   May 2022
  *********************************************************************/
 

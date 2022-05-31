@@ -2,7 +2,7 @@
  * @file   App.h
  * @brief  Hedear file of the class representing 3Dsections app
  * 
- * @author Micha≥ Rutkowski @P4ndaM1x
+ * @author Micha≈Ç Rutkowski @P4ndaM1x
  * @date   May 2022
  *********************************************************************/
 

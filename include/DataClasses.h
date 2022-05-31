@@ -2,7 +2,7 @@
  * @file   DataClasses.h
  * @brief  classes decomposing loaded file for processing
  *
- * @author Aleksander Bartoszek, Micha≥ Rutkowski
+ * @author Aleksander Bartoszek, Micha≈Ç Rutkowski
  *********************************************************************/
 
 #pragma once

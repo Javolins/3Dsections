@@ -5,7 +5,7 @@
  * C++ constructor and destructor generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
  * http://www.wxformbuilder.org/
  * 
- * @author Micha³ Rutkowski @P4ndaM1x
+ * @author MichaÅ‚ Rutkowski @P4ndaM1x
  * @date   May 2022
  *********************************************************************/
 
@@ -229,21 +229,21 @@ void MainFrame::onExit(){
 
 void MainFrame::viewDocumentationOnMenuSelection(wxCommandEvent& event) {
 	if (!wxLaunchDefaultBrowser("https://3dsections.p4m1.top/")) {
-		wxMessageDialog* dialog = new wxMessageDialog(nullptr, "Przegl¹darka nie mog³a zostaæ otwarta.", "B³¹d", wxICON_ERROR | wxSTAY_ON_TOP);
+		wxMessageDialog* dialog = new wxMessageDialog(nullptr, "Przeglï¿½darka nie mogï¿½a zostaï¿½ otwarta.", "Bï¿½ï¿½d", wxICON_ERROR | wxSTAY_ON_TOP);
 		dialog->ShowModal();
 		delete dialog;
 	}
 }
 void MainFrame::sendFeedbackOnMenuSelection(wxCommandEvent& event) {
 	if (!wxLaunchDefaultBrowser("mailto:3dsections@p4m1.top")) {
-		wxMessageDialog* dialog = new wxMessageDialog(nullptr, "Klient pocztowy nie móg³ zostaæ otwarty.", "B³¹d", wxICON_ERROR | wxSTAY_ON_TOP);
+		wxMessageDialog* dialog = new wxMessageDialog(nullptr, "Klient pocztowy nie mï¿½gï¿½ zostaï¿½ otwarty.", "Bï¿½ï¿½d", wxICON_ERROR | wxSTAY_ON_TOP);
 		dialog->ShowModal();
 		delete dialog;
 	}
 }
 void MainFrame::about3DsectionsOnMenuSelection(wxCommandEvent& event) {
 	if (!wxLaunchDefaultBrowser("https://github.com/Javolins/3Dsections#readme")) {
-		wxMessageDialog* dialog = new wxMessageDialog(nullptr, "Przegl¹darka nie mog³a zostaæ otwarta.", "B³¹d", wxICON_ERROR | wxSTAY_ON_TOP);
+		wxMessageDialog* dialog = new wxMessageDialog(nullptr, "Przeglï¿½darka nie mogï¿½a zostaï¿½ otwarta.", "Bï¿½ï¿½d", wxICON_ERROR | wxSTAY_ON_TOP);
 		dialog->ShowModal();
 		delete dialog;
 	}
