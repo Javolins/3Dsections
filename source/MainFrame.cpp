@@ -229,21 +229,21 @@ void MainFrame::onExit(){
 
 void MainFrame::viewDocumentationOnMenuSelection(wxCommandEvent& event) {
 	if (!wxLaunchDefaultBrowser("https://3dsections.p4m1.top/")) {
-		wxMessageDialog* dialog = new wxMessageDialog(nullptr, "Przegl�darka nie mog�a zosta� otwarta.", "B��d", wxICON_ERROR | wxSTAY_ON_TOP);
+		wxMessageDialog* dialog = new wxMessageDialog(nullptr, "Przeglądarka nie mogła zostać otwarta.", "Błąd", wxICON_ERROR | wxSTAY_ON_TOP);
 		dialog->ShowModal();
 		delete dialog;
 	}
 }
 void MainFrame::sendFeedbackOnMenuSelection(wxCommandEvent& event) {
 	if (!wxLaunchDefaultBrowser("mailto:3dsections@p4m1.top")) {
-		wxMessageDialog* dialog = new wxMessageDialog(nullptr, "Klient pocztowy nie m�g� zosta� otwarty.", "B��d", wxICON_ERROR | wxSTAY_ON_TOP);
+		wxMessageDialog* dialog = new wxMessageDialog(nullptr, "Klient pocztowy nie mógł zostać otwarty.", "Błąd", wxICON_ERROR | wxSTAY_ON_TOP);
 		dialog->ShowModal();
 		delete dialog;
 	}
 }
 void MainFrame::about3DsectionsOnMenuSelection(wxCommandEvent& event) {
 	if (!wxLaunchDefaultBrowser("https://github.com/Javolins/3Dsections#readme")) {
-		wxMessageDialog* dialog = new wxMessageDialog(nullptr, "Przegl�darka nie mog�a zosta� otwarta.", "B��d", wxICON_ERROR | wxSTAY_ON_TOP);
+		wxMessageDialog* dialog = new wxMessageDialog(nullptr, "Przeglądarka nie mogła zostać otwarta.", "Błąd", wxICON_ERROR | wxSTAY_ON_TOP);
 		dialog->ShowModal();
 		delete dialog;
 	}

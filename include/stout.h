@@ -131,7 +131,7 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 }
 
 /**
- * @brief DO TEST�W!!!
+ * @brief DO TESTÓW!!!
  * 
  * @param originalEdges
  * @param plane
