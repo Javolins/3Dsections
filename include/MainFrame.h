@@ -231,10 +231,12 @@ class MainFrame : public wxFrame {
 		wxButton* forewardButton;
 		wxStaticLine* verticalStaticLine;
 		wxStaticText* fileLoadLabel;
+		//! Opens a file selection dialog.
 		wxButton* fileLoadButton;
 		wxStaticText* saveAnimationLabel;
 		wxButton* saveAnimationButton;
 		wxStaticText* planeChoiceLabel;
+		//! Expands to the list of three planes: xOy, xOz, yOz
 		wxChoice* planeChoice;
 		wxStaticText* speedChoiceLabel;
 		wxSlider* speedSlider;
