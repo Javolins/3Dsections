@@ -40,11 +40,13 @@
 #include <wx/msgdlg.h>
 #include <wx/dcbuffer.h>
 
+// All needed STL's modules.
 #include <fstream>
 #include <vector>
 #include <map>
 #include <limits>
 
+// All of our headers used in the file. 
 #include "../include/stout.h"
 #include "../include/DataClasses.h"
 #include "../include/OriginalEdge.h"
@@ -136,7 +138,15 @@ class MainFrame : public wxFrame {
 		virtual void about3DsectionsOnMenuSelection(wxCommandEvent& event);
 
 		virtual void backwardButtonOnClick(wxCommandEvent& event) { event.Skip(); }
-		virtual void prevFrameButtonOnClick(wxCommandEvent& event) { event.Skip(); }
+
+		/**
+		 * @brief After clicking @ref prevFrameButton, decreases the parameter of @ref currentPlane
+		 * responsible for its position and repaints the section.
+		 * 
+		 * @param event Connected event, in this case: wxEVT_COMMAND_BUTTON_CLICKED.
+		 * @see prevFrameButton
+		 */
+		virtual void prevFrameButtonOnClick(wxCommandEvent& event);
 
 		/**
 		 * @brief Deals with all actions that should be managed after clicking @ref playToggle button.
@@ -172,13 +182,20 @@ class MainFrame : public wxFrame {
 		virtual void repaintGeo();
 
 		/**
-		 * @brief Draws points where edges are intersecting with a plane, on the @ref rightPanel
+		 * @brief Draws points where edges are intersecting with a plane, on the @ref rightPanel.
 		 * 
-		 * @param foundPoints Edges which are causing the intersections and Points representing coordinates of those
 		 */
-		virtual void repaintSec(std::vector<std::pair<const Edge*, Point>> foundPoints);
+		virtual void repaintSec();
 
-		virtual void nextFrameButtonOnClick(wxCommandEvent& event) { event.Skip(); }
+		/**
+		 * @brief After clicking @ref nextFrameButton, increases the parameter of @ref currentPlane
+		 * responsible for its position and repaints the section.
+		 *
+		 * @param event Connected event, in this case: wxEVT_COMMAND_BUTTON_CLICKED.
+		 * @see nextFrameButton
+		 */
+		virtual void nextFrameButtonOnClick(wxCommandEvent& event);
+
 		virtual void forewardButtonOnClick(wxCommandEvent& event) { event.Skip(); }
 
 		/**
@@ -193,7 +210,15 @@ class MainFrame : public wxFrame {
 		virtual void fileLoadButtonOnClick(wxCommandEvent& event);
 
 		virtual void saveAnimationButtonOnClick(wxCommandEvent& event) { event.Skip(); }
-		virtual void planeChoiceOnChoice(wxCommandEvent& event) { event.Skip(); }
+
+		/**
+		 * @brief Changes orientation of @ref currentPlane.
+		 * 
+		 * @param event Connected event, in this case: wxEVT_COMMAND_CHOICE_SELECTED.
+		 * @see currentPlane
+		 */
+		virtual void planeChoiceOnChoice(wxCommandEvent& event);
+
 		virtual void speedSliderOnScroll(wxScrollEvent& event) { event.Skip(); }
 
 
@@ -205,21 +230,26 @@ class MainFrame : public wxFrame {
 		 */
 		virtual void wxPanelRepaint(wxPaintEvent& event);
 	
-	//private:
+	private:
 		//! A bar on top of the window, contains: @ref quitMenu, @ref helpMenu.
 		wxMenuBar* topMenuBar;
 		wxMenu* quitMenu;
 		//! Expands to the list of menu items: @ref viewDocumentation, @ref sendFeedback, @ref about3Dsections.
 		wxMenu* helpMenu;
+		//! Displays loaded solid
 		wxPanel* leftPanel;
+		//! Displays sections of the solid
 		wxPanel* rightPanel;
+		//! Optically separates right toolbar
 		wxStaticLine* horizontalStaticLine;
 		//! Indicates state of the played animation.
 		wxGauge* progressGauge;
 		wxButton* backwardButton;
+		//! Rewinds the animation by one frame
 		wxButton* prevFrameButton;
 		//! Controls if animation is being played.
 		wxToggleButton* playToggle;
+		//! Advances the animation by one frame
 		wxButton* nextFrameButton;
 		wxButton* forewardButton;
 		wxStaticLine* verticalStaticLine;
@@ -237,7 +267,9 @@ class MainFrame : public wxFrame {
 
 		//! Stores edges of loaded solid
 		std::vector<OriginalEdge> dataSegment;
-		//! Stores a section points coordinates
+		//! Stores a section points coordinates (co to, po co, na co?)
 		std::vector<std::array<wxCoord, 4>> cordData;
+		//! Stores the cutting plane
+		Plane currentPlane{0,0,1,0};
 };
 

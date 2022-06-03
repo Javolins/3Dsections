@@ -254,20 +254,7 @@ void MainFrame::playToggleOnToggle(wxCommandEvent& event) {
 
 		progressGauge->Show();
 		playToggle->SetLabel("Stop");
-
-		unsigned planeIndex = planeChoice->GetSelection();
-		Plane plane;
-		// plane: xOy
-		if( planeIndex == 0 )
-			plane.setC(1);
-		// plane: xOz
-		if( planeIndex == 1 )
-			plane.setB(1);
-		// plane: yOz
-		if( planeIndex == 2 )
-			plane.setA(1);
-
-		repaintSec(intersectionPoints(dataSegment, plane));
+		repaintSec();
 	}
 	else {
 		progressGauge->Hide();
@@ -402,8 +389,9 @@ void MainFrame::repaintGeo() {
 	}
 }
 
-void MainFrame::repaintSec(std::vector<std::pair<const Edge*, Point>> foundPoints){
-
+void MainFrame::repaintSec(){
+	
+	std::vector<std::pair<const Edge*, Point>> foundPoints = intersectionPoints(dataSegment, currentPlane);
 	std::vector<Edge> lines = polygonalChain(foundPoints, dataSegment).getEdges();
 
 	wxClientDC dc(rightPanel);
@@ -414,7 +402,6 @@ void MainFrame::repaintSec(std::vector<std::pair<const Edge*, Point>> foundPoint
 	
 	double min_x = std::numeric_limits<double>::max(), min_y = std::numeric_limits<double>::max(),
 		max_x = std::numeric_limits<double>::min(), max_y = std::numeric_limits<double>::min();
-
 
 	unsigned planeIndex = planeChoice->GetSelection();
 	// plane: xOy
@@ -462,7 +449,8 @@ void MainFrame::repaintSec(std::vector<std::pair<const Edge*, Point>> foundPoint
 
 		buffer.DrawCircle(
 			abs(x)*scale + margin_x, 
-			abs(y)*scale + margin_y, 2
+			abs(y)*scale + margin_y, 
+			2
 		);
 	}
 
@@ -485,4 +473,31 @@ void MainFrame::repaintSec(std::vector<std::pair<const Edge*, Point>> foundPoint
 			}
 		);
 	}
+}
+
+
+void MainFrame::planeChoiceOnChoice(wxCommandEvent& event){
+	
+	unsigned planeIndex = planeChoice->GetSelection();
+	// plane: xOy
+	if( planeIndex == 0 )
+		currentPlane.set(0, 0, 1, 0);
+	// plane: xOz
+	if( planeIndex == 1 )
+		currentPlane.set(0, 1, 0, 0);
+	// plane: yOz
+	if( planeIndex == 2 )
+		currentPlane.set(1, 0, 0, 0);
+}
+
+void MainFrame::prevFrameButtonOnClick(wxCommandEvent& event){
+
+	currentPlane.setD(currentPlane.getD() - 0.1);
+	repaintSec();
+}
+
+void MainFrame::nextFrameButtonOnClick(wxCommandEvent& event){
+	
+	currentPlane.setD(currentPlane.getD() + 0.1);
+	repaintSec();
 }

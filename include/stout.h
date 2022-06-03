@@ -106,17 +106,27 @@ inline int sgn(double val){
  */
 inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane){
 
+	// check if edge intersects plane
+	Point onPlane;
+	if( plane.getA() != 0 )
+		onPlane.set(-plane.getD()/plane.getA(), 0, 0);
+	else if( plane.getB() != 0 )
+		onPlane.set(0, -plane.getD()/plane.getB(), 0);
+	else if( plane.getC() != 0 )
+		onPlane.set(0, 0, -plane.getD()/plane.getC());
+	else return nullptr;
+
 	Point start = line.getStart();
 	Point end = line.getEnd();
 
-	std::array<double, 3> startVec{ start.getX(), start.getY(), start.getZ() };
-	std::array<double, 3> endVec{ end.getX(), end.getY(), end.getZ() };
-	std::array<double, 3> planeVec = plane.getNormalVector();
+	std::array<double, 3> startVec{ start.getX() - onPlane.getX(), start.getY() - onPlane.getY(), start.getZ() - onPlane.getZ() };
+	std::array<double, 3> endVec{ end.getX() - onPlane.getX(), end.getY() - onPlane.getY(), end.getZ() - onPlane.getZ() };
+	std::array<double, 3> planeVec{ plane.getA() - onPlane.getX(), plane.getB() - onPlane.getY(), plane.getC() - onPlane.getZ() };
 
-	// check if edge intersects plane
 	if( sgn(dot(startVec, planeVec)) == sgn(dot(endVec, planeVec)) ) 
 		return nullptr;
 
+	// calculate intersection point
 	std::array<double, 3> lineVec = line.getDirectionalVector();
 
 	double t = -(plane.getA() * start.getX() + plane.getB() * start.getY() + plane.getC() * start.getZ() + plane.getD())
