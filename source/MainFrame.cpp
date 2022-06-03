@@ -229,21 +229,21 @@ void MainFrame::onExit(){
 
 void MainFrame::viewDocumentationOnMenuSelection(wxCommandEvent& event) {
 	if (!wxLaunchDefaultBrowser("https://3dsections.p4m1.top/")) {
-		wxMessageDialog* dialog = new wxMessageDialog(nullptr, "Przegl�darka nie mog�a zosta� otwarta.", "B��d", wxICON_ERROR | wxSTAY_ON_TOP);
+		wxMessageDialog* dialog = new wxMessageDialog(nullptr, "Przeglądarka nie mogła zostać otwarta.", "Błąd", wxICON_ERROR | wxSTAY_ON_TOP);
 		dialog->ShowModal();
 		delete dialog;
 	}
 }
 void MainFrame::sendFeedbackOnMenuSelection(wxCommandEvent& event) {
 	if (!wxLaunchDefaultBrowser("mailto:3dsections@p4m1.top")) {
-		wxMessageDialog* dialog = new wxMessageDialog(nullptr, "Klient pocztowy nie m�g� zosta� otwarty.", "B��d", wxICON_ERROR | wxSTAY_ON_TOP);
+		wxMessageDialog* dialog = new wxMessageDialog(nullptr, "Klient pocztowy nie mógł zostać otwarty.", "Błąd", wxICON_ERROR | wxSTAY_ON_TOP);
 		dialog->ShowModal();
 		delete dialog;
 	}
 }
 void MainFrame::about3DsectionsOnMenuSelection(wxCommandEvent& event) {
 	if (!wxLaunchDefaultBrowser("https://github.com/Javolins/3Dsections#readme")) {
-		wxMessageDialog* dialog = new wxMessageDialog(nullptr, "Przegl�darka nie mog�a zosta� otwarta.", "B��d", wxICON_ERROR | wxSTAY_ON_TOP);
+		wxMessageDialog* dialog = new wxMessageDialog(nullptr, "Przeglądarka nie mogła zostać otwarta.", "Błąd", wxICON_ERROR | wxSTAY_ON_TOP);
 		dialog->ShowModal();
 		delete dialog;
 	}
@@ -268,9 +268,6 @@ void MainFrame::playToggleOnToggle(wxCommandEvent& event) {
 			plane.setA(1);
 
 		repaintSec(intersectionPoints(dataSegment, plane));
-
-		connectionPoints(secPoint);
-		secPoint.clear();
 	}
 	else {
 		progressGauge->Hide();
@@ -407,12 +404,14 @@ void MainFrame::repaintGeo() {
 
 void MainFrame::repaintSec(std::map<const Edge*, Point> foundPoints){
 
+	std::vector<Edge> lines = polygonalChain(foundPoints, dataSegment).getEdges();
+
 	wxClientDC dc(rightPanel);
 	wxBufferedDC buffer(&dc);
 	buffer.SetBackground(*wxWHITE_BRUSH);
 	buffer.SetPen(*wxBLACK_PEN);
 	buffer.Clear();
-
+	
 	double min_x = std::numeric_limits<double>::max(), min_y = std::numeric_limits<double>::max(),
 		max_x = std::numeric_limits<double>::min(), max_y = std::numeric_limits<double>::min();
 
@@ -455,34 +454,35 @@ void MainFrame::repaintSec(std::map<const Edge*, Point> foundPoints){
 	double y0 = 0;
 	bool first = true;
 
+	// draw circles
 	for( const auto& element : foundPoints ){
 
 		double x = (element.second.*get_x)() - min_x;
 		double y = (element.second.*get_y)() - min_y;
-		buffer.DrawCircle(abs(x)*scale + margin_x, abs(y)*scale + margin_y, 2);
-		buffer.DrawCircle(abs(x)*scale + margin_x, abs(y)*scale + margin_y, 2);
 
-		//gathered point cordinates to container
-		if(first){ x0 = x; y0 = y; first = false;}
-		std::array<double, 4> arr{ abs(x) * scale + margin_x, abs(y) * scale + margin_y, abs(x0) * scale + margin_x, abs(y0) * scale + margin_y };
-		secPoint.push_back(arr);
-		x0 = x;
-		y0 = y;
-	}
-}
-
-
-
-void MainFrame::connectionPoints(std::vector<std::array<double, 4>> secPoint){
-
-	wxClientDC dc(rightPanel);
-	wxBufferedDC buffer(&dc);
-	buffer.SetBackground(*wxWHITE_BRUSH);
-	buffer.SetPen(*wxBLACK_PEN);
-	buffer.Clear();
-
-	for( const auto& element : secPoint ){
-		buffer.DrawLine(element[0], element[1], element[2], element[3]);
+		buffer.DrawCircle(
+			abs(x)*scale + margin_x, 
+			abs(y)*scale + margin_y, 2
+		);
 	}
 
+	// draw lines
+	for( const auto& element : lines ){
+
+		double x_start = (element.getStart().*get_x)() - min_x;
+		double y_start = (element.getStart().*get_y)() - min_y;
+		double x_end = (element.getEnd().*get_x)() - min_x;
+		double y_end = (element.getEnd().*get_y)() - min_y;
+
+		buffer.DrawLine(
+			wxPoint{ 
+				static_cast<int>(abs(x_start)*scale + margin_x), 
+				static_cast<int>(abs(y_start)*scale + margin_y)
+			},
+			wxPoint{ 
+				static_cast<int>(abs(x_end)*scale + margin_x),
+				static_cast<int>(abs(y_end)*scale + margin_y)
+			}
+		);
+	}
 }
