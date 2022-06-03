@@ -204,13 +204,6 @@ class MainFrame : public wxFrame {
 		 * @note Refresh wxPanel when updating UIEvent
 		 */
 		virtual void wxPanelRepaint(wxPaintEvent& event);
-
-		/**
-		 * @brief Connect a point which arose as the intersection of a solid with a plane
-		 * 
-		 * @param secPoint Container with arrays of point coordinates as intersection plane - solid result  
-		 */
-		virtual void connectionPoints(std::vector<std::array<double, 4>> secPoint);
 	
 	//private:
 		//! A bar on top of the window, contains: @ref quitMenu, @ref helpMenu.
@@ -246,7 +239,5 @@ class MainFrame : public wxFrame {
 		std::vector<OriginalEdge> dataSegment;
 		//! Stores a section points coordinates
 		std::vector<std::array<wxCoord, 4>> cordData;
-		//! Stores a section points coordinates for temporary purposes
-		std::vector<std::array<double, 4>> secPoint;
 };
 
