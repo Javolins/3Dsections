@@ -176,7 +176,7 @@ class MainFrame : public wxFrame {
 		 * 
 		 * @param foundPoints Edges which are causing the intersections and Points representing coordinates of those
 		 */
-		virtual void repaintSec(std::map<const Edge*, Point> foundPoints);
+		virtual void repaintSec(std::vector<std::pair<const Edge*, Point>> foundPoints);
 
 		virtual void nextFrameButtonOnClick(wxCommandEvent& event) { event.Skip(); }
 		virtual void forewardButtonOnClick(wxCommandEvent& event) { event.Skip(); }

@@ -138,13 +138,13 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
  * @param plane
  * @return 
  */
- inline std::map<const Edge*, Point> intersectionPoints(const std::vector<OriginalEdge>& originalEdges, const Plane& plane){
+ inline std::vector<std::pair<const Edge*, Point>> intersectionPoints(const std::vector<OriginalEdge>& originalEdges, const Plane& plane){
 	
-	std::map<const Edge*, Point> intersections;
+	 std::vector<std::pair<const Edge*, Point>> intersections;
 	for( auto& edge : originalEdges ){
 		std::unique_ptr<Point> ptr{ intersection(edge, plane) };
 		if( ptr != nullptr )
-			intersections.insert({ &edge, *ptr });
+			intersections.push_back({ &edge, *ptr });
 	}
 	return intersections;
 }
@@ -157,24 +157,28 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
   * @param origin - original edges from file
   * @return polygonal chain to be drawn as intersection border
   */
- inline ClosedPolygonalChains polygonalChain(const std::map<const Edge*, Point> intersections, const std::vector<OriginalEdge> origin) {
+ inline ClosedPolygonalChains polygonalChain(const std::vector<std::pair<const Edge*, Point>> intersections, const std::vector<OriginalEdge> origin) {
 	 std::set<Edge, compareEdges> polyLine;
-	 for (auto const& x : intersections) {
-		 for (auto const& y : intersections) {
-			 if (!(x == y)) {
-				 #pragma omp parallel
-				 for (auto& e : origin) {
-					 // 4 possible connections, both ways
-					 if			(e.getStart() == x.first->getStart()	&& e.getEnd() == y.first->getStart())	polyLine.insert(Edge(x.second, y.second, Color(0, 0, 0)));
-					 else if	(e.getStart() == x.first->getStart()	&& e.getEnd() == y.first->getEnd())		polyLine.insert(Edge(x.second, y.second, Color(0, 0, 0)));
-					 else if	(e.getStart() == x.first->getEnd()		&& e.getEnd() == y.first->getStart())	polyLine.insert(Edge(x.second, y.second, Color(0, 0, 0)));
-					 else if	(e.getStart() == x.first->getEnd()		&& e.getEnd() == y.first->getEnd())		polyLine.insert(Edge(x.second, y.second, Color(0, 0, 0)));
-					 
-					 else if	(e.getStart() == y.first->getStart()	&& e.getEnd() == x.first->getStart())	polyLine.insert(Edge(x.second, y.second, Color(0, 0, 0)));
-					 else if	(e.getStart() == y.first->getStart()	&& e.getEnd() == x.first->getEnd())		polyLine.insert(Edge(x.second, y.second, Color(0, 0, 0)));
-					 else if	(e.getStart() == y.first->getEnd()		&& e.getEnd() == x.first->getStart())	polyLine.insert(Edge(x.second, y.second, Color(0, 0, 0)));
-					 else if	(e.getStart() == y.first->getEnd()		&& e.getEnd() == x.first->getEnd())		polyLine.insert(Edge(x.second, y.second, Color(0, 0, 0)));
-				 }
+
+	 #pragma omp parallel for collapse(3)
+	 for( int i = 0; i < intersections.size() - 1; i++) {
+		 for( int j = i+1; j < intersections.size(); j++ ){
+			 for( int k = 0; k < origin.size(); k++ ){
+				 Edge* e;
+				 // 4 possible connections, both ways
+				 if		( origin[k].getStart() == intersections[i].first->getStart()	&& origin[k].getEnd() == intersections[j].first->getStart() )	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
+				 else if( origin[k].getStart() == intersections[i].first->getStart()	&& origin[k].getEnd() == intersections[j].first->getEnd() )		e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
+				 else if( origin[k].getStart() == intersections[i].first->getEnd()		&& origin[k].getEnd() == intersections[j].first->getStart() )	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
+				 else if( origin[k].getStart() == intersections[i].first->getEnd()		&& origin[k].getEnd() == intersections[j].first->getEnd() )		e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
+
+				 else if( origin[k].getStart() == intersections[j].first->getStart()	&& origin[k].getEnd() == intersections[i].first->getStart() )	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
+				 else if( origin[k].getStart() == intersections[j].first->getStart()	&& origin[k].getEnd() == intersections[i].first->getEnd() )		e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
+				 else if( origin[k].getStart() == intersections[j].first->getEnd()		&& origin[k].getEnd() == intersections[i].first->getStart() )	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
+				 else if( origin[k].getStart() == intersections[j].first->getEnd()		&& origin[k].getEnd() == intersections[i].first->getEnd() )		e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
+				 else continue;
+
+				 #pragma omp critical
+				 polyLine.insert(*e);
 			 }
 		 }
 	 }

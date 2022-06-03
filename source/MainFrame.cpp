@@ -402,7 +402,7 @@ void MainFrame::repaintGeo() {
 	}
 }
 
-void MainFrame::repaintSec(std::map<const Edge*, Point> foundPoints){
+void MainFrame::repaintSec(std::vector<std::pair<const Edge*, Point>> foundPoints){
 
 	std::vector<Edge> lines = polygonalChain(foundPoints, dataSegment).getEdges();
 

@@ -99,12 +99,12 @@ TEST_CASE("Mesh() testing") {
 }
 
 TEST_CASE("polygonalChain() testing") {
-	std::map<const Edge*, Point> testMap;
+	std::vector<std::pair<const Edge*, Point>> testMap;
 
-	testMap.insert(std::pair<Edge*, Point>(&OriginalEdge(Point(1, 1, 1), Point(1, 1, -1), Color(0, 0, 0)), Point(1, 1, 0)));
-	testMap.insert(std::pair<Edge*, Point>(&OriginalEdge(Point(1, -1, 1), Point(1, -1, -1), Color(0, 0, 0)), Point(1, -1, 0)));
-	testMap.insert(std::pair<Edge*, Point>(&OriginalEdge(Point(-1, 1, 1), Point(-1, 1, -1), Color(0, 0, 0)), Point(-1, 1, 0)));
-	testMap.insert(std::pair<Edge*, Point>(&OriginalEdge(Point(-1, -1, 1), Point(-1, -1, -1), Color(0, 0, 0)), Point(-1, -1, 0)));
+	testMap.push_back(std::pair<Edge*, Point>(&OriginalEdge(Point(1, 1, 1), Point(1, 1, -1), Color(0, 0, 0)), Point(1, 1, 0)));
+	testMap.push_back(std::pair<Edge*, Point>(&OriginalEdge(Point(1, -1, 1), Point(1, -1, -1), Color(0, 0, 0)), Point(1, -1, 0)));
+	testMap.push_back(std::pair<Edge*, Point>(&OriginalEdge(Point(-1, 1, 1), Point(-1, 1, -1), Color(0, 0, 0)), Point(-1, 1, 0)));
+	testMap.push_back(std::pair<Edge*, Point>(&OriginalEdge(Point(-1, -1, 1), Point(-1, -1, -1), Color(0, 0, 0)), Point(-1, -1, 0)));
 
 	std::vector<OriginalEdge> testEdges;
 
@@ -125,7 +125,7 @@ TEST_CASE("polygonalChain() testing") {
 
 	ClosedPolygonalChains testCpc = polygonalChain(testMap, testEdges);
 
-	for (auto a : testCpc.getEdges()) std::cout << a << std::endl;
+	//for (auto a : testCpc.getEdges()) std::cout << a << std::endl;
 
 	//TODO add requires
 }
