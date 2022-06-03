@@ -137,7 +137,14 @@ class MainFrame : public wxFrame {
 		 */
 		virtual void about3DsectionsOnMenuSelection(wxCommandEvent& event);
 
-		virtual void backwardButtonOnClick(wxCommandEvent& event) { event.Skip(); }
+		/**
+		 * @brief After clicking @ref backwardButton, changes @ref currentPlane position 
+		 * to the starting one and repaints the section.
+		 * 
+		 * @param event Connected event, in this case: wxEVT_COMMAND_BUTTON_CLICKED.
+		 * @see backwardButton
+		 */
+		virtual void backwardButtonOnClick(wxCommandEvent& event);
 
 		/**
 		 * @brief After clicking @ref prevFrameButton, decreases the parameter of @ref currentPlane
@@ -196,7 +203,14 @@ class MainFrame : public wxFrame {
 		 */
 		virtual void nextFrameButtonOnClick(wxCommandEvent& event);
 
-		virtual void forewardButtonOnClick(wxCommandEvent& event) { event.Skip(); }
+		/**
+		 * @brief After clicking @ref forewardButton, changes @ref currentPlane position
+		 * to the ending one and repaints the section.
+		 *
+		 * @param event Connected event, in this case: wxEVT_COMMAND_BUTTON_CLICKED.
+		 * @see forewardButton
+		 */
+		virtual void forewardButtonOnClick(wxCommandEvent& event);
 
 		/**
 		 * @brief After clicking @ref fileLoadButton open a default folder browser dialog 
@@ -231,6 +245,19 @@ class MainFrame : public wxFrame {
 		virtual void wxPanelRepaint(wxPaintEvent& event);
 	
 	private:
+
+		/**
+		 * @brief Calculates @ref animationLength.
+		 * 
+		 */
+		void MainFrame::calculateAnimationlength();
+		//! Stores distance between distance between the most distant points in @ref currentPlane normal vector direction.
+		double animationLength = 0;
+		//! Stores the starting position of cutting plane
+		double startingPosition = 0;
+		//! Stores the ending position of cutting plane
+		double endingPosition = 0;
+
 		//! A bar on top of the window, contains: @ref quitMenu, @ref helpMenu.
 		wxMenuBar* topMenuBar;
 		wxMenu* quitMenu;
@@ -244,6 +271,7 @@ class MainFrame : public wxFrame {
 		wxStaticLine* horizontalStaticLine;
 		//! Indicates state of the played animation.
 		wxGauge* progressGauge;
+		//! Advances the animation to the start
 		wxButton* backwardButton;
 		//! Rewinds the animation by one frame
 		wxButton* prevFrameButton;
@@ -251,6 +279,7 @@ class MainFrame : public wxFrame {
 		wxToggleButton* playToggle;
 		//! Advances the animation by one frame
 		wxButton* nextFrameButton;
+		//! Advances the animation to the end
 		wxButton* forewardButton;
 		wxStaticLine* verticalStaticLine;
 		wxStaticText* fileLoadLabel;
@@ -270,6 +299,6 @@ class MainFrame : public wxFrame {
 		//! Stores a section points coordinates (co to, po co, na co?)
 		std::vector<std::array<wxCoord, 4>> cordData;
 		//! Stores the cutting plane
-		Plane currentPlane{0,0,1,0};
+		Plane currentPlane{ 0,0,1,0 };
 };
 

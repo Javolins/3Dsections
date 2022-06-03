@@ -254,7 +254,8 @@ void MainFrame::playToggleOnToggle(wxCommandEvent& event) {
 
 		progressGauge->Show();
 		playToggle->SetLabel("Stop");
-		repaintSec();
+		currentPlane.setD(0);
+		repaintSec(); statusBar->SetStatusText("startingPosition = " + std::to_string(startingPosition) + ", endingPosition = " + std::to_string(endingPosition) + ", actualPosition = " +  std::to_string(currentPlane.getD()));
 	}
 	else {
 		progressGauge->Hide();
@@ -286,6 +287,7 @@ void MainFrame::fileLoadButtonOnClick(wxCommandEvent& event) {
 		event.Skip();
 	}
 
+	calculateAnimationlength();
 	repaintGeo();
 }
 
@@ -488,16 +490,65 @@ void MainFrame::planeChoiceOnChoice(wxCommandEvent& event){
 	// plane: yOz
 	if( planeIndex == 2 )
 		currentPlane.set(1, 0, 0, 0);
+
+	calculateAnimationlength();
+}
+
+void MainFrame::backwardButtonOnClick(wxCommandEvent& event){
+
+	currentPlane.setD(startingPosition);
+	repaintSec();
+	statusBar->SetStatusText("startingPosition = " + std::to_string(startingPosition) + ", endingPosition = " + std::to_string(endingPosition) + ", actualPosition = " +  std::to_string(currentPlane.getD()));
 }
 
 void MainFrame::prevFrameButtonOnClick(wxCommandEvent& event){
 
-	currentPlane.setD(currentPlane.getD() - 0.1);
+	currentPlane.setD(currentPlane.getD() - animationLength/10);
 	repaintSec();
+	statusBar->SetStatusText("startingPosition = " + std::to_string(startingPosition) + ", endingPosition = " + std::to_string(endingPosition) + ", actualPosition = " +  std::to_string(currentPlane.getD()));
 }
 
 void MainFrame::nextFrameButtonOnClick(wxCommandEvent& event){
 	
-	currentPlane.setD(currentPlane.getD() + 0.1);
+	currentPlane.setD(currentPlane.getD() + animationLength/10);
 	repaintSec();
+	statusBar->SetStatusText("startingPosition = " + std::to_string(startingPosition) + ", endingPosition = " + std::to_string(endingPosition) + ", actualPosition = " +  std::to_string(currentPlane.getD()));
+}
+
+void MainFrame::forewardButtonOnClick(wxCommandEvent& event){
+	
+	currentPlane.setD(endingPosition);
+	repaintSec();
+	statusBar->SetStatusText("startingPosition = " + std::to_string(startingPosition) + ", endingPosition = " + std::to_string(endingPosition) + ", actualPosition = " +  std::to_string(currentPlane.getD()));
+}
+
+void MainFrame::calculateAnimationlength(){
+
+	double min = std::numeric_limits<double>::max();
+	double max = std::numeric_limits<double>::min();
+
+	// plane: xOy
+	float (Point::* get_z)() const = &Point::getZ;
+	// plane: xOz
+	if( planeChoice->GetSelection() == 1 )
+		get_z = &Point::getY;
+	// plane: yOz
+	if( planeChoice->GetSelection() == 2 )
+		get_z = &Point::getX;
+
+	for( auto& edge : dataSegment ){
+		if( (edge.getStart().*get_z)() > max )
+			max = (edge.getStart().*get_z)();
+		if( (edge.getEnd().*get_z)() > max )
+			max = (edge.getEnd().*get_z)();
+		if( (edge.getStart().*get_z)() < min )
+			min = (edge.getStart().*get_z)();
+		if( (edge.getEnd().*get_z)() < min )
+			min = (edge.getEnd().*get_z)();
+	}
+
+	animationLength = abs(max - min);
+	startingPosition = min;
+	endingPosition = max;
+	statusBar->SetStatusText("startingPosition = " + std::to_string(startingPosition) + ", endingPosition = " + std::to_string(endingPosition) + ", actualPosition = " +  std::to_string(currentPlane.getD()));
 }
