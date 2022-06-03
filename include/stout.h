@@ -14,6 +14,7 @@
 #include <map>
 #include <memory>
 #include <cmath>
+#include <omp.h>
 #include "../include/OriginalEdge.h"
 #include "../include/MeshEdge.h"
 #include "../include/Edge.h"
@@ -131,7 +132,7 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 }
 
 /**
- * @brief DO TEST�W!!!
+ * @brief DO TESTÓW!!!
  * 
  * @param originalEdges
  * @param plane
@@ -161,13 +162,14 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 	 for (auto const& x : intersections) {
 		 for (auto const& y : intersections) {
 			 if (!(x == y)) {
+				 #pragma omp parallel
 				 for (auto& e : origin) {
 					 // 4 possible connections, both ways
 					 if			(e.getStart() == x.first->getStart()	&& e.getEnd() == y.first->getStart())	polyLine.insert(Edge(x.second, y.second, Color(0, 0, 0)));
 					 else if	(e.getStart() == x.first->getStart()	&& e.getEnd() == y.first->getEnd())		polyLine.insert(Edge(x.second, y.second, Color(0, 0, 0)));
 					 else if	(e.getStart() == x.first->getEnd()		&& e.getEnd() == y.first->getStart())	polyLine.insert(Edge(x.second, y.second, Color(0, 0, 0)));
 					 else if	(e.getStart() == x.first->getEnd()		&& e.getEnd() == y.first->getEnd())		polyLine.insert(Edge(x.second, y.second, Color(0, 0, 0)));
-
+					 
 					 else if	(e.getStart() == y.first->getStart()	&& e.getEnd() == x.first->getStart())	polyLine.insert(Edge(x.second, y.second, Color(0, 0, 0)));
 					 else if	(e.getStart() == y.first->getStart()	&& e.getEnd() == x.first->getEnd())		polyLine.insert(Edge(x.second, y.second, Color(0, 0, 0)));
 					 else if	(e.getStart() == y.first->getEnd()		&& e.getEnd() == x.first->getStart())	polyLine.insert(Edge(x.second, y.second, Color(0, 0, 0)));
