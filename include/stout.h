@@ -107,21 +107,33 @@ inline int sgn(double val){
 inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane){
 
 	// check if edge intersects plane
-	Point onPlane;
+	Point onPlane{ 0,0,0 };
 	if( plane.getA() != 0 )
-		onPlane.set(-plane.getD()/plane.getA(), 0, 0);
+		onPlane.setX( -plane.getD()/plane.getA() );
 	else if( plane.getB() != 0 )
-		onPlane.set(0, -plane.getD()/plane.getB(), 0);
+		onPlane.setY( -plane.getD()/plane.getB() );
 	else if( plane.getC() != 0 )
-		onPlane.set(0, 0, -plane.getD()/plane.getC());
+		onPlane.setZ( -plane.getD()/plane.getC() );
 	else return nullptr;
 
 	Point start = line.getStart();
 	Point end = line.getEnd();
 
+	while( start == onPlane || end == onPlane ){
+		srand(time(nullptr));
+		onPlane.set( onPlane.getX()+rand()%7-3, onPlane.getX()+rand()%7-3, onPlane.getX()+rand()%7-3);
+		if( plane.getA() != 0 )
+			onPlane.setX( -(plane.getD()+plane.getB()*onPlane.getY()+plane.getC()*onPlane.getZ()) / plane.getA() );
+		else if( plane.getB() != 0 )
+			onPlane.setY( -(plane.getD()+plane.getA()*onPlane.getX()+plane.getC()*onPlane.getZ()) / plane.getB() );
+		else if( plane.getC() != 0 )
+			onPlane.setZ( -(plane.getD()+plane.getA()*onPlane.getX()+plane.getB()*onPlane.getY()) / plane.getC() );
+		else return nullptr;
+	}
+
 	std::array<double, 3> startVec{ start.getX() - onPlane.getX(), start.getY() - onPlane.getY(), start.getZ() - onPlane.getZ() };
 	std::array<double, 3> endVec{ end.getX() - onPlane.getX(), end.getY() - onPlane.getY(), end.getZ() - onPlane.getZ() };
-	std::array<double, 3> planeVec{ plane.getA() - onPlane.getX(), plane.getB() - onPlane.getY(), plane.getC() - onPlane.getZ() };
+	std::array<double, 3> planeVec{ plane.getNormalVector() };
 
 	if( sgn(dot(startVec, planeVec)) == sgn(dot(endVec, planeVec)) ) 
 		return nullptr;
