@@ -172,6 +172,7 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 	this->SetSizer(mainFrameSizer);
 	this->Layout();
 	statusBar = this->CreateStatusBar(1, wxSTB_SIZEGRIP, STATUS_BAR_ID);
+	statusBar->SetFieldsCount(3);
 
 	this->Centre(wxBOTH);
 
@@ -198,7 +199,7 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 	speedSlider->Connect(wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler(MainFrame::speedSliderOnScroll), NULL, this);
 	speedSlider->Connect(wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler(MainFrame::speedSliderOnScroll), NULL, this);
 	speedSlider->Connect(wxEVT_SCROLL_CHANGED, wxScrollEventHandler(MainFrame::speedSliderOnScroll), NULL, this);
-
+	statusBar->Connect(wxEVT_UPDATE_UI, wxUpdateUIEventHandler(MainFrame::statusBarUpdate), NULL, this);
 }
 
 MainFrame::~MainFrame() {
@@ -220,7 +221,7 @@ MainFrame::~MainFrame() {
 	speedSlider->Disconnect(wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler(MainFrame::speedSliderOnScroll), NULL, this);
 	speedSlider->Disconnect(wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler(MainFrame::speedSliderOnScroll), NULL, this);
 	speedSlider->Disconnect(wxEVT_SCROLL_CHANGED, wxScrollEventHandler(MainFrame::speedSliderOnScroll), NULL, this);
-
+	statusBar->Disconnect(wxEVT_UPDATE_UI, wxUpdateUIEventHandler(MainFrame::statusBarUpdate), NULL, this);
 }
 
 void MainFrame::onExit(){
@@ -255,7 +256,7 @@ void MainFrame::playToggleOnToggle(wxCommandEvent& event) {
 		progressGauge->Show();
 		playToggle->SetLabel("Stop");
 		currentPlane.setD(0);
-		repaintSec(); statusBar->SetStatusText("startingPosition = " + std::to_string(startingPosition) + ", endingPosition = " + std::to_string(endingPosition) + ", actualPosition = " +  std::to_string(currentPlane.getD()));
+		repaintSec(); 
 	}
 	else {
 		progressGauge->Hide();
@@ -294,6 +295,7 @@ void MainFrame::fileLoadButtonOnClick(wxCommandEvent& event) {
 
 void MainFrame::wxPanelRepaint(wxPaintEvent& event) {
 	repaintGeo();
+	repaintSec();
 }
 
 void MainFrame::repaintGeo() {
@@ -496,30 +498,26 @@ void MainFrame::planeChoiceOnChoice(wxCommandEvent& event){
 
 void MainFrame::backwardButtonOnClick(wxCommandEvent& event){
 
-	currentPlane.setD(startingPosition);
+	currentPlane.setD(-startingPosition);
 	repaintSec();
-	statusBar->SetStatusText("startingPosition = " + std::to_string(startingPosition) + ", endingPosition = " + std::to_string(endingPosition) + ", actualPosition = " +  std::to_string(currentPlane.getD()));
 }
 
 void MainFrame::prevFrameButtonOnClick(wxCommandEvent& event){
 
-	currentPlane.setD(currentPlane.getD() - animationLength/10);
+	currentPlane.setD(currentPlane.getD() + animationLength/20);
 	repaintSec();
-	statusBar->SetStatusText("startingPosition = " + std::to_string(startingPosition) + ", endingPosition = " + std::to_string(endingPosition) + ", actualPosition = " +  std::to_string(currentPlane.getD()));
 }
 
 void MainFrame::nextFrameButtonOnClick(wxCommandEvent& event){
 	
-	currentPlane.setD(currentPlane.getD() + animationLength/10);
+	currentPlane.setD(currentPlane.getD() - animationLength/20);
 	repaintSec();
-	statusBar->SetStatusText("startingPosition = " + std::to_string(startingPosition) + ", endingPosition = " + std::to_string(endingPosition) + ", actualPosition = " +  std::to_string(currentPlane.getD()));
 }
 
 void MainFrame::forewardButtonOnClick(wxCommandEvent& event){
 	
-	currentPlane.setD(endingPosition);
+	currentPlane.setD(-endingPosition);
 	repaintSec();
-	statusBar->SetStatusText("startingPosition = " + std::to_string(startingPosition) + ", endingPosition = " + std::to_string(endingPosition) + ", actualPosition = " +  std::to_string(currentPlane.getD()));
 }
 
 void MainFrame::calculateAnimationlength(){
@@ -550,5 +548,14 @@ void MainFrame::calculateAnimationlength(){
 	animationLength = abs(max - min);
 	startingPosition = min;
 	endingPosition = max;
-	statusBar->SetStatusText("startingPosition = " + std::to_string(startingPosition) + ", endingPosition = " + std::to_string(endingPosition) + ", actualPosition = " +  std::to_string(currentPlane.getD()));
+	
+}
+
+void MainFrame::statusBarUpdate(wxUpdateUIEvent& event){
+
+	double currentPosition = -currentPlane.getD();
+	if( currentPlane.getD() == 0 ) currentPosition = 0;
+	statusBar->SetStatusText("startingPosition = " + std::to_string(startingPosition), 0);
+	statusBar->SetStatusText("currenPosition = " +  std::to_string(currentPosition), 1);
+	statusBar->SetStatusText("endingPosition = " + std::to_string(endingPosition), 2);
 }
