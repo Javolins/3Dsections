@@ -235,7 +235,6 @@ class MainFrame : public wxFrame {
 
 		virtual void speedSliderOnScroll(wxScrollEvent& event) { event.Skip(); }
 
-
 		/**
 		 * @brief Handler for class event
 		 * 
@@ -243,6 +242,15 @@ class MainFrame : public wxFrame {
 		 * @note Refresh wxPanel when updating UIEvent
 		 */
 		virtual void wxPanelRepaint(wxPaintEvent& event);
+
+		/**
+		 * @brief Displays info about @ref currentPlane position as well as
+		 * @ref startingPosition and @ref endingPosition values.
+		 * 
+		 * @param event Connected event, in this case: wxEVT_UPDATE_UI.
+		 * @see statusBar
+		 */
+		virtual void statusBarUpdate(wxUpdateUIEvent& event);
 	
 	private:
 

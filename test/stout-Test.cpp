@@ -66,6 +66,26 @@ TEST_CASE("intersection() testing") {
 	REQUIRE((intersection(x_eq_y_eq_z_short, xOz) == nullptr));
 	REQUIRE((intersection(z_eq_mx_p1_short, xOz) == nullptr));
 
+
+	SUBCASE("strange bug, D = -1"){
+
+		Plane z_eq_p0d5{ 0,0,1,-0.5 };
+		Plane z_eq_p1d5{ 0,0,1,-1.5 };
+		Plane z_eq_p1{ 0,0,1,-1.0 };
+		Edge x_eq_y_eq_zero{ Point{ 0,0,0 }, Point{ 0,0,2 } };
+
+		REQUIRE((*intersection(x_eq_y_eq_zero, z_eq_p0d5) == Point{ 0,0,0.5 }));
+		REQUIRE((*intersection(x_eq_y_eq_zero, z_eq_p1d5) == Point{ 0,0,1.5 }));
+
+		if( REQUIRE((intersection(z_eq_mx_p1_short, xOz) != nullptr)) ){
+
+			REQUIRE(intersection(x_eq_y_eq_zero, z_eq_p1)->getX() == 0);
+			REQUIRE(intersection(x_eq_y_eq_zero, z_eq_p1)->getY() == 0);
+			REQUIRE(intersection(x_eq_y_eq_zero, z_eq_p1)->getZ() == 1);
+		}
+		//REQUIRE((*intersection(x_eq_y_eq_zero, z_eq_p1) == Point{ 0,0,1.0 }));
+	}
+
 }
 
 TEST_CASE("intersectionPoints() testing") {
