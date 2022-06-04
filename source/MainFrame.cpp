@@ -65,7 +65,7 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 	horizontalStaticLine = new wxStaticLine(this, HORIZONTAL_STATIC_LINE_ID, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL);
 	mainFrameLeftSizer->Add(horizontalStaticLine, 0, wxBOTTOM | wxEXPAND, 5);
 
-	progressGauge = new wxGauge(this, PROGRESS_GAUGE_ID, 1000, wxDefaultPosition, wxDefaultSize, wxGA_HORIZONTAL);
+	progressGauge = new wxGauge(this, PROGRESS_GAUGE_ID, 10000, wxDefaultPosition, wxDefaultSize, wxGA_HORIZONTAL);
 	progressGauge->SetValue(0);
 	progressGauge->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 	progressGauge->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
@@ -160,7 +160,7 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 	speedChoiceLabel->Wrap(-1);
 	mainFrameRightSizer->Add(speedChoiceLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT | wxTOP, 5);
 
-	speedSlider = new wxSlider(this, SPEED_SLIDER_ID, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL);
+	speedSlider = new wxSlider(this, SPEED_SLIDER_ID, 5, 1, 9, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL);
 	speedSlider->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
 
 	mainFrameRightSizer->Add(speedSlider, 0, wxALIGN_CENTER_HORIZONTAL | wxBOTTOM | wxTOP, 5);
@@ -177,6 +177,7 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 	this->Centre(wxBOTH);
 
 	Bind(wxEVT_PAINT, &MainFrame::wxPanelRepaint, this);
+	animationTimer = new wxTimer();
 
 	// Connect Events
 	helpMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MainFrame::viewDocumentationOnMenuSelection), this, viewDocumentation->GetId());
@@ -200,6 +201,7 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 	speedSlider->Connect(wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler(MainFrame::speedSliderOnScroll), NULL, this);
 	speedSlider->Connect(wxEVT_SCROLL_CHANGED, wxScrollEventHandler(MainFrame::speedSliderOnScroll), NULL, this);
 	statusBar->Connect(wxEVT_UPDATE_UI, wxUpdateUIEventHandler(MainFrame::statusBarUpdate), NULL, this);
+	animationTimer->Connect(wxEVT_TIMER, wxTimerEventHandler(MainFrame::onTimerNotify), NULL, this);
 }
 
 MainFrame::~MainFrame() {
@@ -222,6 +224,8 @@ MainFrame::~MainFrame() {
 	speedSlider->Disconnect(wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler(MainFrame::speedSliderOnScroll), NULL, this);
 	speedSlider->Disconnect(wxEVT_SCROLL_CHANGED, wxScrollEventHandler(MainFrame::speedSliderOnScroll), NULL, this);
 	statusBar->Disconnect(wxEVT_UPDATE_UI, wxUpdateUIEventHandler(MainFrame::statusBarUpdate), NULL, this);
+	animationTimer->Disconnect(wxEVT_TIMER, wxTimerEventHandler(MainFrame::onTimerNotify), NULL, this);
+	delete animationTimer;
 }
 
 void MainFrame::onExit(){
@@ -253,19 +257,17 @@ void MainFrame::about3DsectionsOnMenuSelection(wxCommandEvent& event) {
 void MainFrame::playToggleOnToggle(wxCommandEvent& event) {
 	if (playToggle->GetValue()) {
 
-		progressGauge->Show();
 		playToggle->SetLabel("Stop");
-		currentPlane.setD(0);
+		animationTimer->Start(100/speedSlider->GetValue());
+		progressGauge->Show();
+
 		repaintSec(); 
 	}
 	else {
-		progressGauge->Hide();
 		playToggle->SetLabel("Play");
-
-		wxClientDC dc(rightPanel);
-		wxBufferedDC buffer(&dc);
-		buffer.SetBackground(*wxWHITE_BRUSH);
-		buffer.Clear();
+		if( animationTimer->IsRunning() )
+			animationTimer->Stop();
+		//progressGauge->Hide();
 	}
 }
 
@@ -290,8 +292,8 @@ void MainFrame::fileLoadButtonOnClick(wxCommandEvent& event) {
 
 	calculateAnimationlength();
 	repaintGeo();
+	repaintSec();
 }
-
 
 void MainFrame::wxPanelRepaint(wxPaintEvent& event) {
 	repaintGeo();
@@ -477,8 +479,9 @@ void MainFrame::repaintSec(){
 			}
 		);
 	}
-}
 
+	progressGauge->SetValue( 10000 * (-currentPlane.getD()-startingPosition) / animationLength );
+}
 
 void MainFrame::planeChoiceOnChoice(wxCommandEvent& event){
 	
@@ -494,6 +497,7 @@ void MainFrame::planeChoiceOnChoice(wxCommandEvent& event){
 		currentPlane.set(1, 0, 0, 0);
 
 	calculateAnimationlength();
+	repaintSec();
 }
 
 void MainFrame::backwardButtonOnClick(wxCommandEvent& event){
@@ -504,13 +508,13 @@ void MainFrame::backwardButtonOnClick(wxCommandEvent& event){
 
 void MainFrame::prevFrameButtonOnClick(wxCommandEvent& event){
 
-	currentPlane.setD(currentPlane.getD() + animationLength/20);
+	currentPlane.setD(currentPlane.getD() + animationLength/200);
 	repaintSec();
 }
 
 void MainFrame::nextFrameButtonOnClick(wxCommandEvent& event){
 	
-	currentPlane.setD(currentPlane.getD() - animationLength/20);
+	currentPlane.setD(currentPlane.getD() - animationLength/200);
 	repaintSec();
 }
 
@@ -548,7 +552,9 @@ void MainFrame::calculateAnimationlength(){
 	animationLength = abs(max - min);
 	startingPosition = min;
 	endingPosition = max;
-	
+
+	currentPlane.setD(-startingPosition);
+	progressGauge->SetValue(10000 * (-currentPlane.getD()-startingPosition) / animationLength);
 }
 
 void MainFrame::statusBarUpdate(wxUpdateUIEvent& event){
@@ -558,4 +564,22 @@ void MainFrame::statusBarUpdate(wxUpdateUIEvent& event){
 	statusBar->SetStatusText("startingPosition = " + std::to_string(startingPosition), 0);
 	statusBar->SetStatusText("currenPosition = " +  std::to_string(currentPosition), 1);
 	statusBar->SetStatusText("endingPosition = " + std::to_string(endingPosition), 2);
+}
+
+void MainFrame::onTimerNotify(wxTimerEvent& event){
+	if( -currentPlane.getD() < endingPosition ){
+		currentPlane.setD(currentPlane.getD() - animationLength/200);
+		repaintSec();
+	}
+}
+
+void MainFrame::speedSliderOnScroll(wxScrollEvent& event){
+
+	if( animationTimer->IsRunning() ){
+		animationTimer->Start(100/speedSlider->GetValue());
+	}
+	else{
+		animationTimer->Start(100/speedSlider->GetValue());
+		animationTimer->Stop();
+	}
 }
