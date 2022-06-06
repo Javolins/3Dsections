@@ -47,6 +47,9 @@ class Point {
 		void set(float x, float y, float z) {
 			_x = x; _y = y; _z = z;
 		}
+		void setX(float x){ _x = x; }
+		void setY(float y){ _y = y; }
+		void setZ(float z){ _z = z; }
 		float getX() const { return _x; }
 		float getY() const { return _y; }
 		float getZ() const { return _z; }

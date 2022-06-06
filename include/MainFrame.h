@@ -39,6 +39,7 @@
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
 #include <wx/dcbuffer.h>
+#include <wx/timer.h>
 
 // All needed STL's modules.
 #include <fstream>
@@ -233,7 +234,13 @@ class MainFrame : public wxFrame {
 		 */
 		virtual void planeChoiceOnChoice(wxCommandEvent& event);
 
-		virtual void speedSliderOnScroll(wxScrollEvent& event) { event.Skip(); }
+		/**
+		 * @brief Changes animation speed to be appropriate with the value of @ref speedSlider.
+		 * 
+		 * @param event Connected events regarding any change in @ref speedSlider state.
+		 * @see speedSlider
+		 */
+		virtual void speedSliderOnScroll(wxScrollEvent& event);
 
 		/**
 		 * @brief Handler for class event
@@ -255,7 +262,8 @@ class MainFrame : public wxFrame {
 	private:
 
 		/**
-		 * @brief Calculates @ref animationLength.
+		 * @brief Calculates @ref animationLength, @ref startingPosition, @ref endingPosition.
+		 * Also updates @ref currentPlane position and @ref progressGauge value.
 		 * 
 		 */
 		void MainFrame::calculateAnimationlength();
@@ -265,6 +273,15 @@ class MainFrame : public wxFrame {
 		double startingPosition = 0;
 		//! Stores the ending position of cutting plane
 		double endingPosition = 0;
+
+		/**
+		 * @brief Periodically paints a next animation frame on @ref rightPlane, every time @ref animationTimer notifies.
+		 * 
+		 * @param event Connected event, in this case: wxEVT_TIMER.
+		 */
+		void onTimerNotify(wxTimerEvent& event);
+		//! Counts down to the repaint of a next animation frame
+		wxTimer* animationTimer;
 
 		//! A bar on top of the window, contains: @ref quitMenu, @ref helpMenu.
 		wxMenuBar* topMenuBar;
@@ -299,6 +316,7 @@ class MainFrame : public wxFrame {
 		//! Expands to the list of three planes: xOy, xOz, yOz
 		wxChoice* planeChoice;
 		wxStaticText* speedChoiceLabel;
+		//! Controls animation speed
 		wxSlider* speedSlider;
 		wxStatusBar* statusBar;
 
