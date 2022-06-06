@@ -175,16 +175,23 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 		 for( int j = i+1; j < intersections.size(); j++ ){
 			 for( int k = 0; k < origin.size(); k++ ){
 				 Edge* e;
-				 // 4 possible connections, both ways
-				 if		( origin[k].getStart() == intersections[i].first->getStart()	&& origin[k].getEnd() == intersections[j].first->getStart() )	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
-				 else if( origin[k].getStart() == intersections[i].first->getStart()	&& origin[k].getEnd() == intersections[j].first->getEnd() )		e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
-				 else if( origin[k].getStart() == intersections[i].first->getEnd()		&& origin[k].getEnd() == intersections[j].first->getStart() )	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
-				 else if( origin[k].getStart() == intersections[i].first->getEnd()		&& origin[k].getEnd() == intersections[j].first->getEnd() )		e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
 
-				 else if( origin[k].getStart() == intersections[j].first->getStart()	&& origin[k].getEnd() == intersections[i].first->getStart() )	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
-				 else if( origin[k].getStart() == intersections[j].first->getStart()	&& origin[k].getEnd() == intersections[i].first->getEnd() )		e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
-				 else if( origin[k].getStart() == intersections[j].first->getEnd()		&& origin[k].getEnd() == intersections[i].first->getStart() )	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
-				 else if( origin[k].getStart() == intersections[j].first->getEnd()		&& origin[k].getEnd() == intersections[i].first->getEnd() )		e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
+				 Point origin_start = origin[k].getStart();
+				 Point origin_end = origin[k].getEnd();
+				 Point a_start = intersections[i].first->getStart();
+				 Point a_end = intersections[i].first->getEnd();
+				 Point b_start = intersections[j].first->getStart();
+				 Point b_end = intersections[j].first->getEnd();
+				 // 4 possible connections, both ways
+				 if		( a_start == origin_start	&& b_start == origin_end)	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
+				 else if( a_start == origin_start	&& b_end == origin_end)		e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
+				 else if( a_end == origin_start		&& b_start == origin_end)	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
+				 else if( a_end == origin_start		&& b_end == origin_end)		e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
+
+				 else if( b_start == origin_start	&& a_start == origin_end)	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
+				 else if( b_start == origin_start	&& a_end == origin_end)		e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
+				 else if( b_end	== origin_start		&& a_start == origin_end)	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
+				 else if( b_end	== origin_start		&& a_end == origin_end)		e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
 				 else continue;
 
 				 #pragma omp critical
@@ -192,6 +199,7 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 			 }
 		 }
 	 }
+
 	 std::vector<Edge> out(polyLine.begin(), polyLine.end());
 	 ClosedPolygonalChains cpc = ClosedPolygonalChains(out);
 	 return cpc;
