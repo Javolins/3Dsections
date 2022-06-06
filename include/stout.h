@@ -194,16 +194,20 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 				 Point a_end = intersections[i].first->getEnd();
 				 Point b_start = intersections[j].first->getStart();
 				 Point b_end = intersections[j].first->getEnd();
-				 // 4 possible connections, both ways
-				 if		( a_start == origin_start	&& b_start == origin_end)	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
-				 else if( a_start == origin_start	&& b_end == origin_end)		e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
-				 else if( a_end == origin_start		&& b_start == origin_end)	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
-				 else if( a_end == origin_start		&& b_end == origin_end)		e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
 
-				 else if( b_start == origin_start	&& a_start == origin_end)	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
-				 else if( b_start == origin_start	&& a_end == origin_end)		e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
-				 else if( b_end	== origin_start		&& a_start == origin_end)	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
-				 else if( b_end	== origin_start		&& a_end == origin_end)		e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
+				 // shouldn't ever be needed provided everything is correct
+				 if( a_start == b_start && a_end == b_end ) continue;
+
+				 // 4 possible connections, both ways
+				 if		( origin_start == a_start	&& origin_end == b_start )	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
+				 else if( origin_start == a_start	&& origin_end == b_end )	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
+				 else if( origin_start == a_end		&& origin_end == b_start )	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
+				 else if( origin_start == a_end		&& origin_end == b_end )	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
+
+				 else if( origin_start == b_start	&& origin_end == a_start )	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
+				 else if( origin_start == b_start	&& origin_end == a_end )	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
+				 else if( origin_start == b_end		&& origin_end == a_start )	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
+				 else if( origin_start == b_end		&& origin_end == a_end )	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
 				 else continue;
 
 				 #pragma omp critical

@@ -98,12 +98,12 @@ TEST_CASE("intersection() testing") {
 		REQUIRE((*intersection(x_eq_y_eq_zero, z_eq_p0d5) == Point{ 0,0,0.5 }));
 		REQUIRE((*intersection(x_eq_y_eq_zero, z_eq_p1d5) == Point{ 0,0,1.5 }));
 
-		if( REQUIRE((intersection(z_eq_mx_p1_short, xOz) != nullptr)) ){
+		/*if( REQUIRE((intersection(z_eq_mx_p1_short, xOz) != nullptr)) ){
 
 			REQUIRE(intersection(x_eq_y_eq_zero, z_eq_p1)->getX() == 0);
 			REQUIRE(intersection(x_eq_y_eq_zero, z_eq_p1)->getY() == 0);
 			REQUIRE(intersection(x_eq_y_eq_zero, z_eq_p1)->getZ() == 1);
-		}
+		}*/
 		//REQUIRE((*intersection(x_eq_y_eq_zero, z_eq_p1) == Point{ 0,0,1.0 }));
 	}
 
