@@ -72,6 +72,9 @@ TEST_CASE("Triangle testing"){
 	REQUIRE(test2.containsPoint(Point{ 0,2,0 }));
 	REQUIRE(test2.containsPoint(Point{ 2,0,0 }));
 	REQUIRE(test2.containsPoint(Point{ 1,1,0 }));
+
+	REQUIRE(test2.containsPoint(Point{ 0.6,0.6,0 }));
+
 	REQUIRE(test2.containsPoint(Point{ 2.1,0,0 }) == false);
 	REQUIRE(test2.containsPoint(Point{ 0,2.1,0 }) == false);
 	REQUIRE(test2.containsPoint(Point{ 1.5,1.5,0 }) == false);

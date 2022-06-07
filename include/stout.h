@@ -26,15 +26,15 @@
 
 
 inline std::vector<Edge> removeReversed(std::vector<Edge> edges){
-	std::set<Edge, compareEdges> unique;
+	std::vector<Edge> e;
 	for( auto& x : edges ){
 		bool only = true;
-		for( auto& y : unique )
+		for( auto& y : e )
 			if( y.getStart() == x.getEnd() && y.getEnd() == x.getStart() )
 				only = false;
-		if( only ) unique.insert(x);
+		if( only ) e.push_back(x);
 	}
-	std::vector<Edge> out(unique.begin(),unique.end());
+	std::vector<Edge> out(e.begin(), e.end());
 	return out;
 }
 
@@ -46,15 +46,15 @@ inline std::vector<Edge> removeReversed(std::vector<Edge> edges){
  * 
  */
 inline std::vector<Edge> mesh(std::vector<OriginalEdge>& origin) {
-	std::set<Point, comparePoints> uniquePoints;
+	std::vector<Point> points;
 	for (const auto& a : origin) {
-		uniquePoints.insert(a.getStart());
-		uniquePoints.insert(a.getEnd());
+		points.push_back(a.getStart());
+		points.push_back(a.getEnd());
 	}
-	std::set<Edge, compareEdges> allEdges;
+	std::vector<Edge> allEdges;
 
 	//foreach point
-	for (const auto& p : uniquePoints) {
+	for (const auto& p : points) {
 		//filter appropriate edges
 		std::vector<Edge> temp;
 		for (auto& e : origin) {
@@ -68,10 +68,10 @@ inline std::vector<Edge> mesh(std::vector<OriginalEdge>& origin) {
 				if (!(x == y)) {
 					//find 3 edge to form triangle
 					//add edges
-					if (x.getStart() == p && y.getStart() == p)		allEdges.insert(MeshEdge(x.getEnd(), y.getEnd(), Color(0,0,0)));
-					else if (x.getStart() == p && y.getEnd() == p)	allEdges.insert(MeshEdge(x.getEnd(), y.getStart(), Color(0, 0, 0)));
-					else if (x.getEnd() == p && y.getStart() == p)	allEdges.insert(MeshEdge(x.getStart(), y.getEnd(), Color(0, 0, 0)));
-					else if (x.getEnd() == p && y.getEnd() == p)	allEdges.insert(MeshEdge(x.getStart(), y.getStart(), Color(0, 0, 0)));
+					if (x.getStart() == p && y.getStart() == p)		allEdges.push_back(MeshEdge(x.getEnd(), y.getEnd(), Color(0,0,0)));
+					else if (x.getStart() == p && y.getEnd() == p)	allEdges.push_back(MeshEdge(x.getEnd(), y.getStart(), Color(0, 0, 0)));
+					else if (x.getEnd() == p && y.getStart() == p)	allEdges.push_back(MeshEdge(x.getStart(), y.getEnd(), Color(0, 0, 0)));
+					else if (x.getEnd() == p && y.getEnd() == p)	allEdges.push_back(MeshEdge(x.getStart(), y.getStart(), Color(0, 0, 0)));
 					// else throw new Exception :P
 				}
 			}
@@ -204,7 +204,7 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
   * @return polygonal chain to be drawn as intersection border
   */
  inline ClosedPolygonalChains polygonalChain(const std::vector<std::pair<const Edge*, Point>> intersections, const std::vector<OriginalEdge> origin) {
-	 std::set<Edge, compareEdges> polyLine;
+	 std::vector<Edge> polyLine;
 
 	 #pragma omp parallel for collapse(3)
 	 for( int i = 0; i < intersections.size() - 1; i++) {
@@ -214,17 +214,6 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 				 bool firstCondition = false;
 				 bool secondCondition = false;
 				 // 4 possible connections, both ways
-				 /*if		( origin[k].getStart() == intersections[i].first->getStart()	&& origin[k].getEnd() == intersections[j].first->getStart() )	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
-				 else if( origin[k].getStart() == intersections[i].first->getStart()	&& origin[k].getEnd() == intersections[j].first->getEnd() )		e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
-				 else if( origin[k].getStart() == intersections[i].first->getEnd()		&& origin[k].getEnd() == intersections[j].first->getStart() )	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
-				 else if( origin[k].getStart() == intersections[i].first->getEnd()		&& origin[k].getEnd() == intersections[j].first->getEnd() )		e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
-
-				 else if( origin[k].getStart() == intersections[j].first->getStart()	&& origin[k].getEnd() == intersections[i].first->getStart() )	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
-				 else if( origin[k].getStart() == intersections[j].first->getStart()	&& origin[k].getEnd() == intersections[i].first->getEnd() )		e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
-				 else if( origin[k].getStart() == intersections[j].first->getEnd()		&& origin[k].getEnd() == intersections[i].first->getStart() )	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
-				 else if( origin[k].getStart() == intersections[j].first->getEnd()		&& origin[k].getEnd() == intersections[i].first->getEnd() )		e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
-				 else continue;*/
-
 				 if		( origin[k].getStart() == intersections[i].first->getStart()	&& origin[k].getEnd() == intersections[j].first->getStart() )	firstCondition = true;
 				 else if( origin[k].getStart() == intersections[i].first->getStart()	&& origin[k].getEnd() == intersections[j].first->getEnd() )		firstCondition = true;
 				 else if( origin[k].getStart() == intersections[i].first->getEnd()		&& origin[k].getEnd() == intersections[j].first->getStart() )	firstCondition = true;
@@ -243,7 +232,7 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 				 } else continue;
 
 				 #pragma omp critical
-				 polyLine.insert(*e);
+				 polyLine.push_back(*e);
 			 }
 		 }
 	 }
@@ -277,6 +266,58 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 	return false;
  }
 
+ inline bool areIntersecting(const Edge& a, const Edge& b){
+
+	 std::array<double, 3> aVec = a.getDirectionalVector();
+	 std::array<double, 3> bVec = b.getDirectionalVector();
+
+	 std::array<double, 3> crossProduct = cross(aVec, bVec);
+	 if( crossProduct[0] == 0 && crossProduct[1] == 0 && crossProduct[2] == 0 )
+		 return false;
+
+	 Point A = a.getStart();
+	 Point B = a.getEnd();
+	 Point C = b.getStart();
+	 Point D = b.getEnd();
+
+	 double t = 0, s = 0;
+	 if( !(((A.getX()-B.getX()) == 0 || (D.getY()-C.getY()) == 0) && ((A.getY()-B.getY()) == 0 || (D.getX()-C.getX()) == 0)) )
+		 if( (A.getX() - B.getX()) ){
+
+			 s = ((A.getX()-B.getX())*(D.getY()-B.getY()) - (A.getY()-B.getY())*(D.getX()-B.getX()))
+				 / ((A.getX()-B.getX())*(D.getY()-C.getY()) - (A.getY()-B.getY())*(D.getX()-C.getX()));
+			 t = ((D.getX()-B.getX()) - s*(D.getX()-C.getX())) / (A.getX() - B.getX());
+
+			 if( t*(A.getZ() - B.getZ()) + s*(D.getZ()-C.getZ()) != D.getZ()-B.getZ() )
+				 return false;
+		 }
+	 if( !(((A.getX()-B.getX()) == 0 || (D.getZ()-C.getZ()) == 0) && ((A.getZ()-B.getZ()) == 0 || (D.getX()-C.getX()) == 0)) )
+		 if( (A.getX() - B.getX()) ){
+
+			 s = ((A.getX()-B.getX())*(D.getZ()-B.getZ()) - (A.getZ()-B.getZ())*(D.getX()-B.getX()))
+				 / ((A.getX()-B.getX())*(D.getZ()-C.getZ()) - (A.getZ()-B.getZ())*(D.getX()-C.getX()));
+			 t = ((D.getX()-B.getX()) - s*(D.getX()-C.getX())) / (A.getX() - B.getX());
+
+			 if( t*(A.getY() - B.getY()) + s*(D.getY()-C.getY()) != D.getY()-B.getY() )
+				 return false;
+		 }
+	 if( !(((A.getY()-B.getY()) == 0 || (D.getZ()-C.getZ()) == 0) && ((A.getZ()-B.getZ()) == 0 || (D.getY()-C.getY()) == 0)) )
+		 if( (A.getY() - B.getY()) ){
+
+			 s = ((A.getY()-B.getY())*(D.getZ()-B.getZ()) - (A.getZ()-B.getZ())*(D.getY()-B.getY()))
+				 / ((A.getY()-B.getY())*(D.getZ()-C.getZ()) - (A.getZ()-B.getZ())*(D.getY()-C.getY()));
+			 t = ((D.getY()-B.getY()) - s*(D.getY()-C.getY())) / (A.getY() - B.getY());
+
+			 if( t*(A.getX() - B.getX()) + s*(D.getX()-C.getX()) != D.getX()-B.getX() )
+				 return false;
+		 }
+
+	 if( 0 < t && t < 1 && 0 < s && s < 1 )
+		 return true;
+	 return false;
+
+ }
+
  /**
  * .@brief function triangulating given solid for processing
  *
@@ -285,15 +326,16 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
  *
  */
  inline std::vector<Triangle> meshTriangles(std::vector<OriginalEdge>& origin){
-	 std::set<Point, comparePoints> uniquePoints;
+	 std::vector<Point> points;
 	 for( const auto& a : origin ){
-		 uniquePoints.insert(a.getStart());
-		 uniquePoints.insert(a.getEnd());
+		 points.push_back(a.getStart());
+		 points.push_back(a.getEnd());
 	 }
-	 std::set<Triangle, compareTriangles> allTriangles;
+
+	 std::vector<Triangle> allTriangles;
 
 	 //foreach point
-	 for( const auto& p : uniquePoints ){
+	 for( const auto& p : points ){
 		 //filter appropriate edges
 		 std::vector<Edge> temp;
 		 for( auto& e : origin ){
@@ -308,36 +350,76 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 					 //find 3 edge to form triangle
 					 //add edges
 					 if( x.getStart() == p && y.getStart() == p ){
-						 allTriangles.insert(Triangle(x,y,MeshEdge(x.getEnd(), y.getEnd(), Color(0, 0, 0))));
+						 allTriangles.push_back(Triangle(x,y,MeshEdge(x.getEnd(), y.getEnd(), Color(0, 0, 0))));
 					 } else if( x.getStart() == p && y.getEnd() == p ){
-						 allTriangles.insert(Triangle(x,y,MeshEdge(x.getEnd(), y.getStart(), Color(0, 0, 0))));
+						 allTriangles.push_back(Triangle(x,y,MeshEdge(x.getEnd(), y.getStart(), Color(0, 0, 0))));
 					 } else if( x.getEnd() == p && y.getStart() == p ){
-						 allTriangles.insert(Triangle(x,y,MeshEdge(x.getStart(), y.getEnd(), Color(0, 0, 0))));
+						 allTriangles.push_back(Triangle(x,y,MeshEdge(x.getStart(), y.getEnd(), Color(0, 0, 0))));
 					 } else if( x.getEnd() == p && y.getEnd() == p ){
-						 allTriangles.insert(Triangle(x,y,MeshEdge(x.getStart(), y.getStart(), Color(0, 0, 0))));
+						 allTriangles.push_back(Triangle(x,y,MeshEdge(x.getStart(), y.getStart(), Color(0, 0, 0))));
 					 }
 					 // else throw new Exception :P
 				 }
 			 }
 		 }
 	 }
-	 std::vector<Triangle> out(allTriangles.begin(), allTriangles.end());
-	 return out;
+	 return allTriangles;
  };
 
  inline std::vector<Triangle> connectedIntersectionPoints(std::vector<std::pair<const Edge*, Point>> isections){
 	 std::vector<Triangle> out;
-	 for( int i = 0; i < isections.size() - 2; i++ ){
-		 for( int j = i; j < isections.size() - 1; j++ ){
-			 for( int k = j; k < isections.size(); k++ ){
-				 Edge a(isections[i].second, isections[j].second);
-				 Edge b(isections[j].second, isections[k].second);
-				 Edge c(isections[k].second, isections[i].second);
-				 out.push_back(Triangle(a, b, c));
+	 std::vector<Edge> connections;
+		 //Point a1 = isections[0].second;
+		 //int mem = 1;
+		 //double min = 100000000000;
+		 //for( int i = 1; i < isections.size(); i++ ){
+			// double dist = norm(std::array<double, 3>{
+			//	 a1.getX() - isections[i].second.getX(),
+			//		 a1.getY() - isections[i].second.getY(),
+			//		 a1.getZ() - isections[i].second.getZ()}
+			// );
+			// if( dist < min ){
+			//	 min = dist;
+			//	 mem = i;
+			// }
+		 //}
+		 //Edge e(a1, isections[mem].second);
+		 //connections.push_back(e);
+
+		 for( int i = 0; i < isections.size(); i++ ){
+			 for( int j = 0; j < isections.size(); j++ ){
+				 if( i != j ){
+					 Edge edge(isections[i].second, isections[j].second);
+					 bool add = true;
+					 for( auto& e : connections ){
+						 if( areIntersecting(e, edge) ){
+							 add = false;
+							 continue;
+						 }
+					 }
+					 if( add ) connections.push_back(edge);
+				 }
 			 }
 		 }
-	 }
-	 return out;
+
+		 #pragma omp parallel for collapse(3)
+		 for( int i = 0; i < connections.size(); i++ ){
+			 Edge a = connections[i];
+			 for( int j = 0; j < connections.size(); j++ ){
+				 if( connections[j].getStart() == a.getEnd() || connections[j].getEnd() == a.getEnd() ){
+					 Edge b = connections[j];
+					 for( int k = 0; k < connections.size(); k++ ){
+						 if( connections[k].getStart() == b.getEnd() || connections[k].getEnd() == b.getEnd() ){
+							 Edge c = connections[k];
+							 #pragma omp critical
+							 out.push_back(Triangle(a, b, c));
+						 } else continue;
+					 }
+				 } else continue;
+			 }
+		 }
+
+		 return out;
  }
 
  inline bool triangleInsideSection(Triangle insideTriangle, std::vector<Triangle>& outsideTriangles){
@@ -350,23 +432,24 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 			 counter++;
 
 	 if( counter % 2 == 1 ) return true;
-	 else false;
+	 else return false;
  }
 
  inline ClosedPolygonalChains removeTriangles(std::vector<Triangle> in, std::vector<Triangle> out){
-	 for( auto i = in.begin(); i != in.end(); i++ )
-		 if (!triangleInsideSection(*i, out) ) in.erase(i);
+
+	 std::vector<Triangle> in_inside;
+	 for( auto& e: in ){
+		 if( !triangleInsideSection(e, out) ) in_inside.push_back(e);
+	 }
 
 	 std::vector<Edge> polyLine;
 
-	 for( auto& e: in ){
+	 for( auto& e: in_inside ){
 		 polyLine.push_back(e.getEdgeA());
 		 polyLine.push_back(e.getEdgeB());
 		 polyLine.push_back(e.getEdgeC());
 	 }
 
-	 std::vector<Edge> unique = removeReversed(polyLine);
-
-	 ClosedPolygonalChains cpc(unique);
+	 ClosedPolygonalChains cpc(polyLine);
 	 return cpc;
  }

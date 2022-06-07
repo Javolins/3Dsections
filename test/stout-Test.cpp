@@ -117,6 +117,34 @@ TEST_CASE("Mesh() testing") {
 	//TODO add requires
 }
 
+TEST_CASE("meshTriangle() testing"){
+	std::vector<OriginalEdge> testEdges;
+
+	testEdges.push_back(OriginalEdge(Point(1, 1, 1), Point(1, 1, -1), Color(0, 0, 0)));
+	testEdges.push_back(OriginalEdge(Point(1, -1, 1), Point(1, -1, -1), Color(0, 0, 0)));
+	testEdges.push_back(OriginalEdge(Point(-1, 1, 1), Point(-1, 1, -1), Color(0, 0, 0)));
+	testEdges.push_back(OriginalEdge(Point(-1, -1, 1), Point(-1, -1, -1), Color(0, 0, 0)));
+
+	testEdges.push_back(OriginalEdge(Point(1, 1, 1), Point(1, -1, 1), Color(0, 0, 0)));
+	testEdges.push_back(OriginalEdge(Point(1, -1, 1), Point(-1, -1, 1), Color(0, 0, 0)));
+	testEdges.push_back(OriginalEdge(Point(-1, -1, 1), Point(-1, 1, 1), Color(0, 0, 0)));
+	testEdges.push_back(OriginalEdge(Point(-1, 1, 1), Point(1, 1, 1), Color(0, 0, 0)));
+
+	testEdges.push_back(OriginalEdge(Point(1, 1, -1), Point(1, -1, -1), Color(0, 0, 0)));
+	testEdges.push_back(OriginalEdge(Point(1, -1, -1), Point(-1, -1, -1), Color(0, 0, 0)));
+	testEdges.push_back(OriginalEdge(Point(-1, -1, -1), Point(-1, 1, -1), Color(0, 0, 0)));
+	testEdges.push_back(OriginalEdge(Point(-1, 1, -1), Point(1, 1, -1), Color(0, 0, 0)));
+
+	std::vector<Triangle> meshedEdges = meshTriangles(testEdges);
+	//for( auto& e : meshedEdges ){
+	//	std::cout << "a : " <<  e.getEdgeA() << " ";
+	//	std::cout << "b : " <<  e.getEdgeB() << " ";
+	//	std::cout << "c : " <<  e.getEdgeC() << std::endl;
+	//}
+
+	//TODO add requires
+}
+
 TEST_CASE("polygonalChain() testing") {
 	std::vector<std::pair<const Edge*, Point>> testMap;
 
@@ -170,4 +198,39 @@ TEST_CASE("removeReversed() testing") {
 	//for (auto e : outTest) std::cout << e << std::endl;
 
 	//TODO add requires
+}
+
+TEST_CASE("areIntersecting() testing"){
+	std::vector<Edge> testEdges;
+
+	// not intersecting
+	Edge a1(Point(0, 0, 5), Point(-2, 0, 0));
+	Edge b1(Point(0, -2, 0), Point(0, 5, 0), Color(0, 0, 0));
+	// common point
+	Edge a2(Point(-2, 0, 0), Point(0, 0, 4), Color(0, 0, 0));
+	Edge b2(Point(-2, 0, 0), Point(0, -2, 0), Color(0, 0, 0));
+	//intersecting
+	Edge a3(Point(-2, 0, 0), Point(3, 0, 0), Color(0, 0, 0));
+	Edge b3(Point(0, -1, 0), Point(0, 3, 0), Color(0, 0, 0));
+	// not intersecting in range
+	Edge a4(Point(1, 0, 0), Point(5, 0, 0), Color(0, 0, 0));
+	Edge b4(Point(0, 1, 0), Point(0, 5, 0), Color(0, 0, 0));
+	// parallel
+	Edge a5(Point(1, 0, 0), Point(5, 0, 0), Color(0, 0, 0));
+	Edge b5(Point(1, 1, 0), Point(5, 1, 0), Color(0, 0, 0));
+	// duplicates
+	Edge a6(Point(1, 0, 0), Point(5, 0, 0), Color(0, 0, 0));
+	Edge b6(Point(1, 1, 0), Point(5, 1, 0), Color(0, 0, 0));
+	// partially the same
+	Edge a7(Point(1, 0, 0), Point(5, 0, 0), Color(0, 0, 0));
+	Edge b7(Point(3, 0, 0), Point(9, 0, 0), Color(0, 0, 0));
+
+
+	REQUIRE(areIntersecting(a1, b1) == false);
+	REQUIRE(areIntersecting(a2, b2) == false);
+	REQUIRE(areIntersecting(a3, b3) == true);
+	REQUIRE(areIntersecting(a4, b4) == false);
+	REQUIRE(areIntersecting(a5, b5) == false);
+	REQUIRE(areIntersecting(a6, b6) == false);
+	REQUIRE(areIntersecting(a7, b7) == false); //??
 }

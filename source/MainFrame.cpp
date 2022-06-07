@@ -358,7 +358,16 @@ void MainFrame::repaintGeo() {
 	buffer.SetBackground(*wxWHITE_BRUSH);
 	buffer.Clear();
 
-	for (auto& segment : dataSegment) {
+	/**/
+	std::vector<Triangle> in = meshTriangles(dataSegment);
+	std::vector<Edge> polyLine;
+	for( auto& e: in ){
+		polyLine.push_back(e.getEdgeA());
+		polyLine.push_back(e.getEdgeB());
+		polyLine.push_back(e.getEdgeC());
+	}
+
+	for (auto& segment : /*dataSegment*/polyLine ){
 		buffer.SetPen(wxPen(wxColour(segment.getRgb().getR(), segment.getRgb().getG(), segment.getRgb().getB())));
 
 		Vector4 beginVec, endVec;
@@ -400,6 +409,7 @@ void MainFrame::repaintSec(){
 	std::vector<std::pair<const Edge*, Point>> foundPoints = intersectionPoints(dataSegment, currentPlane);
 	//std::vector<Edge> lines = polygonalChain(foundPoints, dataSegment).getEdges();
 	std::vector<Edge> lines = removeTriangles(connectedIntersectionPoints(foundPoints), meshTriangles(dataSegment)).getEdges();
+	//std::vector<Edge> lines = connectedIntersectionPoints(foundPoints);
 
 	wxClientDC dc(rightPanel);
 	wxBufferedDC buffer(&dc);

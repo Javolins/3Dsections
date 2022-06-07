@@ -74,16 +74,23 @@ class Triangle : public Plane{
 class compareTriangles{
 	public:
 		bool operator()(const Triangle& a, const Triangle& b) const{
-			if( b.getA() < a.getA() ) return false;
-			if( a.getA() < b.getA() ) return true;
+			//if( b.getA() < a.getA() ) return false;
+			//if( a.getA() < b.getA() ) return true;
 
-			if( b.getB() < a.getB() ) return false;
-			if( a.getB() < b.getB() ) return true;
+			//if( b.getB() < a.getB() ) return false;
+			//if( a.getB() < b.getB() ) return true;
 
-			if( b.getC() < a.getC() ) return false;
-			if( a.getC() < b.getC() ) return true;
+			//if( b.getC() < a.getC() ) return false;
+			//if( a.getC() < b.getC() ) return true;
 
-			return false;
+			//if( b.getD() < a.getD() ) return false;
+			//if( a.getD() < b.getD() ) return true;
+
+			if( a.getPointA() == b.getPointA() &&
+			   a.getPointB() == b.getPointB() &&
+			   a.getPointC() == b.getPointC() ) return false;
+
+			return true;
 		}
 };
 
