@@ -37,6 +37,7 @@
     <ClCompile Include="test\Plane-Test.cpp" />
     <ClCompile Include="test\stout-Test.cpp" />
     <ClCompile Include="test\Vector4-Test.cpp" />
+    <ClCompile Include="Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\App.h" />
@@ -48,6 +49,7 @@
     <ClInclude Include="include\MeshEdge.h" />
     <ClInclude Include="include\OriginalEdge.h" />
     <ClInclude Include="include\Plane.h" />
+    <ClInclude Include="include\Ray.h" />
     <ClInclude Include="include\stout.h" />
     <ClInclude Include="include\Triangle.h" />
     <ClInclude Include="include\Vector4.h" />

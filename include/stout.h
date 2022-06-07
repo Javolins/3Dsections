@@ -20,7 +20,23 @@
 #include "../include/Edge.h"
 #include "../include/Plane.h"
 #include "../include/ClosedPolygonalChains.h"
+#include "../include/Triangle.h"
+#include "../include/Ray.h"
 
+
+
+inline std::vector<Edge> removeReversed(std::vector<Edge> edges){
+	std::set<Edge, compareEdges> unique;
+	for( auto& x : edges ){
+		bool only = true;
+		for( auto& y : unique )
+			if( y.getStart() == x.getEnd() && y.getEnd() == x.getStart() )
+				only = false;
+		if( only ) unique.insert(x);
+	}
+	std::vector<Edge> out(unique.begin(),unique.end());
+	return out;
+}
 
 /**
  * .@brief function triangulating given solid for processing
@@ -28,7 +44,6 @@
  * @param origin vector of edges from the file
  * @return vector of all original and virtual edges
  * 
- * //TODO proper color of new Edge
  */
 inline std::vector<Edge> mesh(std::vector<OriginalEdge>& origin) {
 	std::set<Point, comparePoints> uniquePoints;
@@ -63,6 +78,7 @@ inline std::vector<Edge> mesh(std::vector<OriginalEdge>& origin) {
 		}
 	}
 	std::vector<Edge> out(allEdges.begin(), allEdges.end());
+	removeReversed(out);
 	return out;
 };
 
@@ -77,23 +93,23 @@ inline double dot(std::array<double, 3> a, std::array<double, 3> b){
 	return a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
 }
 
-inline std::array<double, 3> cross(std::array<double, 3> a, std::array<double, 3> b){
-	std::array<double, 3> result;
-	result[0] = a[1]*b[2] - a[2]*b[1];
-	result[1] = a[2]*b[0] - a[0]*b[2];
-	result[2] = a[0]*b[1] - a[1]*b[0];
-	return result;
-}
-
-/**
- * @brief Calculates the norm of a vector.
- * 
- * @param vec 3-dimensional vector.
- * @return Norm of the provided vector.
- */
-inline double norm(std::array<double, 3> vec){
-	return sqrt(vec[0]*vec[0] + vec[1]*vec[1] + vec[2]*vec[2]);
-}
+//inline std::array<double, 3> cross(std::array<double, 3> a, std::array<double, 3> b){
+//	std::array<double, 3> result;
+//	result[0] = a[1]*b[2] - a[2]*b[1];
+//	result[1] = a[2]*b[0] - a[0]*b[2];
+//	result[2] = a[0]*b[1] - a[1]*b[0];
+//	return result;
+//}
+//
+///**
+// * @brief Calculates the norm of a vector.
+// * 
+// * @param vec 3-dimensional vector.
+// * @return Norm of the provided vector.
+// */
+//inline double norm(std::array<double, 3> vec){
+//	return sqrt(vec[0]*vec[0] + vec[1]*vec[1] + vec[2]*vec[2]);
+//}
 
 /**
  * @brief Simple signum function.
@@ -179,7 +195,7 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 	return intersections;
 }
 
- bool connect(const Edge& a, const Edge& b);
+ inline bool connect(const Edge& a, const Edge& b);
  /**
   * @brief Functions checking which intersections with a plane would create a section
   * 
@@ -236,19 +252,6 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 	 return cpc;
  }
 
- inline std::vector<Edge> removeReversed(std::vector<Edge> edges) {
-	 std::vector<Edge> unique;
-	 for (auto& x : edges) {
-		bool only = true;
-		for (auto &y : unique)
-			if (y.getStart() == x.getEnd() && y.getEnd() == x.getStart())
-				only = false;
-		if (only) unique.push_back(x);
-	 }
-	 return unique;
- }
-
-
  inline bool connect(const Edge& a, const Edge& b){
 	std::array<double, 3> aVec = a.getDirectionalVector();
 	std::array<double, 3> bVec = b.getDirectionalVector();
@@ -272,4 +275,98 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 				if( commonPlane.containsPoint(b.getEnd()) )
 					return true;
 	return false;
+ }
+
+ /**
+ * .@brief function triangulating given solid for processing
+ *
+ * @param origin vector of edges from the file
+ * @return vector of all triangles forming solid
+ *
+ */
+ inline std::vector<Triangle> meshTriangles(std::vector<OriginalEdge>& origin){
+	 std::set<Point, comparePoints> uniquePoints;
+	 for( const auto& a : origin ){
+		 uniquePoints.insert(a.getStart());
+		 uniquePoints.insert(a.getEnd());
+	 }
+	 std::set<Triangle, compareTriangles> allTriangles;
+
+	 //foreach point
+	 for( const auto& p : uniquePoints ){
+		 //filter appropriate edges
+		 std::vector<Edge> temp;
+		 for( auto& e : origin ){
+			 if( e.getStart() == p || e.getEnd() == p ){
+				 temp.push_back(e);
+			 }
+		 }
+		 //foreach pair of edges
+		 for( auto& x : temp ){
+			 for( const auto& y : temp ){
+				 if( !(x == y) ){
+					 //find 3 edge to form triangle
+					 //add edges
+					 if( x.getStart() == p && y.getStart() == p ){
+						 allTriangles.insert(Triangle(x,y,MeshEdge(x.getEnd(), y.getEnd(), Color(0, 0, 0))));
+					 } else if( x.getStart() == p && y.getEnd() == p ){
+						 allTriangles.insert(Triangle(x,y,MeshEdge(x.getEnd(), y.getStart(), Color(0, 0, 0))));
+					 } else if( x.getEnd() == p && y.getStart() == p ){
+						 allTriangles.insert(Triangle(x,y,MeshEdge(x.getStart(), y.getEnd(), Color(0, 0, 0))));
+					 } else if( x.getEnd() == p && y.getEnd() == p ){
+						 allTriangles.insert(Triangle(x,y,MeshEdge(x.getStart(), y.getStart(), Color(0, 0, 0))));
+					 }
+					 // else throw new Exception :P
+				 }
+			 }
+		 }
+	 }
+	 std::vector<Triangle> out(allTriangles.begin(), allTriangles.end());
+	 return out;
+ };
+
+ inline std::vector<Triangle> connectedIntersectionPoints(std::vector<std::pair<const Edge*, Point>> isections){
+	 std::vector<Triangle> out;
+	 for( int i = 0; i < isections.size() - 2; i++ ){
+		 for( int j = i; j < isections.size() - 1; j++ ){
+			 for( int k = j; k < isections.size(); k++ ){
+				 Edge a(isections[i].second, isections[j].second);
+				 Edge b(isections[j].second, isections[k].second);
+				 Edge c(isections[k].second, isections[i].second);
+				 out.push_back(Triangle(a, b, c));
+			 }
+		 }
+	 }
+	 return out;
+ }
+
+ inline bool triangleInsideSection(Triangle insideTriangle, std::vector<Triangle>& outsideTriangles){
+	 Point insidePoint = insideTriangle.getPointInside();
+	 Ray ray(insidePoint);
+	 
+	 int counter = 0;
+	 for( auto& e : outsideTriangles )
+		 if( intersection(ray, e.getPlane()) != nullptr && e.containsPoint((*intersection(ray, e.getPlane()))))
+			 counter++;
+
+	 if( counter % 2 == 1 ) return true;
+	 else false;
+ }
+
+ inline ClosedPolygonalChains removeTriangles(std::vector<Triangle> in, std::vector<Triangle> out){
+	 for( auto i = in.begin(); i != in.end(); i++ )
+		 if (!triangleInsideSection(*i, out) ) in.erase(i);
+
+	 std::vector<Edge> polyLine;
+
+	 for( auto& e: in ){
+		 polyLine.push_back(e.getEdgeA());
+		 polyLine.push_back(e.getEdgeB());
+		 polyLine.push_back(e.getEdgeC());
+	 }
+
+	 std::vector<Edge> unique = removeReversed(polyLine);
+
+	 ClosedPolygonalChains cpc(unique);
+	 return cpc;
  }

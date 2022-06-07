@@ -112,9 +112,7 @@ TEST_CASE("Mesh() testing") {
 	testEdges.push_back(OriginalEdge(Point(-1, 1, -1), Point(1, 1, -1), Color(0, 0, 0)));
 
 	std::vector<Edge> meshedEdges = mesh(testEdges);
-	//for (auto& e : meshedEdges) {
-	//	std::cout << e << std::endl;
-	//}
+	//for (auto& e : meshedEdges) std::cout << e << std::endl;
 
 	//TODO add requires
 }
@@ -157,6 +155,7 @@ TEST_CASE("removeReversed() testing") {
 	testEdges.push_back(OriginalEdge(Point(1, 1, 1), Point(-1, -1, -1), Color(0, 0, 0)));
 	testEdges.push_back(OriginalEdge(Point(-1, -1, -1), Point(1, 1, 1), Color(0, 0, 0)));
 
+	testEdges.push_back(OriginalEdge(Point(2, 2, 2), Point(-2, -2, -2), Color(0, 0, 0)));
 	testEdges.push_back(OriginalEdge(Point(2, 2, 2), Point(-2, -2, -2), Color(0, 0, 0)));
 
 	testEdges.push_back(OriginalEdge(Point(3, 3, 3), Point(-3, -3, -3), Color(0, 0, 0)));

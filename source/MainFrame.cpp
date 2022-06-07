@@ -398,7 +398,8 @@ void MainFrame::repaintGeo() {
 void MainFrame::repaintSec(){
 	
 	std::vector<std::pair<const Edge*, Point>> foundPoints = intersectionPoints(dataSegment, currentPlane);
-	std::vector<Edge> lines = polygonalChain(foundPoints, dataSegment).getEdges();
+	//std::vector<Edge> lines = polygonalChain(foundPoints, dataSegment).getEdges();
+	std::vector<Edge> lines = removeTriangles(connectedIntersectionPoints(foundPoints), meshTriangles(dataSegment)).getEdges();
 
 	wxClientDC dc(rightPanel);
 	wxBufferedDC buffer(&dc);

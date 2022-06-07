@@ -9,7 +9,24 @@
 #pragma once
 #include "Plane.h"
 #include "Edge.h"
-#include "stout.h"
+
+inline std::array<double, 3> cross(std::array<double, 3> a, std::array<double, 3> b){
+	std::array<double, 3> result;
+	result[0] = a[1]*b[2] - a[2]*b[1];
+	result[1] = a[2]*b[0] - a[0]*b[2];
+	result[2] = a[0]*b[1] - a[1]*b[0];
+	return result;
+}
+
+/**
+ * @brief Calculates the norm of a vector.
+ *
+ * @param vec 3-dimensional vector.
+ * @return Norm of the provided vector.
+ */
+inline double norm(std::array<double, 3> vec){
+	return sqrt(vec[0]*vec[0] + vec[1]*vec[1] + vec[2]*vec[2]);
+}
 
 class Triangle : public Plane{
 
@@ -44,8 +61,29 @@ class Triangle : public Plane{
 				return true;
 			return false;
 		}
+
+		Point getPointInside() const{
+			Point centerAB{ (pointA.getX()+pointB.getX())/2, (pointA.getY()+pointB.getY())/2, (pointA.getZ()+pointB.getZ())/2 };
+			return Point{ (centerAB.getX()+pointC.getX())/2, (centerAB.getY()+pointC.getY())/2, (centerAB.getZ()+pointC.getZ())/2 };
+		}
 	private:
 		Edge edgeA, edgeB, edgeC;
 		Point pointA, pointB, pointC;
+};
+
+class compareTriangles{
+	public:
+		bool operator()(const Triangle& a, const Triangle& b) const{
+			if( b.getA() < a.getA() ) return false;
+			if( a.getA() < b.getA() ) return true;
+
+			if( b.getB() < a.getB() ) return false;
+			if( a.getB() < b.getB() ) return true;
+
+			if( b.getC() < a.getC() ) return false;
+			if( a.getC() < b.getC() ) return true;
+
+			return false;
+		}
 };
 
