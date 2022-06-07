@@ -14,6 +14,7 @@ class Plane {
 
 	public:
 		Plane(const double a = 0, const double b = 0, const double c = 0, const double d = 0) : parameters{ a, b, c, d } {}
+		//Plane(const std::array<double, 3> v, const double d = 0) : parameters{ v[0], v[1], v[2], d} {}
 		~Plane() = default;
 
 		double getParameter(const short i) const { return parameters.at(i); }

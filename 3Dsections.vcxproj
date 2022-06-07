@@ -49,6 +49,7 @@
     <ClInclude Include="include\OriginalEdge.h" />
     <ClInclude Include="include\Plane.h" />
     <ClInclude Include="include\stout.h" />
+    <ClInclude Include="include\Triangle.h" />
     <ClInclude Include="include\Vector4.h" />
     <ClInclude Include="test\doctest.h" />
   </ItemGroup>
