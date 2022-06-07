@@ -8,6 +8,7 @@
 
 #pragma once
 #include <array>
+#include "DataClasses.h"
 
 class Plane {
 
@@ -29,6 +30,12 @@ class Plane {
 		void set(const double a, const double b, const double c, const double d) { setA(a); setB(b); setC(c); setD(d); }
 
 		std::array<double, 3> getNormalVector() const { return std::array<double, 3> {parameters[0], parameters[1], parameters[2]}; }
+		bool containsPoint(const Point& point) const{
+			if( getA()*point.getX() + getB()*point.getY() + getC()*point.getZ() + getD() == 0 )
+				return true;
+			else
+				return false;
+		}
 
 	private:
 		std::array<double, 4> parameters;

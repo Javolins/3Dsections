@@ -77,6 +77,14 @@ inline double dot(std::array<double, 3> a, std::array<double, 3> b){
 	return a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
 }
 
+inline std::array<double, 3> cross(std::array<double, 3> a, std::array<double, 3> b){
+	std::array<double, 3> result;
+	result[0] = a[1]*b[2] - a[2]*b[1];
+	result[1] = a[2]*b[0] - a[0]*b[2];
+	result[2] = a[0]*b[1] - a[1]*b[0];
+	return result;
+}
+
 /**
  * @brief Calculates the norm of a vector.
  * 
@@ -171,7 +179,7 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 	return intersections;
 }
 
-
+ bool connect(const Edge& a, const Edge& b);
  /**
   * @brief Functions checking which intersections with a plane would create a section
   * 
@@ -187,8 +195,10 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 		 for( int j = i+1; j < intersections.size(); j++ ){
 			 for( int k = 0; k < origin.size(); k++ ){
 				 Edge* e;
+				 bool firstCondition = false;
+				 bool secondCondition = false;
 				 // 4 possible connections, both ways
-				 if		( origin[k].getStart() == intersections[i].first->getStart()	&& origin[k].getEnd() == intersections[j].first->getStart() )	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
+				 /*if		( origin[k].getStart() == intersections[i].first->getStart()	&& origin[k].getEnd() == intersections[j].first->getStart() )	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
 				 else if( origin[k].getStart() == intersections[i].first->getStart()	&& origin[k].getEnd() == intersections[j].first->getEnd() )		e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
 				 else if( origin[k].getStart() == intersections[i].first->getEnd()		&& origin[k].getEnd() == intersections[j].first->getStart() )	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
 				 else if( origin[k].getStart() == intersections[i].first->getEnd()		&& origin[k].getEnd() == intersections[j].first->getEnd() )		e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
@@ -197,7 +207,24 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 				 else if( origin[k].getStart() == intersections[j].first->getStart()	&& origin[k].getEnd() == intersections[i].first->getEnd() )		e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
 				 else if( origin[k].getStart() == intersections[j].first->getEnd()		&& origin[k].getEnd() == intersections[i].first->getStart() )	e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
 				 else if( origin[k].getStart() == intersections[j].first->getEnd()		&& origin[k].getEnd() == intersections[i].first->getEnd() )		e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
-				 else continue;
+				 else continue;*/
+
+				 if		( origin[k].getStart() == intersections[i].first->getStart()	&& origin[k].getEnd() == intersections[j].first->getStart() )	firstCondition = true;
+				 else if( origin[k].getStart() == intersections[i].first->getStart()	&& origin[k].getEnd() == intersections[j].first->getEnd() )		firstCondition = true;
+				 else if( origin[k].getStart() == intersections[i].first->getEnd()		&& origin[k].getEnd() == intersections[j].first->getStart() )	firstCondition = true;
+				 else if( origin[k].getStart() == intersections[i].first->getEnd()		&& origin[k].getEnd() == intersections[j].first->getEnd() )		firstCondition = true;
+
+				 else if( origin[k].getStart() == intersections[j].first->getStart()	&& origin[k].getEnd() == intersections[i].first->getStart() )	firstCondition = true;
+				 else if( origin[k].getStart() == intersections[j].first->getStart()	&& origin[k].getEnd() == intersections[i].first->getEnd() )		firstCondition = true;
+				 else if( origin[k].getStart() == intersections[j].first->getEnd()		&& origin[k].getEnd() == intersections[i].first->getStart() )	firstCondition = true;
+				 else if( origin[k].getStart() == intersections[j].first->getEnd()		&& origin[k].getEnd() == intersections[i].first->getEnd() )		firstCondition = true;
+
+
+				 if( connect(*(intersections[i].first), *(intersections[j].first)) ) secondCondition = true;
+
+				 if( firstCondition && secondCondition ){
+					 e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
+				 } else continue;
 
 				 #pragma omp critical
 				 polyLine.insert(*e);
@@ -219,4 +246,30 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 		if (only) unique.push_back(x);
 	 }
 	 return unique;
+ }
+
+
+ inline bool connect(const Edge& a, const Edge& b){
+	std::array<double, 3> aVec = a.getDirectionalVector();
+	std::array<double, 3> bVec = b.getDirectionalVector();
+	
+	std::array<double, 3> crossProduct = cross(aVec,bVec);
+	if( crossProduct[0] == 0 && crossProduct[1] == 0 && crossProduct[2] == 0 ){
+		bVec = std::array<double, 3> { 
+			a.getEnd().getX() - b.getStart().getX(),
+			a.getEnd().getY() - b.getStart().getY(),
+			a.getEnd().getZ() - b.getStart().getZ()
+		};
+		crossProduct = cross(aVec, bVec);
+	}
+
+	double D = -(crossProduct[0]*b.getEnd().getX() + crossProduct[1]*b.getEnd().getY() + crossProduct[2]*b.getEnd().getZ());
+	Plane commonPlane{ crossProduct[0], crossProduct[1], crossProduct[2], D };
+
+	if( commonPlane.containsPoint(a.getStart()) )
+		if( commonPlane.containsPoint(a.getEnd()) )
+			if( commonPlane.containsPoint(b.getStart()) )
+				if( commonPlane.containsPoint(b.getEnd()) )
+					return true;
+	return false;
  }
