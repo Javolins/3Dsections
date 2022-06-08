@@ -13,7 +13,7 @@
 
 class Edge {
 	public:
-		Edge(Point start, Point end, Color rgb = {0,0,0}) : ends(std::pair<Point, Point>(start, end)), color(rgb){}
+		Edge(Point start = {0,0,0}, Point end = {0,0,0}, Color rgb = {0,0,0}) : ends(std::pair<Point, Point>(start, end)), color(rgb){ }
 		Point getStart() const { return ends.first; }
 		Point getEnd() const { return ends.second; }
 		Color getRgb() const { return color; }
@@ -24,7 +24,16 @@ class Edge {
 				static_cast<double>(getEnd().getZ() - getStart().getZ())
 			};
 		}
-		bool operator==(const Edge& e) const { if (this != nullptr && getStart() == e.getStart() && getEnd() == e.getEnd()) return true; else return false; };
+		bool operator==(const Edge& e) const { 
+			if (this != nullptr && ((getStart() == e.getStart() && getEnd() == e.getEnd()) || (getStart() == e.getEnd() && getEnd() == e.getStart()))) 
+				return true; 
+			else 
+				return false; 
+		};
+		void set(Point a, Point b){
+			ends.first = a; 
+			ends.second = b;
+		}
 		friend std::ostream& operator<<(std::ostream& os, const Point& p);
 	private:
 		std::pair<Point, Point>	ends;

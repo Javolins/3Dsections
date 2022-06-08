@@ -269,3 +269,95 @@ TEST_CASE("sortowanie"){
 	//std::cout << toHash << std::endl;
 	//std::cout << number << std::endl;
 }
+
+TEST_CASE("triangle == operator testing"){
+	// the same
+	Triangle a (Edge(Point(0, 0, 0), Point(1, 0, 0)), Edge(Point(1, 0, 0), Point(1, 1, 0)), Edge(Point(1, 1, 0), Point(0, 0, 0)));
+	Triangle a_copy (Edge(Point(0, 0, 0), Point(1, 0, 0)), Edge(Point(1, 0, 0), Point(1, 1, 0)), Edge(Point(1, 1, 0), Point(0, 0, 0)));
+	// one common edge
+	Triangle a_edge (Edge(Point(0, 0, 0), Point(1, 0, 0)), Edge(Point(1, 0, 0), Point(2, 2, 0)), Edge(Point(2, 2, 0), Point(0, 0, 0)));
+	// one common point
+	Triangle a_point (Edge(Point(0, 0, 0), Point(0, 0, 1)), Edge(Point(0, 0, 1), Point(0, 1, 1)), Edge(Point(0, 1, 1), Point(0, 0, 0)));
+	// no common points
+	Triangle b (Edge(Point(4, 4, 4), Point(5, 4, 4)), Edge(Point(5, 4, 4), Point(5, 5, 4)), Edge(Point(5, 5, 4), Point(4, 4, 4)));
+
+	REQUIRE(a == a_copy);
+	REQUIRE(!(a == a_edge));
+	REQUIRE(!(a == a_point));
+	REQUIRE(!(a == b));
+}
+
+TEST_CASE("testing comparepoints()"){
+
+	std::array<Point, 3> table;
+
+	//
+	table = { Point{ 0,0,0 },Point{ 1,0,0 }, Point{ 2,0,0 } };
+	std::sort(table.begin(), table.end(), comparePoints());
+	REQUIRE(table[0] == Point{ 0,0,0 });
+	REQUIRE(table[1] == Point{ 1,0,0 });
+	REQUIRE(table[2] == Point{ 2,0,0 });
+
+	table = { Point{ 0,0,0 },Point{ 0,1,0 }, Point{ 0,2,0 } };
+	std::sort(table.begin(), table.end(), comparePoints());
+	REQUIRE(table[0] == Point{ 0,0,0 });
+	REQUIRE(table[1] == Point{ 0,1,0 });
+	REQUIRE(table[2] == Point{ 0,2,0 });
+
+	table = { Point{ 0,0,0 },Point{ 0,0,1 }, Point{ 0,0,2 } };
+	std::sort(table.begin(), table.end(), comparePoints());
+	REQUIRE(table[0] == Point{ 0,0,0 });
+	REQUIRE(table[1] == Point{ 0,0,1 });
+	REQUIRE(table[2] == Point{ 0,0,2 });
+
+	//
+	table = { Point{ 2,0,0 },Point{ 1,0,0 }, Point{ 0,0,0 } };
+	std::sort(table.begin(), table.end(), comparePoints());
+	REQUIRE(table[0] == Point{ 0,0,0 });
+	REQUIRE(table[1] == Point{ 1,0,0 });
+	REQUIRE(table[2] == Point{ 2,0,0 });
+
+	table = { Point{ 0,2,0 },Point{ 0,1,0 }, Point{ 0,0,0 } };
+	std::sort(table.begin(), table.end(), comparePoints());
+	REQUIRE(table[0] == Point{ 0,0,0 });
+	REQUIRE(table[1] == Point{ 0,1,0 });
+	REQUIRE(table[2] == Point{ 0,2,0 });
+
+	table = { Point{ 0,0,2 },Point{ 0,0,1 }, Point{ 0,0,0 } };
+	std::sort(table.begin(), table.end(), comparePoints());
+	REQUIRE(table[0] == Point{ 0,0,0 });
+	REQUIRE(table[1] == Point{ 0,0,1 });
+	REQUIRE(table[2] == Point{ 0,0,2 });
+
+	//
+	table = { Point{ 1,0,0 },Point{ 2,0,0 }, Point{ 0,0,0 } };
+	std::sort(table.begin(), table.end(), comparePoints());
+	REQUIRE(table[0] == Point{ 0,0,0 });
+	REQUIRE(table[1] == Point{ 1,0,0 });
+	REQUIRE(table[2] == Point{ 2,0,0 });
+
+	table = { Point{ 0,1,0 },Point{ 0,2,0 }, Point{ 0,0,0 } };
+	std::sort(table.begin(), table.end(), comparePoints());
+	REQUIRE(table[0] == Point{ 0,0,0 });
+	REQUIRE(table[1] == Point{ 0,1,0 });
+	REQUIRE(table[2] == Point{ 0,2,0 });
+
+	table = { Point{ 0,0,1 },Point{ 0,0,2 }, Point{ 0,0,0 } };
+	std::sort(table.begin(), table.end(), comparePoints());
+	REQUIRE(table[0] == Point{ 0,0,0 });
+	REQUIRE(table[1] == Point{ 0,0,1 });
+	REQUIRE(table[2] == Point{ 0,0,2 });
+
+	//
+	table = { Point{ 1,2,3 },Point{ 1,3,2 }, Point{ 1,1,1 } };
+	std::sort(table.begin(), table.end(), comparePoints());
+	REQUIRE(table[0] == Point{ 1,1,1 });
+	REQUIRE(table[1] == Point{ 1,2,3 });
+	REQUIRE(table[2] == Point{ 1,3,2 });
+
+	table = { Point{ 1,1,1 },Point{ 1,1,3 }, Point{ 1,1,2 } };
+	std::sort(table.begin(), table.end(), comparePoints());
+	REQUIRE(table[0] == Point{ 1,1,1 });
+	REQUIRE(table[1] == Point{ 1,1,2 });
+	REQUIRE(table[2] == Point{ 1,1,3 });
+}

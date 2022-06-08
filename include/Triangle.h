@@ -64,7 +64,21 @@ class Triangle : public Plane{
 			return false;
 		}
 		bool operator==(const Triangle& e) const {
-			if( this != nullptr && getA() == e.getA() && getB() == e.getB() && getC() == e.getC() && getD() == e.getD() ) return true; else return false;
+			//if( this != nullptr && getA() == e.getA() && getB() == e.getB() && getC() == e.getC() && getD() == e.getD() ) return true; else return false;
+			if( this != nullptr ){
+				std::array<Point, 3> thisPoints{ getPointA(), getPointB(), getPointC() };
+				std::sort(thisPoints.begin(), thisPoints.end(), comparePoints());
+
+				std::array<Point, 3> thatPoints{ e.getPointA(), e.getPointB(), e.getPointC() };
+				std::sort(thatPoints.begin(), thatPoints.end(), comparePoints());
+
+				if( thisPoints[0] == thatPoints[0] && thisPoints[1] == thatPoints[1] && thisPoints[2] == thatPoints[2] ){
+					return true;
+				}
+				else{
+					return false;
+				}
+			}
 		};
 		Point getPointInside() const{
 			Point centerAB{ (pointA.getX()+pointB.getX())/2, (pointA.getY()+pointB.getY())/2, (pointA.getZ()+pointB.getZ())/2 };

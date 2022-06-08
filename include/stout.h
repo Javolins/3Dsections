@@ -327,7 +327,7 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
  *
  */
  inline std::vector<Triangle> meshTriangles(std::vector<OriginalEdge>& origin){
-	 std::vector<Point> points;
+	 /*std::vector<Point> points;
 	 for( const auto& a : origin ){
 		 bool addStart = true;
 		 bool addEnd = true;
@@ -393,63 +393,152 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 			 anotherOne.push_back(allTriangles[i]);
 	 }
 
-	 return anotherOne;//allTriangles;
+	 return allTriangles;// anotherOne;//allTriangles;*/
+	 std::vector<Triangle> triangles;
+
+	 for( int i = 0; i < origin.size(); i++ ){
+		 for( int j = i+1; j < origin.size(); j++ ){
+			 if( !(origin[i] == origin[j]) ){
+				 Point xs = origin[i].getStart();
+				 Point xe = origin[i].getEnd();
+				 Point ys = origin[j].getStart();
+				 Point ye = origin[j].getEnd();
+				 Edge temp;
+
+				 if( xs == ys ){
+					 temp.set(xe, ye);
+				 }
+				 else if( xs == ye ){
+					 temp.set(xe, ys);
+				 }
+				 else if( xe == ys ){
+					 temp.set(xs, ye);
+				 }
+				 else if( xe == ye ){
+					 temp.set(xs, ys);
+				 }
+				 else{
+					 continue;
+				 }
+
+				 bool add = true;
+
+				 for( auto& e : triangles ){
+					 if( areIntersecting(temp, e.getEdgeA()) || areIntersecting(temp, e.getEdgeB()) || areIntersecting(temp, e.getEdgeC())) {
+						 add = false;
+						 break;
+					 }
+				 }
+
+				 if( add )
+					 triangles.push_back(Triangle(origin[i], origin[j], temp));
+			 }
+		 }
+	 }
+	 std::vector<Triangle> unique;
+	 for( int i = 0; i < triangles.size(); i++ ){
+		 bool add = true;
+		 for( int j = 0; j < unique.size(); j++ ){
+			 if(triangles[i] == unique[j]) {
+				 add = false;
+				 break;
+			 }
+		 }
+		 if( add )
+			 unique.push_back(triangles[i]);
+	 }
+
+	 return unique;
  };
 
  inline std::vector<Triangle> connectedIntersectionPoints(std::vector<std::pair<const Edge*, Point>> isections){
-	 std::vector<Triangle> out;
-	 std::vector<Edge> connections;
-		 //Point a1 = isections[0].second;
-		 //int mem = 1;
-		 //double min = 100000000000;
-		 //for( int i = 1; i < isections.size(); i++ ){
-			// double dist = norm(std::array<double, 3>{
-			//	 a1.getX() - isections[i].second.getX(),
-			//		 a1.getY() - isections[i].second.getY(),
-			//		 a1.getZ() - isections[i].second.getZ()}
-			// );
-			// if( dist < min ){
-			//	 min = dist;
-			//	 mem = i;
-			// }
-		 //}
-		 //Edge e(a1, isections[mem].second);
-		 //connections.push_back(e);
+	 //std::vector<Triangle> out;
+	 //std::vector<Edge> connections;
+		// //Point a1 = isections[0].second;
+		// //int mem = 1;
+		// //double min = 100000000000;
+		// //for( int i = 1; i < isections.size(); i++ ){
+		//	// double dist = norm(std::array<double, 3>{
+		//	//	 a1.getX() - isections[i].second.getX(),
+		//	//		 a1.getY() - isections[i].second.getY(),
+		//	//		 a1.getZ() - isections[i].second.getZ()}
+		//	// );
+		//	// if( dist < min ){
+		//	//	 min = dist;
+		//	//	 mem = i;
+		//	// }
+		// //}
+		// //Edge e(a1, isections[mem].second);
+		// //connections.push_back(e);
+		// for( int i = 0; i < isections.size(); i++ ){
+		//	 for( int j = 0; j < isections.size(); j++ ){
+		//		 if( i != j ){
+		//			 Edge edge(isections[i].second, isections[j].second);
+		//			 bool add = true;
+		//			 for( auto& e : connections ){
+		//				 if( areIntersecting(e, edge) ){
+		//					 add = false;
+		//					 continue;
+		//				 }
+		//			 }
+		//			 if( add ) connections.push_back(edge);
+		//		 }
+		//	 }
+		// }
+		// #pragma omp parallel for collapse(3)
+		// for( int i = 0; i < connections.size(); i++ ){
+		//	 Edge a = connections[i];
+		//	 for( int j = 0; j < connections.size(); j++ ){
+		//		 if( connections[j].getStart() == a.getEnd() || connections[j].getEnd() == a.getEnd() ){
+		//			 Edge b = connections[j];
+		//			 for( int k = 0; k < connections.size(); k++ ){
+		//				 if( connections[k].getStart() == b.getEnd() || connections[k].getEnd() == b.getEnd() ){
+		//					 Edge c = connections[k];
+		//					 #pragma omp critical
+		//					 out.push_back(Triangle(a, b, c));
+		//				 } else continue;
+		//			 }
+		//		 } else continue;
+		//	 }
+		// }
+		// return out;
+	 std::vector<Triangle> unique;
 
-		 for( int i = 0; i < isections.size(); i++ ){
-			 for( int j = 0; j < isections.size(); j++ ){
-				 if( i != j ){
-					 Edge edge(isections[i].second, isections[j].second);
+	 for( int i = 0; i < isections.size(); i++ ){
+		 Point a = isections[i].second;
+		 for( int j = i+1; j < isections.size(); j++ ){
+			 Point b = isections[j].second;
+			 for( int k = j+1; k < isections.size(); k++ ){ 
+				 Point c = isections[k].second;
+
+				 //if( i == j && i == k && j == k ){
+					 Edge ab(a, b);
+					 Edge bc(b, c);
+					 Edge ca(c, a);
+
 					 bool add = true;
-					 for( auto& e : connections ){
-						 if( areIntersecting(e, edge) ){
+					 for( auto& e : unique ){
+						 if( areIntersecting(ab, e.getEdgeA()) || areIntersecting(ab, e.getEdgeB()) || areIntersecting(ab, e.getEdgeC()) ){
 							 add = false;
-							 continue;
+							 break;
+						 } else if( areIntersecting(bc, e.getEdgeA()) || areIntersecting(bc, e.getEdgeB()) || areIntersecting(bc, e.getEdgeC()) ){
+							 add = false;
+							 break;
+						 } else if( areIntersecting(ca, e.getEdgeA()) || areIntersecting(ca, e.getEdgeB()) || areIntersecting(ca, e.getEdgeC()) ){
+							 add = false;
+							 break;
 						 }
 					 }
-					 if( add ) connections.push_back(edge);
-				 }
-			 }
-		 }
 
-		 #pragma omp parallel for collapse(3)
-		 for( int i = 0; i < connections.size(); i++ ){
-			 Edge a = connections[i];
-			 for( int j = 0; j < connections.size(); j++ ){
-				 if( connections[j].getStart() == a.getEnd() || connections[j].getEnd() == a.getEnd() ){
-					 Edge b = connections[j];
-					 for( int k = 0; k < connections.size(); k++ ){
-						 if( connections[k].getStart() == b.getEnd() || connections[k].getEnd() == b.getEnd() ){
-							 Edge c = connections[k];
-							 #pragma omp critical
-							 out.push_back(Triangle(a, b, c));
-						 } else continue;
+					 if( add ){
+						 unique.push_back(Triangle(ab, bc, ca));
 					 }
-				 } else continue;
+				 //}
 			 }
 		 }
+	 }
 
-		 return out;
+	 return unique;
  }
 
  inline bool triangleInsideSection(Triangle insideTriangle, std::vector<Triangle>& outsideTriangles){
