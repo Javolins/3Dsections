@@ -117,7 +117,7 @@ TEST_CASE("Mesh() testing") {
 	//TODO add requires
 }
 
-TEST_CASE("meshTriangle() testing"){
+TEST_CASE("meshTriangles() testing"){
 	std::vector<OriginalEdge> testEdges;
 
 	testEdges.push_back(OriginalEdge(Point(1, 1, 1), Point(1, 1, -1), Color(0, 0, 0)));
@@ -136,11 +136,13 @@ TEST_CASE("meshTriangle() testing"){
 	testEdges.push_back(OriginalEdge(Point(-1, 1, -1), Point(1, 1, -1), Color(0, 0, 0)));
 
 	std::vector<Triangle> meshedEdges = meshTriangles(testEdges);
-	//for( auto& e : meshedEdges ){
-	//	std::cout << "a : " <<  e.getEdgeA() << " ";
-	//	std::cout << "b : " <<  e.getEdgeB() << " ";
-	//	std::cout << "c : " <<  e.getEdgeC() << std::endl;
-	//}
+	std::cout << "meshedEdges.size(): " << meshedEdges.size() << std::endl;
+	for( auto& e : meshedEdges ){
+		std::cout << "a : " <<  e.getEdgeA() << " ";
+		std::cout << "b : " <<  e.getEdgeB() << " ";
+		std::cout << "c : " <<  e.getEdgeC() << std::endl;
+	}
+	std::cout << "meshedEdges.size(): " << meshedEdges.size() << std::endl;
 
 	//TODO add requires
 }
@@ -233,4 +235,37 @@ TEST_CASE("areIntersecting() testing"){
 	REQUIRE(areIntersecting(a5, b5) == false);
 	REQUIRE(areIntersecting(a6, b6) == false);
 	REQUIRE(areIntersecting(a7, b7) == false); //??
+}
+
+TEST_CASE("sortowanie"){
+
+	//Triangle t(
+	//	Edge(Point(-2, 0, 0), Point(0, 0, 4)),
+	//	Edge(Point(-2, 0, 0), Point(0, -2, 0)),
+	//	Edge(Point(0, -2, 0), Point(0, 0, 4 ))
+	//	);
+
+	//std::array<Point, 3> points{ t.getPointA(), t.getPointB(), t.getPointC() };
+
+	//std::sort(points.begin(), points.end(), comparePoints());
+
+	//std::string toHash =
+	//	std::to_string(points[0].getX()) +
+	//	std::to_string(points[0].getY()) +
+	//	std::to_string(points[0].getZ()) +
+	//	std::to_string(points[1].getX()) +
+	//	std::to_string(points[1].getY()) +
+	//	std::to_string(points[1].getZ()) +
+	//	std::to_string(points[2].getX()) +
+	//	std::to_string(points[2].getY()) +
+	//	std::to_string(points[2].getZ());
+
+	//for( auto e : points ){
+	//	std::cout << e << std::endl;
+	//}
+
+	//size_t number = std::hash<std::string>()(toHash);
+
+	//std::cout << toHash << std::endl;
+	//std::cout << number << std::endl;
 }

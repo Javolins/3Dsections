@@ -61,21 +61,16 @@ class Point {
 
 struct comparePoints {
 	bool operator()(const Point& a, const Point& b) const {
-		//if (a.getX() < b.getX()) return true;
-		//if (b.getX() < a.getX()) return false;
+		if (a.getX() < b.getX()) return true;
+		if (b.getX() < a.getX()) return false;
 
-		//if (a.getY() < b.getY()) return true;
-		//if (b.getY() < a.getY()) return false;
+		if (a.getY() < b.getY()) return true;
+		if (b.getY() < a.getY()) return false;
 
-		//if (a.getZ() < b.getZ()) return true;
-		//if (b.getZ() < a.getZ()) return false;
-		//
-		//return false;
-
-		if( a.getX() == b.getX() && a.getY() == b.getY() && a.getZ() == b.getZ() ) 
-			return false;
-
-		return true;
+		if (a.getZ() < b.getZ()) return true;
+		if (b.getZ() < a.getZ()) return false;
+		
+		return false;
 	}
 };
 

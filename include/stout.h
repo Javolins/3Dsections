@@ -11,6 +11,7 @@
 #include <vector>
 #include <array>
 #include <set>
+#include <unordered_set>
 #include <map>
 #include <memory>
 #include <cmath>
@@ -328,8 +329,18 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
  inline std::vector<Triangle> meshTriangles(std::vector<OriginalEdge>& origin){
 	 std::vector<Point> points;
 	 for( const auto& a : origin ){
-		 points.push_back(a.getStart());
-		 points.push_back(a.getEnd());
+		 bool addStart = true;
+		 bool addEnd = true;
+		 for( auto& e: points ){
+			 if( a.getStart() == e ){
+				 addStart = false;
+			 }
+			 if( a.getEnd() == e ){
+				 addEnd = false;
+			 }
+		 }
+		 if (addStart) points.push_back(a.getStart());
+		 if (addEnd) points.push_back(a.getEnd());
 	 }
 
 	 std::vector<Triangle> allTriangles;
@@ -363,7 +374,26 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 			 }
 		 }
 	 }
-	 return allTriangles;
+	 std::vector<Triangle> anotherOne;
+
+	 for( int i = 0; i < allTriangles.size(); i++ ){
+		 std::array<Point, 3> pointsI{ allTriangles[i].getPointA(), allTriangles[i].getPointB(), allTriangles[i].getPointC()};
+		 std::sort(pointsI.begin(), pointsI.end(), comparePoints());
+		 bool add = true;
+		 for( int j = 0; j < anotherOne.size(); j++ ){
+			  std::array<Point, 3> pointsJ{ allTriangles[j].getPointA(), allTriangles[j].getPointB(), allTriangles[j].getPointC() };
+			  std::sort(pointsJ.begin(), pointsJ.end(), comparePoints());
+				 
+			  if( pointsI[0] == pointsJ[0] && pointsI[1] == pointsJ[1] && pointsI[2] == pointsJ[2] ){
+				  add = false;
+				break;
+			  }
+		 }
+		 if( add ) 
+			 anotherOne.push_back(allTriangles[i]);
+	 }
+
+	 return anotherOne;//allTriangles;
  };
 
  inline std::vector<Triangle> connectedIntersectionPoints(std::vector<std::pair<const Edge*, Point>> isections){

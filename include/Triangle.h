@@ -9,6 +9,8 @@
 #pragma once
 #include "Plane.h"
 #include "Edge.h"
+#include <algorithm>
+#include <string>
 
 inline std::array<double, 3> cross(std::array<double, 3> a, std::array<double, 3> b){
 	std::array<double, 3> result;
@@ -61,7 +63,9 @@ class Triangle : public Plane{
 				return true;
 			return false;
 		}
-
+		bool operator==(const Triangle& e) const {
+			if( this != nullptr && getA() == e.getA() && getB() == e.getB() && getC() == e.getC() && getD() == e.getD() ) return true; else return false;
+		};
 		Point getPointInside() const{
 			Point centerAB{ (pointA.getX()+pointB.getX())/2, (pointA.getY()+pointB.getY())/2, (pointA.getZ()+pointB.getZ())/2 };
 			return Point{ (centerAB.getX()+pointC.getX())/2, (centerAB.getY()+pointC.getY())/2, (centerAB.getZ()+pointC.getZ())/2 };
@@ -71,26 +75,48 @@ class Triangle : public Plane{
 		Point pointA, pointB, pointC;
 };
 
-class compareTriangles{
+class hashTriangles{
 	public:
-		bool operator()(const Triangle& a, const Triangle& b) const{
-			//if( b.getA() < a.getA() ) return false;
-			//if( a.getA() < b.getA() ) return true;
+		size_t operator()(const Triangle& t) const{
+			std::array<Point, 3> points{ t.getPointA(), t.getPointB(), t.getPointC() };
+			std::sort(points.begin(), points.end(), comparePoints());
 
-			//if( b.getB() < a.getB() ) return false;
-			//if( a.getB() < b.getB() ) return true;
+			//std::string toHash =
+			//	std::to_string(points[0].getX()) +
+			//	std::to_string(points[0].getY()) +
+			//	std::to_string(points[0].getZ()) +
+			//	std::to_string(points[1].getX()) +
+			//	std::to_string(points[1].getY()) +
+			//	std::to_string(points[1].getZ()) +
+			//	std::to_string(points[2].getX()) +
+			//	std::to_string(points[2].getY()) +
+			//	std::to_string(points[2].getZ());
 
-			//if( b.getC() < a.getC() ) return false;
-			//if( a.getC() < b.getC() ) return true;
+			//		size_t ax = std::hash<float>{}(points[0].getX());
+			//		size_t ay = std::hash<float>{}(points[0].getY());
+			//		size_t az = std::hash<float>{}(points[0].getZ());
+			//		size_t bx = std::hash<float>{}(points[1].getX());
+			//		size_t by = std::hash<float>{}(points[1].getY());
+			//		size_t bz = std::hash<float>{}(points[1].getZ());
+			//		size_t cx = std::hash<float>{}(points[2].getX());
+			//		size_t cy = std::hash<float>{}(points[2].getY());
+			//		size_t cz = std::hash<float>{}(points[2].getZ());
 
-			//if( b.getD() < a.getD() ) return false;
-			//if( a.getD() < b.getD() ) return true;
+			//size_t a = ((((((((ax ^ (ay << 1)) ^ (az << 1)) ^ (bx << 1)) ^ (by << 1)) ^ (bz << 1)) ^ (cx << 1)) ^ (cy << 1)) ^ (cz << 1));
+			//size_t number = std::hash<std::string>()(toHash);
 
-			if( a.getPointA() == b.getPointA() &&
-			   a.getPointB() == b.getPointB() &&
-			   a.getPointC() == b.getPointC() ) return false;
+			//size_t out =
+			//	3 * points[0].getX() +
+			//	5 * points[0].getY() +
+			//	7 * points[0].getZ() +
+			//	11 * points[1].getX() +
+			//	13 * points[1].getY() +
+			//	17 * points[1].getZ() +
+			//	19 * points[2].getX() +
+			//	23 * points[2].getY() +
+			//	29 * points[2].getZ();
 
-			return true;
+			//return out;//number;
 		}
 };
 

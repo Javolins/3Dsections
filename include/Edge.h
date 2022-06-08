@@ -24,7 +24,7 @@ class Edge {
 				static_cast<double>(getEnd().getZ() - getStart().getZ())
 			};
 		}
-		bool operator==(const Edge& e) { if (this != nullptr && getStart() == e.getStart() && getEnd() == e.getEnd()) return true; else return false; };
+		bool operator==(const Edge& e) const { if (this != nullptr && getStart() == e.getStart() && getEnd() == e.getEnd()) return true; else return false; };
 		friend std::ostream& operator<<(std::ostream& os, const Point& p);
 	private:
 		std::pair<Point, Point>	ends;
