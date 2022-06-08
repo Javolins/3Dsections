@@ -34,15 +34,18 @@ class Triangle : public Plane{
 
 	public:
 		Triangle(const Edge& _edgeA, const Edge& _edgeB, const Edge& _edgeC) 
-		: edgeA{ _edgeA }, edgeB{ _edgeB }, edgeC{ _edgeC } {
-			std::array<double, 3> crossProduct = cross(edgeA.getDirectionalVector(), edgeB.getDirectionalVector());
-			double D = -(getA()*edgeB.getEnd().getX() + getB()*edgeB.getEnd().getY() + getC()*edgeB.getEnd().getZ());
-			set(crossProduct[0], crossProduct[1], crossProduct[2], D);
-			pointA = edgeA.getStart();
-			pointB = edgeA.getEnd();
-			pointC = edgeB.getStart();
+		: edgeA{ _edgeA }, edgeB{ _edgeB }, edgeC{ _edgeC }, pointA{ edgeA.getStart() }, pointB{ edgeA.getEnd() }, pointC{ edgeB.getStart() }
+		{
 			if( pointC == pointA ||  pointC == pointB )
 				pointC = edgeB.getEnd();
+
+			std::array<double, 3> crossProduct = cross(edgeA.getDirectionalVector(), edgeB.getDirectionalVector());
+			set(crossProduct[0], 
+				crossProduct[1],
+				crossProduct[2],
+				//0  // zakomentowanie linijki poniżej a odkomentowanie tej, powraca do poprzedniej wersji
+				-(crossProduct[0]*getPointInside().getX() + crossProduct[1]*getPointInside().getY() + crossProduct[2]*getPointInside().getZ())
+			);
 		}
 
 		Edge getEdgeA() const { return edgeA; }

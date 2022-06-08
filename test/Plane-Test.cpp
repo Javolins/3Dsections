@@ -56,10 +56,11 @@ TEST_CASE("Triangle testing"){
 	Edge z_eq_mx_p1{ Point{ 1,0,0 }, Point{ 0,0,1 } };
 
 	Triangle test{ z_eq_my_p1, y_eq_mx_p1, z_eq_mx_p1 };
+	MESSAGE("A: ", test.getA(), ", B: ", test.getB(), ", C: ", test.getC(), ", D: ", test.getD());
 	REQUIRE(test.getA() == -1);
 	REQUIRE(test.getB() == -1);
 	REQUIRE(test.getC() == -1);
-	REQUIRE(test.getD() == 0);
+	REQUIRE(test.getD() == 1);
 	REQUIRE(test.getArea() == sqrt(3)/2);
 	REQUIRE(test.containsPoint(Point{ 0,1,0 }));
 	REQUIRE(test.containsPoint(Point{ 0,0,1 }));

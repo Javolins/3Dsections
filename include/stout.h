@@ -131,6 +131,9 @@ inline int sgn(double val){
  */
 inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane){
 
+	if( line.getDirectionalVector()[0] == 0 &&  line.getDirectionalVector()[1] == 0 && line.getDirectionalVector()[2] == 0 )
+		return nullptr;
+
 	// check if edge intersects plane
 	Point onPlane{ 0,0,0 };
 	if( plane.getA() != 0 )
@@ -166,9 +169,12 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 	// calculate intersection point
 	std::array<double, 3> lineVec = line.getDirectionalVector();
 
+	if( (plane.getA() * lineVec[0] + plane.getB() * lineVec[1] + plane.getC() * lineVec[2]) == 0 )
+		//throw;  // zakomentowanie linijki poniżej a odkomentowanie tej, pozwala śledzić kiedy dzielimy przez zero
+		return nullptr;
+
 	double t = -(plane.getA() * start.getX() + plane.getB() * start.getY() + plane.getC() * start.getZ() + plane.getD())
 		/ (plane.getA() * lineVec[0] + plane.getB() * lineVec[1] + plane.getC() * lineVec[2]);
-
 	return std::unique_ptr<Point>{
 		new Point{
 			static_cast<float>(start.getX() + t * lineVec[0]),
@@ -629,15 +635,10 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 		 }
 	 }
 
-
-
-
-
-
-
 	 std::vector<Edge> polyLine;
 
 	 for( auto& e: unique/*inin_inside*/ ){
+	 //for( auto& e: in ){
 		 polyLine.push_back(e.getEdgeA());
 		 polyLine.push_back(e.getEdgeB());
 		 polyLine.push_back(e.getEdgeC());
