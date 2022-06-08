@@ -556,14 +556,88 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 
  inline ClosedPolygonalChains removeTriangles(std::vector<Triangle> in, std::vector<Triangle> out){
 
-	 std::vector<Triangle> in_inside;
-	 for( auto& e: in ){
-		 if( !triangleInsideSection(e, out) ) in_inside.push_back(e);
+	 //std::vector<Triangle> in_inside;
+	 //for( auto& e: in ){
+		// if( triangleInsideSection(e, out) ) in_inside.push_back(e);
+	 //}
+	 std::vector<Triangle> unique = in;
+
+	 for( int i = 0; i < in.size(); i++ ){
+		 bool a_inside = false;
+		 if( triangleInsideSection(in[i], out) ){
+			 a_inside = true;
+		 }
+		 for( int j = i+1; j < in.size(); j++ ){
+			 bool b_inside = false;
+			 if( triangleInsideSection(in[j], out) ){
+				 b_inside = true;
+			 }
+
+			 if( a_inside == b_inside ){
+				 if( in[i].getEdgeA() == in[j].getEdgeA() ){
+					 unique[i].setEdgeA();
+					 unique[j].setEdgeA();
+				 }
+				 else if( in[i].getEdgeA() == in[j].getEdgeB() ){
+					 unique[i].setEdgeA();
+					 unique[j].setEdgeB();
+				 }
+				 else if( in[i].getEdgeA() == in[j].getEdgeC() ){
+					 unique[i].setEdgeA();
+					 unique[j].setEdgeC();
+				 }
+
+				 else if( in[i].getEdgeB() == in[j].getEdgeA() ){
+					 unique[i].setEdgeB();
+					 unique[j].setEdgeA();
+				 } 
+				 else if( in[i].getEdgeB() == in[j].getEdgeB() ){
+					 unique[i].setEdgeB();
+					 unique[j].setEdgeB();
+				 } 
+				 else if( in[i].getEdgeB() == in[j].getEdgeC() ){
+					 unique[i].setEdgeB();
+					 unique[j].setEdgeC();
+				 }
+
+				 else if( in[i].getEdgeC() == in[j].getEdgeA() ){
+					 unique[i].setEdgeC();
+					 unique[j].setEdgeA();
+				 } 
+				 else if( in[i].getEdgeC() == in[j].getEdgeB() ){
+					 unique[i].setEdgeC();
+					 unique[j].setEdgeB();
+				 } 
+				 else if( in[i].getEdgeC() == in[j].getEdgeC() ){
+					 unique[i].setEdgeC();
+					 unique[j].setEdgeC();
+				 }
+			 }
+			 else{
+
+				 if( !a_inside ){
+					 unique[i].setEdgeA();
+					 unique[i].setEdgeB();
+					 unique[i].setEdgeC();
+				 }
+				 if( !b_inside ){
+					 unique[j].setEdgeA();
+					 unique[j].setEdgeB();
+					 unique[j].setEdgeC();
+				 }
+			 }
+		 }
 	 }
+
+
+
+
+
+
 
 	 std::vector<Edge> polyLine;
 
-	 for( auto& e: in_inside ){
+	 for( auto& e: unique/*inin_inside*/ ){
 		 polyLine.push_back(e.getEdgeA());
 		 polyLine.push_back(e.getEdgeB());
 		 polyLine.push_back(e.getEdgeC());

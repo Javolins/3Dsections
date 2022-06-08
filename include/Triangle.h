@@ -51,14 +51,17 @@ class Triangle : public Plane{
 		Point getPointA() const { return pointA; }
 		Point getPointB() const { return pointB; }
 		Point getPointC() const { return pointC; }
+		void setEdgeA(const Edge& e = { Point(), Point() }) { edgeA = e; };
+		void setEdgeB(const Edge& e = { Point(), Point() }) { edgeB = e; };
+		void setEdgeC(const Edge& e = { Point(), Point() }) { edgeC = e; };
 
 		Plane getPlane() const{ return Plane{ getA(), getB(), getC(), getD() }; }
-		double getArea() const { return 0.5*norm(getNormalVector()); }
+		double getArea() const { return 0.5*abs(norm(getNormalVector())); }
 		bool containsPoint(const Point& pointP) const{
 			std::array<double, 3> vecPA = { pointP.getX() - getPointA().getX(), pointP.getY() - getPointA().getY(), pointP.getZ() - getPointA().getZ() };
 			std::array<double, 3> vecPB = { pointP.getX() - getPointB().getX(), pointP.getY() - getPointB().getY(), pointP.getZ() - getPointB().getZ() };
 			std::array<double, 3> vecPC = { pointP.getX() - getPointC().getX(), pointP.getY() - getPointC().getY(), pointP.getZ() - getPointC().getZ() };
-			double sum = 0.5 * ( norm(cross(vecPA,vecPB)) + norm(cross(vecPB, vecPC)) + norm(cross(vecPC, vecPA)) );
+			double sum = 0.5 * ( abs(norm(cross(vecPA,vecPB))) + abs(norm(cross(vecPB, vecPC))) + abs(norm(cross(vecPC, vecPA))) );
 			if( sum == getArea() )
 				return true;
 			return false;

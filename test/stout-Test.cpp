@@ -87,6 +87,34 @@ TEST_CASE("intersection() testing") {
 		//REQUIRE((*intersection(x_eq_y_eq_zero, z_eq_p1) == Point{ 0,0,1.0 }));
 	}
 
+	SUBCASE("Ray testing"){
+
+		Triangle a (Edge(Point(4, 4, 4), Point(5, 4, 4)), Edge(Point(5, 4, 4), Point(5, 5, 4)), Edge(Point(5, 5, 4), Point(4, 4, 4)));
+		Triangle b (Edge(Point(0, 0, 0), Point(1, 1, 1)), Edge(Point(1, 1, 1), Point(-2, 3, -4)), Edge(Point(-2, 3, -4), Point(0, 0, 0)));
+		Triangle c (Edge(Point(0, 0, 0), Point(1000, 0, 0)), Edge(Point(1000, 0, 0), Point(0, -1, -1)), Edge(Point(0, -1, -1), Point(4, 4, 4)));
+
+		Triangle outA (Edge(Point(4, 4, 4), Point(5, 4, 4)), Edge(Point(5, 4, 4), Point(5, 5, 4)), Edge(Point(5, 5, 4), Point(4, 4, 4)));
+		Triangle outB (Edge(Point(-10, -10, -10), Point(-9, -9, -9)), Edge(Point(-9,-9,-9), Point(-12,-13,-14)), Edge(Point(-12,-13,-14), Point(-10,-10,-10)));
+		Triangle outC(Edge(Point(0, 0, 0), Point(1000, 0, 0)), Edge(Point(1000, 0, 0), Point(0, -1, -1)), Edge(Point(0, -1, -1), Point(4, 4, 4)));
+
+		// ta sama płaszczyzna
+		Point insideA = a.getPointInside();
+		Ray rayA(insideA);
+		bool a1 = intersection(rayA, outA.getPlane()) != nullptr && outA.containsPoint((*intersection(rayA, outA.getPlane())));
+		REQUIRE(!a1);
+	
+		// 
+		Point insideB = b.getPointInside();
+		Ray rayB(insideB);
+		bool b1 = intersection(rayA, outB.getPlane()) != nullptr && outB.containsPoint((*intersection(rayA, outB.getPlane())));
+		REQUIRE(!b1);
+
+		//
+		Ray rayC(Point());
+		bool c1 = intersection(rayA, outC.getPlane()) != nullptr && outC.containsPoint((*intersection(rayA, outC.getPlane())));
+		REQUIRE(!c1);
+	}
+
 }
 
 TEST_CASE("intersectionPoints() testing") {
@@ -360,4 +388,16 @@ TEST_CASE("testing comparepoints()"){
 	REQUIRE(table[0] == Point{ 1,1,1 });
 	REQUIRE(table[1] == Point{ 1,1,2 });
 	REQUIRE(table[2] == Point{ 1,1,3 });
+}
+
+TEST_CASE("triangle setEdge testing") {
+	Triangle b(Edge(Point(4, 4, 4), Point(5, 4, 4)), Edge(Point(5, 4, 4), Point(5, 5, 4)), Edge(Point(5, 5, 4), Point(4, 4, 4)));
+
+	b.setEdgeA();
+	b.setEdgeB();
+	b.setEdgeC();
+
+	REQUIRE(b.getEdgeA() == Edge(Point(0,0,0), Point(0,0,0)));
+	REQUIRE(b.getEdgeB() == Edge(Point(0,0,0), Point(0,0,0)));
+	REQUIRE(b.getEdgeC() == Edge(Point(0,0,0), Point(0,0,0)));
 }
