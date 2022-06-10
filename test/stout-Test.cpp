@@ -10,9 +10,11 @@
 #include "../test/doctest.h"
 #include "../include/stout.h"
 #include "../include/Edge.h"
+#include "../include/Ray.h"
 #include "../include/DataClasses.h"
-#include <iostream>
 #include "../include/ClosedPolygonalChains.h"
+#include <iostream>
+#include <algorithm>
 
 TEST_CASE("intersection() testing") {
 
@@ -400,4 +402,66 @@ TEST_CASE("triangle setEdge testing") {
 	REQUIRE(b.getEdgeA() == Edge(Point(0,0,0), Point(0,0,0)));
 	REQUIRE(b.getEdgeB() == Edge(Point(0,0,0), Point(0,0,0)));
 	REQUIRE(b.getEdgeC() == Edge(Point(0,0,0), Point(0,0,0)));
+}
+
+// testing intire pipeline for a cube
+TEST_CASE("triangleInsideSection() testing"){
+
+	std::vector<OriginalEdge> testEdges;
+
+	testEdges.push_back(OriginalEdge(Point(1, 1, 1), Point(1, 1, -1), Color(0, 0, 0)));
+	testEdges.push_back(OriginalEdge(Point(1, -1, 1), Point(1, -1, -1), Color(0, 0, 0)));
+	testEdges.push_back(OriginalEdge(Point(-1, 1, 1), Point(-1, 1, -1), Color(0, 0, 0)));
+	testEdges.push_back(OriginalEdge(Point(-1, -1, 1), Point(-1, -1, -1), Color(0, 0, 0)));
+
+	testEdges.push_back(OriginalEdge(Point(1, 1, 1), Point(1, -1, 1), Color(0, 0, 0)));
+	testEdges.push_back(OriginalEdge(Point(1, -1, 1), Point(-1, -1, 1), Color(0, 0, 0)));
+	testEdges.push_back(OriginalEdge(Point(-1, -1, 1), Point(-1, 1, 1), Color(0, 0, 0)));
+	testEdges.push_back(OriginalEdge(Point(-1, 1, 1), Point(1, 1, 1), Color(0, 0, 0)));
+
+	testEdges.push_back(OriginalEdge(Point(1, 1, -1), Point(1, -1, -1), Color(0, 0, 0)));
+	testEdges.push_back(OriginalEdge(Point(1, -1, -1), Point(-1, -1, -1), Color(0, 0, 0)));
+	testEdges.push_back(OriginalEdge(Point(-1, -1, -1), Point(-1, 1, -1), Color(0, 0, 0)));
+	testEdges.push_back(OriginalEdge(Point(-1, 1, -1), Point(1, 1, -1), Color(0, 0, 0)));
+
+	std::vector<Triangle> solidTriangles = meshTriangles(testEdges);
+	REQUIRE(solidTriangles.size() == 12);
+
+	Plane yOz{ 1 };
+	Plane xOy{ 0,0,1 };
+	Plane xOz{ 0,1 };
+
+	std::vector<std::pair<const Edge*, Point>> sectionPoints = intersectionPoints(testEdges, Plane { 0,0,1,-0.044 });
+	REQUIRE(sectionPoints.size() == 4);
+
+	std::vector<Triangle> sectionTriangles = connectedIntersectionPoints(sectionPoints);
+	REQUIRE(sectionTriangles.size() == 2);
+
+	int i = 0;
+	for( const auto& in : sectionTriangles ){
+		Ray ray(in.getPointInside());
+		//bool inside = intersection(ray, e.getPlane()) != nullptr && e.containsPoint((*intersection(ray, e.getPlane())));
+		std::cout << "Ray start: " << ray.getPoint() << std::endl << std::endl;
+		int counter = 0;
+		std::vector<Point> intersentions;
+		for( auto& out : solidTriangles ){
+			//std::cout << "-" << out;
+			//std::cout << "-" << out.getPlane() << std::endl;
+			if( (intersection(ray, out.getPlane()) != nullptr) && out.containsPoint((*intersection(ray, out.getPlane()))) ){
+				if( intersentions.end() == std::find(intersentions.begin(), intersentions.end(), (*intersection(ray, out.getPlane()))) ){
+
+					std::cout << "Found new intersection point: " << (*intersection(ray, out.getPlane())) << " with:" << std::endl;
+					std::cout << out << out.getPlane() << std::endl;
+					intersentions.push_back((*intersection(ray, out.getPlane())));
+					counter++;
+				}
+			}
+		}
+			
+
+		bool inside = triangleInsideSection(in, solidTriangles);
+		MESSAGE("i: ", i++, " count: ", counter);
+		//REQUIRE(inside);
+	}
+
 }

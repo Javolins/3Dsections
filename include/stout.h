@@ -23,6 +23,7 @@
 #include "../include/ClosedPolygonalChains.h"
 #include "../include/Triangle.h"
 #include "../include/Ray.h"
+#include "../include/DataClasses.h"
 
 
 
@@ -163,7 +164,8 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 	std::array<double, 3> endVec{ end.getX() - onPlane.getX(), end.getY() - onPlane.getY(), end.getZ() - onPlane.getZ() };
 	std::array<double, 3> planeVec{ plane.getNormalVector() };
 
-	if( sgn(dot(startVec, planeVec)) == sgn(dot(endVec, planeVec)) ) 
+	//#include <limits>
+	if( sgn(dot(startVec, planeVec)) == sgn(dot(endVec, planeVec)) )// && !(line.getEnd() == Point{std::numeric_limits<float>::max(),std::numeric_limits<float>::max(),std::numeric_limits<float>::max()}) )
 		return nullptr;
 
 	// calculate intersection point
@@ -547,20 +549,28 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 	 return unique;
  }
 
- inline bool triangleInsideSection(Triangle insideTriangle, std::vector<Triangle>& outsideTriangles){
+ inline bool triangleInsideSection(const Triangle insideTriangle, const std::vector<Triangle>& outsideTriangles){
 	 Point insidePoint = insideTriangle.getPointInside();
 	 Ray ray(insidePoint);
 	 
 	 int counter = 0;
-	 for( auto& e : outsideTriangles )
-		 if( intersection(ray, e.getPlane()) != nullptr && e.containsPoint((*intersection(ray, e.getPlane()))))
-			 counter++;
+	 std::vector<Point> interPoints;
+	 for( auto& e : outsideTriangles ){
+		 auto point = intersection(ray, e.getPlane());
+		 if( (point != nullptr) && e.containsPoint(*point) )
+			 if( interPoints.end() == std::find(interPoints.begin(), interPoints.end(), *point) ){
+				 interPoints.push_back(*point);
+				 counter++;
+			 }
+	 }
 
-	 if( counter % 2 == 1 ) return true;
-	 else return false;
+	 if( counter % 2 == 1 ) 
+		 return true;
+	 else 
+		 return false;
  }
 
- inline ClosedPolygonalChains removeTriangles(std::vector<Triangle> in, std::vector<Triangle> out){
+ inline ClosedPolygonalChains removeTriangles(std::vector<Triangle> in, const std::vector<Triangle>& out){
 
 	 //std::vector<Triangle> in_inside;
 	 //for( auto& e: in ){
@@ -569,15 +579,16 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 	 std::vector<Triangle> unique = in;
 
 	 for( int i = 0; i < in.size(); i++ ){
+
 		 bool a_inside = false;
-		 if( triangleInsideSection(in[i], out) ){
+		 if( triangleInsideSection(in[i], out) )
 			 a_inside = true;
-		 }
+
 		 for( int j = i+1; j < in.size(); j++ ){
+
 			 bool b_inside = false;
-			 if( triangleInsideSection(in[j], out) ){
+			 if( triangleInsideSection(in[j], out) )
 				 b_inside = true;
-			 }
 
 			 if( a_inside == b_inside ){
 				 if( in[i].getEdgeA() == in[j].getEdgeA() ){
@@ -592,7 +603,6 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 					 unique[i].setEdgeA();
 					 unique[j].setEdgeC();
 				 }
-
 				 else if( in[i].getEdgeB() == in[j].getEdgeA() ){
 					 unique[i].setEdgeB();
 					 unique[j].setEdgeA();
@@ -605,7 +615,6 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 					 unique[i].setEdgeB();
 					 unique[j].setEdgeC();
 				 }
-
 				 else if( in[i].getEdgeC() == in[j].getEdgeA() ){
 					 unique[i].setEdgeC();
 					 unique[j].setEdgeA();

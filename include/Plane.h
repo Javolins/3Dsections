@@ -37,7 +37,12 @@ class Plane {
 			else
 				return false;
 		}
+		friend std::ostream& operator<<(std::ostream& s, const Plane& p);
 
 	private:
 		std::array<double, 4> parameters;
 };
+
+inline std::ostream& operator<<(std::ostream& s, const Plane& p){
+	return s << "Plane:\n" << " " << p.getA() << " " << p.getB() << " " << p.getC() << " " << p.getD() << std::endl;
+}

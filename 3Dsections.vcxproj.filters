@@ -24,6 +24,21 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include=".editorconfig" />
+    <None Include="resource\geo\czworoscian.geo">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\geo\maly_szescian.geo">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\geo\ostroslup.geo">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\geo\prostopadloscian.geo">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\geo\prostopoadłoscian_lite.geo">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\App.cpp">

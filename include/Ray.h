@@ -12,6 +12,6 @@
 
 class Ray : public Edge{
 	public:
-		Ray(const Point& point) : Edge{ point, Point{std::numeric_limits<float>::max(),std::numeric_limits<float>::max(),std::numeric_limits<float>::max()} } {}
+		Ray(const Point& point) : Edge{ point, Point{std::numeric_limits<float>::min(),std::numeric_limits<float>::min(),std::numeric_limits<float>::min()} } {}
 		Point getPoint() const{ return getStart(); }
 };

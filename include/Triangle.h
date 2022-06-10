@@ -65,6 +65,8 @@ class Triangle : public Plane{
 			std::array<double, 3> vecPB = { pointP.getX() - getPointB().getX(), pointP.getY() - getPointB().getY(), pointP.getZ() - getPointB().getZ() };
 			std::array<double, 3> vecPC = { pointP.getX() - getPointC().getX(), pointP.getY() - getPointC().getY(), pointP.getZ() - getPointC().getZ() };
 			double sum = 0.5 * ( abs(norm(cross(vecPA,vecPB))) + abs(norm(cross(vecPB, vecPC))) + abs(norm(cross(vecPC, vecPA))) );
+			//double eps = 0.000000001;
+			//if( sum >= getArea()-eps && sum <= getArea()+eps )
 			if( sum == getArea() )
 				return true;
 			return false;
@@ -90,10 +92,15 @@ class Triangle : public Plane{
 			Point centerAB{ (pointA.getX()+pointB.getX())/2, (pointA.getY()+pointB.getY())/2, (pointA.getZ()+pointB.getZ())/2 };
 			return Point{ (centerAB.getX()+pointC.getX())/2, (centerAB.getY()+pointC.getY())/2, (centerAB.getZ()+pointC.getZ())/2 };
 		}
+		friend std::ostream& operator<<(std::ostream& s, const Triangle& t);
 	private:
 		Edge edgeA, edgeB, edgeC;
 		Point pointA, pointB, pointC;
 };
+
+inline std::ostream& operator<<(std::ostream& s, const Triangle& t){
+	return s << "Triangle:\n" << t.getEdgeA() << t.getEdgeB() << t.getEdgeC() << std::endl;
+}
 
 class hashTriangles{
 	public:
