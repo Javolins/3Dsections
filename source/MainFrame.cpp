@@ -279,12 +279,33 @@ void MainFrame::fileLoadButtonOnClick(wxCommandEvent& event) {
 
 		std::ifstream in(WxOpenFileDialog.GetPath().ToStdString());
 		if (in.is_open()) {
+
+			geometricCenter.set(0, 0, 0);
+			geoMin.set(std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
+			geoMax.set(std::numeric_limits<float>::min(), std::numeric_limits<float>::min(), std::numeric_limits<float>::min());
+
 			dataSegment.clear();
 			while (!in.eof()) {
 				in >> xStartPoint >> yStartPoint >> zStartPoint >> xEndPoint >> yEndPoint >> zEndPoint >> r >> g >> b;
 				dataSegment.push_back(OriginalEdge(Point(xStartPoint, yStartPoint, zStartPoint), Point(xEndPoint, yEndPoint, zEndPoint), Color(r, g, b)));
+				geometricCenter.set(geometricCenter.getX()+xStartPoint+xEndPoint, geometricCenter.getY()+yStartPoint+yEndPoint, geometricCenter.getZ()+zStartPoint+zEndPoint);
+				if( xStartPoint > geoMax.getX() ) geoMax.setX(xStartPoint);
+				if( xStartPoint < geoMin.getX() ) geoMin.setX(xStartPoint);
+				if( yStartPoint > geoMax.getY() ) geoMax.setY(yStartPoint);
+				if( yStartPoint < geoMin.getY() ) geoMin.setY(yStartPoint);
+				if( zStartPoint > geoMax.getZ() ) geoMax.setZ(zStartPoint);
+				if( zStartPoint < geoMin.getZ() ) geoMin.setZ(zStartPoint);
+				if( xEndPoint > geoMax.getX() ) geoMax.setX(xEndPoint);
+				if( xEndPoint < geoMin.getX() ) geoMin.setX(xEndPoint);
+				if( yEndPoint > geoMax.getY() ) geoMax.setY(yEndPoint);
+				if( yEndPoint < geoMin.getY() ) geoMin.setY(yEndPoint);
+				if( zEndPoint > geoMax.getZ() ) geoMax.setZ(zEndPoint);
+				if( zEndPoint < geoMin.getZ() ) geoMin.setZ(zEndPoint);
 			}
 			in.close();
+			
+			geometricCenter.set(0.5*geometricCenter.getX()/dataSegment.size(), 0.5*geometricCenter.getY()/dataSegment.size(), 0.5*geometricCenter.getZ()/dataSegment.size());
+			geoDimensions.set(abs(geoMax.getX()-geoMin.getX()), abs(geoMax.getY()-geoMin.getY()), abs(geoMax.getZ()-geoMin.getZ()) );
 		}
 
 		event.Skip();
@@ -335,21 +356,25 @@ void MainFrame::repaintGeo() {
 	rotationZ.setElement(3, 3, 1);
 
 	translationMatrix.setElement(0, 0, 1);
-	translationMatrix.setElement(0, 3, 0.10);
 	translationMatrix.setElement(1, 1, 1);
-	translationMatrix.setElement(1, 3, 0.10);
 	translationMatrix.setElement(2, 2, 1);
-	translationMatrix.setElement(2, 3, 0.25);
 	translationMatrix.setElement(3, 3, 1);
+
+	// X, Y, Z
+	translationMatrix.setElement(0, 3, -geometricCenter.getX());
+	translationMatrix.setElement(1, 3, -geometricCenter.getY());
+	translationMatrix.setElement(2, 3, 1+0.22*geoDimensions.getZ()); //geometricCenter.getZ()*0.6
 
 	transformationMatrix = translationMatrix * rotationZ * rotationY * rotationX * scaleMatrix;
 
-	perspectiveMatrix.setElement(0, 0, (0.5 * leftPanel->GetSize().GetWidth()));
-	perspectiveMatrix.setElement(0, 2, (0.5 * leftPanel->GetSize().GetWidth()));
-	perspectiveMatrix.setElement(0, 3, (0.5 * leftPanel->GetSize().GetWidth()));
-	perspectiveMatrix.setElement(1, 1, (-0.5 * leftPanel->GetSize().GetHeight()));
-	perspectiveMatrix.setElement(1, 2, (0.5 * leftPanel->GetSize().GetHeight()));
-	perspectiveMatrix.setElement(1, 3, (0.5 * leftPanel->GetSize().GetHeight()));
+	double scalar = std::min(leftPanel->GetSize().GetWidth(), leftPanel->GetSize().GetHeight());
+
+	perspectiveMatrix.setElement(0, 0, (0.5 * scalar));
+	perspectiveMatrix.setElement(0, 2, (0.5 * scalar));
+	perspectiveMatrix.setElement(0, 3, (0.5 * scalar));
+	perspectiveMatrix.setElement(1, 1, (-0.5 * scalar));
+	perspectiveMatrix.setElement(1, 2, (0.5 * scalar));
+	perspectiveMatrix.setElement(1, 3, (0.5 * scalar));
 	perspectiveMatrix.setElement(3, 2, 1);
 	perspectiveMatrix.setElement(3, 3, 1);
 

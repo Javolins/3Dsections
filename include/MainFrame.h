@@ -326,5 +326,9 @@ class MainFrame : public wxFrame {
 		std::vector<std::array<wxCoord, 4>> cordData;
 		//! Stores the cutting plane
 		Plane currentPlane{ 0,0,1,0 };
+		//! Stores solid's center of mass
+		Point geometricCenter;
+		//! Stores extremes of the solid
+		Point geoMin, geoMax, geoDimensions;
 };
 
