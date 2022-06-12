@@ -39,6 +39,18 @@
     <None Include="resource\geo\prostopoadłoscian_lite.geo">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="resource\geo\Dodecahedron.geo">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\geo\Icosahedron.geo">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\geo\Ostrosłup7.geo">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\geo\Tetrahedron.geo">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\App.cpp">

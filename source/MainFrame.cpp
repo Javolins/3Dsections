@@ -619,3 +619,40 @@ void MainFrame::speedSliderOnScroll(wxScrollEvent& event){
 		animationTimer->Stop();
 	}
 }
+
+void MainFrame::saveAnimationButtonOnClick(wxCommandEvent& event){
+
+	wxFileDialog saveToFileDialog(this, _("Choose file:"), _(""), _(""), _("JPG files (*.jpg)|*.jpg"), wxFD_SAVE);
+	if( saveToFileDialog.ShowModal() == wxID_CANCEL )
+		return;
+	Refresh();
+	wxString filePath = saveToFileDialog.GetPath();
+	wxString fileName = saveToFileDialog.GetFilename();
+
+	int i = 0;
+	currentPlane.setD(-startingPosition);
+	while( -currentPlane.getD() < endingPosition ){
+
+		repaintSec();
+		Refresh();
+		wxClientDC dcClient{ rightPanel };
+		wxBufferedDC dcBuffer{ &dcClient };
+		PrepareDC(dcBuffer);
+		wxInitAllImageHandlers();
+
+		wxSize panelSize = rightPanel->GetVirtualSize();
+		wxBitmap bitMapToSave{ panelSize };
+
+		wxMemoryDC memory;
+		memory.SelectObject(bitMapToSave);
+		memory.Blit(0, 0, panelSize.GetX(), panelSize.GetY(), &dcBuffer, 0, 0, wxCOPY, true);
+
+		wxString newFileName = saveToFileDialog.GetFilename();
+		newFileName.insert(newFileName.size()-4, "-" + std::to_string(++i));
+		wxString newFilePath = saveToFileDialog.GetPath();
+		newFilePath.Replace(fileName, newFileName);
+
+		bitMapToSave.ConvertToImage().SaveFile(newFilePath, wxBITMAP_TYPE_JPEG);
+		currentPlane.setD(currentPlane.getD() - animationLength/200);
+	}
+}

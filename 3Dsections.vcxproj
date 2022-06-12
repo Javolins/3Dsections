@@ -23,10 +23,14 @@
     <None Include="resource\.geo files\a10a_4.geo" />
     <None Include="resource\.geo files\szescian.geo" />
     <None Include="resource\geo\czworoscian.geo" />
+    <None Include="resource\geo\Dodecahedron.geo" />
+    <None Include="resource\geo\Icosahedron.geo" />
     <None Include="resource\geo\maly_szescian.geo" />
     <None Include="resource\geo\ostroslup.geo" />
+    <None Include="resource\geo\Ostrosłup7.geo" />
     <None Include="resource\geo\prostopadloscian.geo" />
     <None Include="resource\geo\prostopoadłoscian_lite.geo" />
+    <None Include="resource\geo\Tetrahedron.geo" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\App.cpp" />

@@ -40,6 +40,8 @@
 #include <wx/msgdlg.h>
 #include <wx/dcbuffer.h>
 #include <wx/timer.h>
+#include <wx/wxprec.h>
+#include <wx/colordlg.h>
 
 // All needed STL's modules.
 #include <fstream>
@@ -224,7 +226,13 @@ class MainFrame : public wxFrame {
 		 */
 		virtual void fileLoadButtonOnClick(wxCommandEvent& event);
 
-		virtual void saveAnimationButtonOnClick(wxCommandEvent& event) { event.Skip(); }
+		/**
+		 * @brief After clicking @ref saveAnimationButton saves animation frames in .jpg format to the selected destination.
+		 * 
+		 * @param event Connected event, in this case: wxEVT_COMMAND_BUTTON_CLICKED.
+		 * @see saveAnimationButton
+		 */
+		virtual void saveAnimationButtonOnClick(wxCommandEvent& event);
 
 		/**
 		 * @brief Changes orientation of @ref currentPlane.
@@ -311,6 +319,7 @@ class MainFrame : public wxFrame {
 		//! Opens a file selection dialog.
 		wxButton* fileLoadButton;
 		wxStaticText* saveAnimationLabel;
+		//! Opens a file save dialog.
 		wxButton* saveAnimationButton;
 		wxStaticText* planeChoiceLabel;
 		//! Expands to the list of three planes: xOy, xOz, yOz
@@ -318,6 +327,7 @@ class MainFrame : public wxFrame {
 		wxStaticText* speedChoiceLabel;
 		//! Controls animation speed
 		wxSlider* speedSlider;
+		//! Displays info about ref @currentPlane positioning
 		wxStatusBar* statusBar;
 
 		//! Stores edges of loaded solid
