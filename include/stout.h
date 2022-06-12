@@ -438,6 +438,12 @@ inline std::vector<Triangle> meshTriangles(std::vector<OriginalEdge>& origin){
 					}
 				}
 
+				for( auto& e : origin ){
+					if( temp == e ){
+						temp = e;
+					}
+				}
+
 				if( add )
 					triangles.push_back(Triangle(origin[i], origin[j], temp));
 			}
