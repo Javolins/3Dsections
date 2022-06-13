@@ -65,12 +65,16 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 	horizontalStaticLine = new wxStaticLine(this, HORIZONTAL_STATIC_LINE_ID, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL);
 	mainFrameLeftSizer->Add(horizontalStaticLine, 0, wxBOTTOM | wxEXPAND, 5);
 
-	progressGauge = new wxGauge(this, PROGRESS_GAUGE_ID, 10000, wxDefaultPosition, wxDefaultSize, wxGA_HORIZONTAL);
+	controlSlider = new wxSlider(this, wxID_ANY, 100, 0, 200, wxDefaultPosition, wxSize(-1, 7), wxSL_LEFT|wxSL_RIGHT);
+	mainFrameLeftSizer->Add(controlSlider, 0, wxEXPAND, 0);
+
+	progressGauge = new wxGauge(this, PROGRESS_GAUGE_ID, 10000, wxDefaultPosition, wxSize(-1,10), wxGA_HORIZONTAL);
 	progressGauge->SetValue(0);
 	progressGauge->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 	progressGauge->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 
-	mainFrameLeftSizer->Add(progressGauge, 0, wxALL | wxEXPAND, 5);
+	//mainFrameLeftSizer->Add(progressGauge, 0, wxALL | wxEXPAND, 5);
+	mainFrameLeftSizer->Add(progressGauge, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 20);
 
 	wxBoxSizer* quickMenuSizer;
 	quickMenuSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -146,6 +150,13 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 
 	mainFrameRightSizer->Add(0, 0, 10, wxEXPAND, 5);
 
+	frameNumberSpinLabel = new wxStaticText(this, wxID_ANY, wxT("Frame number:"), wxDefaultPosition, wxDefaultSize, 0);
+	frameNumberSpinLabel->Wrap(-1);
+	mainFrameRightSizer->Add(frameNumberSpinLabel, 0, wxLEFT|wxRIGHT|wxTOP|wxALIGN_CENTER_HORIZONTAL, 5);
+
+	frameNumberSpin = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(75, -1), wxSP_ARROW_KEYS, 10, 999, 200);
+	mainFrameRightSizer->Add(frameNumberSpin, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+
 	planeChoiceLabel = new wxStaticText(this, PLANE_CHOICE_LABEL_ID, wxT("Plane choice:"), wxDefaultPosition, wxDefaultSize, 0);
 	planeChoiceLabel->Wrap(-1);
 	mainFrameRightSizer->Add(planeChoiceLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT | wxTOP, 5);
@@ -160,7 +171,7 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 	speedChoiceLabel->Wrap(-1);
 	mainFrameRightSizer->Add(speedChoiceLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT | wxTOP, 5);
 
-	speedSlider = new wxSlider(this, SPEED_SLIDER_ID, 5, 1, 9, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL);
+	speedSlider = new wxSlider(this, SPEED_SLIDER_ID, 500, 1, 999, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL);
 	speedSlider->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
 
 	mainFrameRightSizer->Add(speedSlider, 0, wxALIGN_CENTER_HORIZONTAL | wxBOTTOM | wxTOP, 5);
@@ -183,6 +194,15 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 	helpMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MainFrame::viewDocumentationOnMenuSelection), this, viewDocumentation->GetId());
 	helpMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MainFrame::sendFeedbackOnMenuSelection), this, sendFeedback->GetId());
 	helpMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MainFrame::about3DsectionsOnMenuSelection), this, about3Dsections->GetId());
+	controlSlider->Connect(wxEVT_SCROLL_TOP, wxScrollEventHandler(MainFrame::controlSliderOnScroll), NULL, this);
+	controlSlider->Connect(wxEVT_SCROLL_BOTTOM, wxScrollEventHandler(MainFrame::controlSliderOnScroll), NULL, this);
+	controlSlider->Connect(wxEVT_SCROLL_LINEUP, wxScrollEventHandler(MainFrame::controlSliderOnScroll), NULL, this);
+	controlSlider->Connect(wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler(MainFrame::controlSliderOnScroll), NULL, this);
+	controlSlider->Connect(wxEVT_SCROLL_PAGEUP, wxScrollEventHandler(MainFrame::controlSliderOnScroll), NULL, this);
+	controlSlider->Connect(wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler(MainFrame::controlSliderOnScroll), NULL, this);
+	controlSlider->Connect(wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler(MainFrame::controlSliderOnScroll), NULL, this);
+	controlSlider->Connect(wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler(MainFrame::controlSliderOnScroll), NULL, this);
+	controlSlider->Connect(wxEVT_SCROLL_CHANGED, wxScrollEventHandler(MainFrame::controlSliderOnScroll), NULL, this);
 	backwardButton->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::backwardButtonOnClick), NULL, this);
 	prevFrameButton->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::prevFrameButtonOnClick), NULL, this);
 	playToggle->Connect(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler(MainFrame::playToggleOnToggle), NULL, this);
@@ -190,6 +210,7 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 	forewardButton->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::forewardButtonOnClick), NULL, this);
 	fileLoadButton->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::fileLoadButtonOnClick), NULL, this);
 	saveAnimationButton->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::saveAnimationButtonOnClick), NULL, this);
+	frameNumberSpin->Connect(wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler(MainFrame::frameNumberSpinonSpin), NULL, this);
 	planeChoice->Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(MainFrame::planeChoiceOnChoice), NULL, this);
 	speedSlider->Connect(wxEVT_SCROLL_TOP, wxScrollEventHandler(MainFrame::speedSliderOnScroll), NULL, this);
 	speedSlider->Connect(wxEVT_SCROLL_BOTTOM, wxScrollEventHandler(MainFrame::speedSliderOnScroll), NULL, this);
@@ -206,6 +227,15 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 
 MainFrame::~MainFrame() {
 	// Disconnect Events
+	controlSlider->Disconnect(wxEVT_SCROLL_TOP, wxScrollEventHandler(MainFrame::controlSliderOnScroll), NULL, this);
+	controlSlider->Disconnect(wxEVT_SCROLL_BOTTOM, wxScrollEventHandler(MainFrame::controlSliderOnScroll), NULL, this);
+	controlSlider->Disconnect(wxEVT_SCROLL_LINEUP, wxScrollEventHandler(MainFrame::controlSliderOnScroll), NULL, this);
+	controlSlider->Disconnect(wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler(MainFrame::controlSliderOnScroll), NULL, this);
+	controlSlider->Disconnect(wxEVT_SCROLL_PAGEUP, wxScrollEventHandler(MainFrame::controlSliderOnScroll), NULL, this);
+	controlSlider->Disconnect(wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler(MainFrame::controlSliderOnScroll), NULL, this);
+	controlSlider->Disconnect(wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler(MainFrame::controlSliderOnScroll), NULL, this);
+	controlSlider->Disconnect(wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler(MainFrame::controlSliderOnScroll), NULL, this);
+	controlSlider->Disconnect(wxEVT_SCROLL_CHANGED, wxScrollEventHandler(MainFrame::controlSliderOnScroll), NULL, this);
 	backwardButton->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::backwardButtonOnClick), NULL, this);
 	prevFrameButton->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::prevFrameButtonOnClick), NULL, this);
 	playToggle->Disconnect(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler(MainFrame::playToggleOnToggle), NULL, this);
@@ -213,6 +243,7 @@ MainFrame::~MainFrame() {
 	forewardButton->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::forewardButtonOnClick), NULL, this);
 	fileLoadButton->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::fileLoadButtonOnClick), NULL, this);
 	saveAnimationButton->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::saveAnimationButtonOnClick), NULL, this);
+	frameNumberSpin->Disconnect(wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler(MainFrame::frameNumberSpinonSpin), NULL, this);
 	planeChoice->Disconnect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(MainFrame::planeChoiceOnChoice), NULL, this);
 	speedSlider->Disconnect(wxEVT_SCROLL_TOP, wxScrollEventHandler(MainFrame::speedSliderOnScroll), NULL, this);
 	speedSlider->Disconnect(wxEVT_SCROLL_BOTTOM, wxScrollEventHandler(MainFrame::speedSliderOnScroll), NULL, this);
@@ -258,7 +289,7 @@ void MainFrame::playToggleOnToggle(wxCommandEvent& event) {
 	if (playToggle->GetValue()) {
 
 		playToggle->SetLabel("Stop");
-		animationTimer->Start(100/speedSlider->GetValue());
+		animationTimer->Start(1000000/speedSlider->GetValue()/frameNumberSpin->GetValue());
 		progressGauge->Show();
 
 		repaintSec(); 
@@ -519,6 +550,7 @@ void MainFrame::repaintSec(){
 	}
 
 	progressGauge->SetValue( 10000 * (-currentPlane.getD()-startingPosition) / animationLength );
+	controlSlider->SetValue(frameNumberSpin->GetValue() * (-currentPlane.getD()-startingPosition) / animationLength);
 }
 
 void MainFrame::planeChoiceOnChoice(wxCommandEvent& event){
@@ -546,13 +578,13 @@ void MainFrame::backwardButtonOnClick(wxCommandEvent& event){
 
 void MainFrame::prevFrameButtonOnClick(wxCommandEvent& event){
 
-	currentPlane.setD(currentPlane.getD() + animationLength/200);
+	currentPlane.setD(currentPlane.getD() + animationLength/frameNumberSpin->GetValue());
 	repaintSec();
 }
 
 void MainFrame::nextFrameButtonOnClick(wxCommandEvent& event){
 	
-	currentPlane.setD(currentPlane.getD() - animationLength/200);
+	currentPlane.setD(currentPlane.getD() - animationLength/frameNumberSpin->GetValue());
 	repaintSec();
 }
 
@@ -606,7 +638,7 @@ void MainFrame::statusBarUpdate(wxUpdateUIEvent& event){
 
 void MainFrame::onTimerNotify(wxTimerEvent& event){
 	if( -currentPlane.getD() < endingPosition ){
-		currentPlane.setD(currentPlane.getD() - animationLength/200);
+		currentPlane.setD(currentPlane.getD() - animationLength/frameNumberSpin->GetValue());
 		repaintSec();
 	}
 }
@@ -614,10 +646,10 @@ void MainFrame::onTimerNotify(wxTimerEvent& event){
 void MainFrame::speedSliderOnScroll(wxScrollEvent& event){
 
 	if( animationTimer->IsRunning() ){
-		animationTimer->Start(100/speedSlider->GetValue());
+		animationTimer->Start(1000000/speedSlider->GetValue()/frameNumberSpin->GetValue());
 	}
 	else{
-		animationTimer->Start(100/speedSlider->GetValue());
+		animationTimer->Start(1000000/speedSlider->GetValue()/frameNumberSpin->GetValue());
 		animationTimer->Stop();
 	}
 }
@@ -655,6 +687,6 @@ void MainFrame::saveAnimationButtonOnClick(wxCommandEvent& event){
 		newFilePath.Replace(fileName, newFileName);
 
 		bitMapToSave.ConvertToImage().SaveFile(newFilePath, wxBITMAP_TYPE_JPEG);
-		currentPlane.setD(currentPlane.getD() - animationLength/200);
+		currentPlane.setD(currentPlane.getD() - animationLength/frameNumberSpin->GetValue());
 	}
 }

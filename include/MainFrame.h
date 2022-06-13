@@ -42,6 +42,7 @@
 #include <wx/timer.h>
 #include <wx/wxprec.h>
 #include <wx/colordlg.h>
+#include <wx/spinctrl.h>
 
 // All needed STL's modules.
 #include <fstream>
@@ -141,6 +142,16 @@ class MainFrame : public wxFrame {
 		virtual void about3DsectionsOnMenuSelection(wxCommandEvent& event);
 
 		/**
+		 * @brief Sets @ref currentPlane position.
+		 * 
+		 * @param event
+		 */
+		virtual void controlSliderOnScroll(wxScrollEvent& event){
+			currentPlane.setD(-startingPosition - controlSlider->GetValue()* animationLength/frameNumberSpin->GetValue());
+			repaintSec();
+		}
+
+		/**
 		 * @brief After clicking @ref backwardButton, changes @ref currentPlane position 
 		 * to the starting one and repaints the section.
 		 * 
@@ -235,6 +246,18 @@ class MainFrame : public wxFrame {
 		virtual void saveAnimationButtonOnClick(wxCommandEvent& event);
 
 		/**
+		 * @brief Manages animation frames number
+		 * 
+		 * @param event
+		 */
+		virtual void frameNumberSpinonSpin(wxSpinEvent& event){
+			if( animationTimer->IsRunning() ){
+				animationTimer->Start(1000000/speedSlider->GetValue()/frameNumberSpin->GetValue());
+			}
+			controlSlider->SetMax(frameNumberSpin->GetValue());
+		}
+
+		/**
 		 * @brief Changes orientation of @ref currentPlane.
 		 * 
 		 * @param event Connected event, in this case: wxEVT_COMMAND_CHOICE_SELECTED.
@@ -302,6 +325,7 @@ class MainFrame : public wxFrame {
 		wxPanel* rightPanel;
 		//! Optically separates right toolbar
 		wxStaticLine* horizontalStaticLine;
+		wxSlider* controlSlider;
 		//! Indicates state of the played animation.
 		wxGauge* progressGauge;
 		//! Advances the animation to the start
@@ -321,6 +345,8 @@ class MainFrame : public wxFrame {
 		wxStaticText* saveAnimationLabel;
 		//! Opens a file save dialog.
 		wxButton* saveAnimationButton;
+		wxStaticText* frameNumberSpinLabel;
+		wxSpinCtrl* frameNumberSpin;
 		wxStaticText* planeChoiceLabel;
 		//! Expands to the list of three planes: xOy, xOz, yOz
 		wxChoice* planeChoice;
