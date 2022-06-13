@@ -148,7 +148,23 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 	mainFrameRightSizer->Add(saveAnimationButton, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 5);
 
 
-	mainFrameRightSizer->Add(0, 0, 10, wxEXPAND, 5);
+	mainFrameRightSizer->Add(0, 0, 1, wxEXPAND, 5);
+
+	algorithmChoiceLabel = new wxStaticText(this, wxID_ANY, wxT("Algorithm choice:"), wxDefaultPosition, wxDefaultSize, 0);
+	algorithmChoiceLabel->Wrap(-1);
+	mainFrameRightSizer->Add(algorithmChoiceLabel, 0, wxALIGN_CENTER_HORIZONTAL|wxLEFT|wxRIGHT|wxTOP, 5);
+
+	wxString algorithmChoiceChoices[] = { wxT("Algorithm 1"), wxT("Algorithm 2"), wxT("Algorithm 3") };
+	int algorithmChoiceNChoices = sizeof(algorithmChoiceChoices) / sizeof(wxString);
+	algorithmChoice = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, algorithmChoiceNChoices, algorithmChoiceChoices, 0);
+	algorithmChoice->SetSelection(0);
+	mainFrameRightSizer->Add(algorithmChoice, 0, wxALL, 5);
+
+	moreEdgesCheckBox = new wxCheckBox(this, wxID_ANY, wxT("More edges"), wxDefaultPosition, wxDefaultSize, 0);
+	mainFrameRightSizer->Add(moreEdgesCheckBox, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5);
+
+	mainFrameRightSizer->Add(0, 0, 1, wxEXPAND, 5);
+
 
 	frameNumberSpinLabel = new wxStaticText(this, wxID_ANY, wxT("Frame number:"), wxDefaultPosition, wxDefaultSize, 0);
 	frameNumberSpinLabel->Wrap(-1);
@@ -210,6 +226,8 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 	forewardButton->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::forewardButtonOnClick), NULL, this);
 	fileLoadButton->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::fileLoadButtonOnClick), NULL, this);
 	saveAnimationButton->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::saveAnimationButtonOnClick), NULL, this);
+	algorithmChoice->Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(MainFrame::algorithmChoiceOnChoice), NULL, this);
+	moreEdgesCheckBox->Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(MainFrame::moreEdgesCheckBoxOnCheck), NULL, this);
 	frameNumberSpin->Connect(wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler(MainFrame::frameNumberSpinonSpin), NULL, this);
 	planeChoice->Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(MainFrame::planeChoiceOnChoice), NULL, this);
 	speedSlider->Connect(wxEVT_SCROLL_TOP, wxScrollEventHandler(MainFrame::speedSliderOnScroll), NULL, this);
@@ -243,6 +261,8 @@ MainFrame::~MainFrame() {
 	forewardButton->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::forewardButtonOnClick), NULL, this);
 	fileLoadButton->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::fileLoadButtonOnClick), NULL, this);
 	saveAnimationButton->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::saveAnimationButtonOnClick), NULL, this);
+	algorithmChoice->Disconnect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(MainFrame::algorithmChoiceOnChoice), NULL, this);
+	moreEdgesCheckBox->Disconnect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(MainFrame::moreEdgesCheckBoxOnCheck), NULL, this);
 	frameNumberSpin->Disconnect(wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler(MainFrame::frameNumberSpinonSpin), NULL, this);
 	planeChoice->Disconnect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(MainFrame::planeChoiceOnChoice), NULL, this);
 	speedSlider->Disconnect(wxEVT_SCROLL_TOP, wxScrollEventHandler(MainFrame::speedSliderOnScroll), NULL, this);
@@ -463,9 +483,14 @@ void MainFrame::repaintGeo() {
 void MainFrame::repaintSec(){
 	
 	std::vector<std::pair<const Edge*, Point>> foundPoints = intersectionPoints(dataSegment, currentPlane);
-	//std::vector<Edge> lines = connectNeighboursSection(foundPoints, dataSegment).getEdges();
-	//std::vector<Edge> lines = rayTrianglesSection(triangulateIntersectionPoints(foundPoints), triangulateEdges(dataSegment)).getEdges();
-	std::vector<Edge> lines = quickSection(triangulateEdges(dataSegment), currentPlane).getEdges();
+	std::vector<Edge> lines;
+
+	if( algorithmChoice->GetSelection() == 0 )
+		lines = connectNeighboursSection(foundPoints, dataSegment).getEdges();
+	else if( algorithmChoice->GetSelection() == 1 )
+		lines = rayTrianglesSection(triangulateIntersectionPoints(foundPoints), triangulateEdges(dataSegment)).getEdges();
+	else if( algorithmChoice->GetSelection() == 2 )
+		lines = quickSection(triangulateEdges(dataSegment), currentPlane).getEdges();
 
 	wxClientDC dc(rightPanel);
 	wxBufferedDC buffer(&dc);
@@ -566,6 +591,7 @@ void MainFrame::planeChoiceOnChoice(wxCommandEvent& event){
 
 	calculateAnimationlength();
 	repaintSec();
+	currentPlane.setD(0); startingPosition = 0; endingPosition = 0;
 }
 
 void MainFrame::backwardButtonOnClick(wxCommandEvent& event){
@@ -629,9 +655,22 @@ void MainFrame::statusBarUpdate(wxUpdateUIEvent& event){
 
 	double currentPosition = -currentPlane.getD();
 	if( currentPlane.getD() == 0 ) currentPosition = 0;
-	statusBar->SetStatusText("startingPosition = " + std::to_string(startingPosition), 0);
-	statusBar->SetStatusText("currenPosition = " +  std::to_string(currentPosition), 1);
-	statusBar->SetStatusText("endingPosition = " + std::to_string(endingPosition), 2);
+
+	wxString direction;
+	unsigned planeIndex = planeChoice->GetSelection();
+	// plane: xOy
+	if( planeIndex == 0 )
+		direction = "z";
+	// plane: xOz
+	if( planeIndex == 1 )
+		direction = "y";
+	// plane: yOz
+	if( planeIndex == 2 )
+		direction = "x";
+
+	statusBar->SetStatusText(direction + "Start = " + std::to_string(startingPosition), 0);
+	statusBar->SetStatusText(direction + "Current = " +  std::to_string(currentPosition), 1);
+	statusBar->SetStatusText(direction + "End = " + std::to_string(endingPosition), 2);
 }
 
 void MainFrame::onTimerNotify(wxTimerEvent& event){

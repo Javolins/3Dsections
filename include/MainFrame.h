@@ -246,6 +246,24 @@ class MainFrame : public wxFrame {
 		virtual void saveAnimationButtonOnClick(wxCommandEvent& event);
 
 		/**
+		 * @brief 
+		 * 
+		 * @param event
+		 */
+		virtual void algorithmChoiceOnChoice(wxCommandEvent& event){
+			repaintSec();
+		}
+		
+		/**
+		 * @brief 
+		 * 
+		 * @param event
+		 */
+		virtual void moreEdgesCheckBoxOnCheck(wxCommandEvent& event){
+			repaintGeo();
+		}
+
+		/**
 		 * @brief Manages animation frames number
 		 * 
 		 * @param event
@@ -345,6 +363,9 @@ class MainFrame : public wxFrame {
 		wxStaticText* saveAnimationLabel;
 		//! Opens a file save dialog.
 		wxButton* saveAnimationButton;
+		wxStaticText* algorithmChoiceLabel;
+		wxChoice* algorithmChoice;
+		wxCheckBox* moreEdgesCheckBox;
 		wxStaticText* frameNumberSpinLabel;
 		wxSpinCtrl* frameNumberSpin;
 		wxStaticText* planeChoiceLabel;
