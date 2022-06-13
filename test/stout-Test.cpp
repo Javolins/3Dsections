@@ -165,7 +165,7 @@ TEST_CASE("meshTriangles() testing"){
 	testEdges.push_back(OriginalEdge(Point(-1, -1, -1), Point(-1, 1, -1), Color(0, 0, 0)));
 	testEdges.push_back(OriginalEdge(Point(-1, 1, -1), Point(1, 1, -1), Color(0, 0, 0)));
 
-	std::vector<Triangle> meshedEdges = edgesToTriangles(testEdges);
+	std::vector<Triangle> meshedEdges = triangulateEdges(testEdges);
 	/*std::cout << "meshedEdges.size(): " << meshedEdges.size() << std::endl;
 	for( auto& e : meshedEdges ){
 		std::cout << "a : " <<  e.getEdgeA() << " ";
@@ -202,7 +202,7 @@ TEST_CASE("polygonalChain() testing") {
 	testEdges.push_back(OriginalEdge(Point(-1, -1, -1), Point(-1, 1, -1), Color(0, 0, 0)));
 	testEdges.push_back(OriginalEdge(Point(-1, 1, -1), Point(1, 1, -1), Color(0, 0, 0)));
 
-	ClosedPolygonalChains testCpc = polygonalChain(testMap, testEdges);
+	ClosedPolygonalChains testCpc = connectNeighboursSection(testMap, testEdges);
 
 	//for (auto a : testCpc.getEdges()) std::cout << a << std::endl;
 
@@ -424,7 +424,7 @@ TEST_CASE("triangleInsideSection() testing"){
 	testEdges.push_back(OriginalEdge(Point(-1, -1, -1), Point(-1, 1, -1), Color(0, 0, 0)));
 	testEdges.push_back(OriginalEdge(Point(-1, 1, -1), Point(1, 1, -1), Color(0, 0, 0)));
 
-	std::vector<Triangle> solidTriangles = edgesToTriangles(testEdges);
+	std::vector<Triangle> solidTriangles = triangulateEdges(testEdges);
 	REQUIRE(solidTriangles.size() == 12);
 
 	Plane yOz{ 1 };

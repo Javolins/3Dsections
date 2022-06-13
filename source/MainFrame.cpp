@@ -74,7 +74,7 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 	progressGauge->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 
 	//mainFrameLeftSizer->Add(progressGauge, 0, wxALL | wxEXPAND, 5);
-	mainFrameLeftSizer->Add(progressGauge, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 20);
+	mainFrameLeftSizer->Add(progressGauge, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5);
 
 	wxBoxSizer* quickMenuSizer;
 	quickMenuSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -415,7 +415,7 @@ void MainFrame::repaintGeo() {
 	buffer.Clear();
 
 	/**/
-	std::vector<Triangle> in = edgesToTriangles(dataSegment);
+	std::vector<Triangle> in = triangulateEdges(dataSegment);
 	std::vector<Edge> polyLine;
 	for( auto& e: in ){
 		polyLine.push_back(e.getEdgeA());
@@ -463,11 +463,9 @@ void MainFrame::repaintGeo() {
 void MainFrame::repaintSec(){
 	
 	std::vector<std::pair<const Edge*, Point>> foundPoints = intersectionPoints(dataSegment, currentPlane);
-	//std::vector<Edge> lines = polygonalChain(foundPoints, dataSegment).getEdges();
-	//**std::vector<Edge> lines = removeTriangles(connectedIntersectionPoints(foundPoints), meshTriangles(dataSegment)).getEdges();
-	//std::vector<Edge> lines = connectedIntersectionPoints(foundPoints);
-	//std::vector<Edge> lines = stupidFunction(meshTriangles(dataSegment), currentPlane).getEdges();
-	std::vector<Edge> lines = godFunction(edgesToTriangles(dataSegment), currentPlane).getEdges();
+	//std::vector<Edge> lines = connectNeighboursSection(foundPoints, dataSegment).getEdges();
+	//std::vector<Edge> lines = rayTrianglesSection(triangulateIntersectionPoints(foundPoints), triangulateEdges(dataSegment)).getEdges();
+	std::vector<Edge> lines = quickSection(triangulateEdges(dataSegment), currentPlane).getEdges();
 
 	wxClientDC dc(rightPanel);
 	wxBufferedDC buffer(&dc);

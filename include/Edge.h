@@ -11,6 +11,9 @@
 #include <array>
 #include <iostream>
 
+/**
+ * @brief Class storing two points and color of the line connecting them.
+ */
 class Edge {
 	public:
 		Edge(Point start = {0,0,0}, Point end = {0,0,0}, Color rgb = {0,0,0}) : ends(std::pair<Point, Point>(start, end)), color(rgb){ }
@@ -40,26 +43,11 @@ class Edge {
 		Color color;
 };
 
+/**
+ * @brief struct for comparing Edges in algorithms
+ */
 struct compareEdges {
 	bool operator()(const Edge& a, const Edge& b) const{
-		//if (b.getStart().getX() < a.getStart().getX()) return false;
-		//if (a.getStart().getX() < b.getStart().getX()) return true;
-
-		//if (b.getStart().getY() < a.getStart().getY()) return false;
-		//if (a.getStart().getY() < b.getStart().getY()) return true;
-
-		//if (b.getStart().getZ() < a.getStart().getZ()) return false;
-		//if (a.getStart().getZ() < b.getStart().getZ()) return true;
-
-		//if (b.getEnd().getX() < a.getEnd().getX()) return false;
-		//if (a.getEnd().getX() < b.getEnd().getX()) return true;
-
-		//if (b.getEnd().getY() < a.getEnd().getY()) return false;
-		//if (a.getEnd().getY() < b.getEnd().getY()) return true;
-
-		//if (b.getEnd().getZ() < a.getEnd().getZ()) return false;
-		//if (a.getEnd().getZ() < b.getEnd().getZ()) return true;
-		//return false;
 
 		if((a.getStart() == b.getStart() || a.getStart() == b.getEnd()) && (a.getEnd() == b.getStart() || a.getEnd() == b.getEnd()))
 			return false;

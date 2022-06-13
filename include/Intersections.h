@@ -13,7 +13,6 @@
 #include <memory>
 
 #include "../include/OriginalEdge.h"
-#include "../include/DataClasses.h"
 #include "../include/VectorOperations.h"
 #include "../include/Plane.h"
 

@@ -9,19 +9,11 @@
 #pragma once
 
 #include <vector>
-#include <array>
-//#include <cmath>
-//#include <omp.h>
+#include <omp.h>
 
-#include "../include/OriginalEdge.h"
-#include "../include/MeshEdge.h"
-#include "../include/Edge.h"
-#include "../include/Plane.h"
 #include "../include/ClosedPolygonalChains.h"
 #include "../include/Triangle.h"
 #include "../include/Ray.h"
-#include "../include/DataClasses.h"
-#include "../include/VectorOperations.h"
 #include "../include/Intersections.h"
 
 
@@ -51,7 +43,7 @@ inline std::vector<Edge> removeReversed(std::vector<Edge> edges){
 * @return vector of all triangles forming solid
 *
 */
-inline std::vector<Triangle> edgesToTriangles(std::vector<OriginalEdge>& origin){
+inline std::vector<Triangle> triangulateEdges(std::vector<OriginalEdge>& origin){
 	
 	std::vector<Triangle> triangles;
 	std::vector<OriginalEdge> allEdges = origin;
@@ -148,50 +140,6 @@ inline std::vector<Triangle> edgesToTriangles(std::vector<OriginalEdge>& origin)
 };
 
 /**
- * @brief [ARCHIVES] function creating collection of triangles from points of intersection to check if points should be connected on section.
- * 
- * @param isections points to connect with edges creating them
- * @return vector of necessary triangles between given points
- */
-inline std::vector<Triangle> triangulateIntersectionPoints(std::vector<std::pair<const Edge*, Point>> isections){
-	std::vector<Triangle> unique;
-
-	for( int i = 0; i < isections.size(); i++ ){
-		Point a = isections[i].second;
-		for( int j = i+1; j < isections.size(); j++ ){
-			Point b = isections[j].second;
-			for( int k = j+1; k < isections.size(); k++ ){ 
-				Point c = isections[k].second;
-
-				Edge ab(a, b);
-				Edge bc(b, c);
-				Edge ca(c, a);
-
-				bool add = true;
-				for( auto& e : unique ){
-					if( areIntersecting(ab, e.getEdgeA()) || areIntersecting(ab, e.getEdgeB()) || areIntersecting(ab, e.getEdgeC()) ){
-						add = false;
-						break;
-					} else if( areIntersecting(bc, e.getEdgeA()) || areIntersecting(bc, e.getEdgeB()) || areIntersecting(bc, e.getEdgeC()) ){
-						add = false;
-						break;
-					} else if( areIntersecting(ca, e.getEdgeA()) || areIntersecting(ca, e.getEdgeB()) || areIntersecting(ca, e.getEdgeC()) ){
-						add = false;
-						break;
-					}
-				}
-
-				if( add ){
-					unique.push_back(Triangle(ab, bc, ca));
-				}
-			}
-		}
-	}
-
-	return unique;
-}
-
-/**
  * @brief Function checking if one of triangles from triangulateIntersectionPoints() is inside processed solid 
  * by creating ray from inside this triangle and counting intersections with outside triangles.
  * 
@@ -257,52 +205,8 @@ inline bool sectionTriangleInsideSolidStatistically(const Triangle insideTriangl
 
 
 /**
- * @brief [ARCHIVES] function creating additional edges to make triangles from given edges. Currently unused, modified version exist in function making triangles.
- *
- * @param origin vector of edges from the file
- * @return vector of all original and virtual edges
- *
- */
-inline std::vector<Edge> triangulate(std::vector<OriginalEdge>& origin){
-	std::vector<Point> points;
-	for( const auto& a : origin ){
-		points.push_back(a.getStart());
-		points.push_back(a.getEnd());
-	}
-	std::vector<Edge> allEdges;
-
-	//foreach point
-	for( const auto& p : points ){
-		//filter appropriate edges
-		std::vector<Edge> temp;
-		for( auto& e : origin ){
-			if( e.getStart() == p || e.getEnd() == p ){
-				temp.push_back(e);
-			}
-		}
-		//foreach pair of edges
-		for( auto& x : temp ){
-			for( const auto& y : temp ){
-				if( !(x == y) ){
-					//find 3 edge to form triangle
-					//add edges
-					if( x.getStart() == p && y.getStart() == p )	allEdges.push_back(MeshEdge(x.getEnd(), y.getEnd(), Color(0, 0, 0)));
-					else if( x.getStart() == p && y.getEnd() == p )	allEdges.push_back(MeshEdge(x.getEnd(), y.getStart(), Color(0, 0, 0)));
-					else if( x.getEnd() == p && y.getStart() == p )	allEdges.push_back(MeshEdge(x.getStart(), y.getEnd(), Color(0, 0, 0)));
-					else if( x.getEnd() == p && y.getEnd() == p )	allEdges.push_back(MeshEdge(x.getStart(), y.getStart(), Color(0, 0, 0)));
-					// else throw new Exception :P
-				}
-			}
-		}
-	}
-	std::vector<Edge> out(allEdges.begin(), allEdges.end());
-	removeReversed(out);
-	return out;
-};
-
-/**
- * @brief [ARCHIVES] function determining if 2 points on intersection plane should be connected by checking if all 4 of their points are on the same plane.
- * Fails to recognize opposing parallel edges in a cube connecting squares diagonally * 
+ * @brief Function determining if 2 points on intersection plane should be connected by checking if all 4 of their points are on the same plane.
+ * Fails to recognize opposing parallel edges in a cube connecting squares diagonally *
  * @param a One of original edges
  * @param b One of original edges
  * @return true if 4 points are on the same plane
@@ -331,12 +235,15 @@ inline bool samePlaneEdges(const Edge& a, const Edge& b){
 	return false;
 }
 
-inline ClosedPolygonalChains removeTriangles(const std::vector<Triangle> in, const std::vector<Triangle> out){
+/**
+ * @brief Function removing unnecessary edges and triangles by casting a ray to form clean section.
+ * 
+ * @param in triangles created from intersection points
+ * @param out triangles from outer faces of processed solid
+ * @return section formatted for printing
+ */
+inline ClosedPolygonalChains rayTrianglesSection(const std::vector<Triangle> in, const std::vector<Triangle> out){
 
-	//std::vector<Triangle> in_inside;
-	//for( auto& e: in ){
-	// if( triangleInsideSection(e, out) ) in_inside.push_back(e);
-	//}
 	std::vector<Triangle> unique = in;
 
 	for( int i = 0; i < in.size(); i++ ){
@@ -398,8 +305,7 @@ inline ClosedPolygonalChains removeTriangles(const std::vector<Triangle> in, con
 
 	std::vector<Edge> polyLine;
 
-	for( auto& e: unique/*inin_inside*/ ){
-		//for( auto& e: in ){
+	for( auto& e: unique ){
 		polyLine.push_back(e.getEdgeA());
 		polyLine.push_back(e.getEdgeB());
 		polyLine.push_back(e.getEdgeC());
@@ -408,7 +314,15 @@ inline ClosedPolygonalChains removeTriangles(const std::vector<Triangle> in, con
 	ClosedPolygonalChains cpc(polyLine);
 	return cpc;
 }
-inline ClosedPolygonalChains godFunction(const std::vector<Triangle> out, const Plane& plane){
+
+/**
+ * @brief Function checking if two points on the intersection are created by the same triangle, if so they should be connected.
+ * 
+ * @param out solid processed to be formed only by triangles
+ * @param plane intersecting with given solid
+ * @return section formatted for printing
+ */
+inline ClosedPolygonalChains quickSection(const std::vector<Triangle> out, const Plane& plane){
 
 	std::vector<Edge> lines;
 	for( const auto& e : out ){
@@ -423,7 +337,15 @@ inline ClosedPolygonalChains godFunction(const std::vector<Triangle> out, const 
 	}
 	return ClosedPolygonalChains{ lines };
 }
-inline ClosedPolygonalChains stupidFunction(const std::vector<Triangle> out, const Plane& plane){
+
+/**
+ * @brief First prototype of quickSection(), contains multiple misconceptions.
+ * 
+ * @param out solid processed to be formed only by triangles
+ * @param plane intersecting with given solid
+ * @return section formatted for printing
+ */
+inline ClosedPolygonalChains quickSectionBeta(const std::vector<Triangle> out, const Plane& plane){
 
 	std::vector<Edge> fromTriangles;
 	for( const auto& e: out ){
@@ -457,7 +379,16 @@ inline ClosedPolygonalChains stupidFunction(const std::vector<Triangle> out, con
 	}
 	return ClosedPolygonalChains{ lines };
 }
-inline ClosedPolygonalChains polygonalChain(const std::vector<std::pair<const Edge*, Point>> intersections, const std::vector<OriginalEdge> origin){
+
+/**
+ * @brief First prototype of function checking if two points on the section should be connected. 
+ * It checks if there is an edge between ends of edges creating intersection points. If there is, points are connected
+ * 
+ * @param intersections points of intersection with edges that created them
+ * @param origin Edges of the solid
+ * @return section formatted for printing
+ */
+inline ClosedPolygonalChains connectNeighboursSection(const std::vector<std::pair<const Edge*, Point>> intersections, const std::vector<OriginalEdge> origin){
 	std::vector<Edge> polyLine;
 
 	#pragma omp parallel for collapse(3)
@@ -494,3 +425,100 @@ inline ClosedPolygonalChains polygonalChain(const std::vector<std::pair<const Ed
 	ClosedPolygonalChains cpc = ClosedPolygonalChains(out);
 	return cpc;
 }
+
+
+
+
+//>
+// Archive of no longer used algorithms
+//>
+
+
+
+/**
+ * @brief [ARCHIVES] function creating collection of triangles from points of intersection to check if points should be connected on section.
+ *
+ * @param isections points to connect with edges creating them
+ * @return vector of necessary triangles between given points
+ */
+inline std::vector<Triangle> triangulateIntersectionPoints(std::vector<std::pair<const Edge*, Point>> isections){
+	std::vector<Triangle> unique;
+
+	for( int i = 0; i < isections.size(); i++ ){
+		Point a = isections[i].second;
+		for( int j = i+1; j < isections.size(); j++ ){
+			Point b = isections[j].second;
+			for( int k = j+1; k < isections.size(); k++ ){
+				Point c = isections[k].second;
+
+				Edge ab(a, b);
+				Edge bc(b, c);
+				Edge ca(c, a);
+
+				bool add = true;
+				for( auto& e : unique ){
+					if( areIntersecting(ab, e.getEdgeA()) || areIntersecting(ab, e.getEdgeB()) || areIntersecting(ab, e.getEdgeC()) ){
+						add = false;
+						break;
+					} else if( areIntersecting(bc, e.getEdgeA()) || areIntersecting(bc, e.getEdgeB()) || areIntersecting(bc, e.getEdgeC()) ){
+						add = false;
+						break;
+					} else if( areIntersecting(ca, e.getEdgeA()) || areIntersecting(ca, e.getEdgeB()) || areIntersecting(ca, e.getEdgeC()) ){
+						add = false;
+						break;
+					}
+				}
+
+				if( add ){
+					unique.push_back(Triangle(ab, bc, ca));
+				}
+			}
+		}
+	}
+
+	return unique;
+}
+
+/**
+ * @brief [ARCHIVES] function creating additional edges to make triangles from given edges. Currently unused, modified version exist in function making triangles.
+ *
+ * @param origin vector of edges from the file
+ * @return vector of all original and virtual edges
+ *
+ */
+inline std::vector<Edge> triangulate(std::vector<OriginalEdge>& origin){
+	std::vector<Point> points;
+	for( const auto& a : origin ){
+		points.push_back(a.getStart());
+		points.push_back(a.getEnd());
+	}
+	std::vector<Edge> allEdges;
+
+	//foreach point
+	for( const auto& p : points ){
+		//filter appropriate edges
+		std::vector<Edge> temp;
+		for( auto& e : origin ){
+			if( e.getStart() == p || e.getEnd() == p ){
+				temp.push_back(e);
+			}
+		}
+		//foreach pair of edges
+		for( auto& x : temp ){
+			for( const auto& y : temp ){
+				if( !(x == y) ){
+					//find 3 edge to form triangle
+					//add edges
+					if( x.getStart() == p && y.getStart() == p )	allEdges.push_back(MeshEdge(x.getEnd(), y.getEnd(), Color(0, 0, 0)));
+					else if( x.getStart() == p && y.getEnd() == p )	allEdges.push_back(MeshEdge(x.getEnd(), y.getStart(), Color(0, 0, 0)));
+					else if( x.getEnd() == p && y.getStart() == p )	allEdges.push_back(MeshEdge(x.getStart(), y.getEnd(), Color(0, 0, 0)));
+					else if( x.getEnd() == p && y.getEnd() == p )	allEdges.push_back(MeshEdge(x.getStart(), y.getStart(), Color(0, 0, 0)));
+					// else throw new Exception :P
+				}
+			}
+		}
+	}
+	std::vector<Edge> out(allEdges.begin(), allEdges.end());
+	removeReversed(out);
+	return out;
+};
