@@ -12,7 +12,7 @@
 #include <array>
 #include <memory>
 
-#include "../include/OriginalEdge.h"
+#include "../include/Edge.h"
 #include "../include/VectorOperations.h"
 #include "../include/Plane.h"
 
@@ -82,14 +82,14 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 /**
  * @brief Function calculating all intersections between given edges and plane
  *
- * @param originalEdges 3D solid defined as edges
+ * @param Edges 3D solid defined as edges
  * @param plane intersecting with 3D solid
  * @return collection of intersection points with edges that created them
  */
-inline std::vector<std::pair<const Edge*, Point>> intersectionPoints(const std::vector<OriginalEdge>& originalEdges, const Plane& plane){
+inline std::vector<std::pair<const Edge*, Point>> intersectionPoints(const std::vector<Edge>& Edges, const Plane& plane){
 
 	std::vector<std::pair<const Edge*, Point>> intersections;
-	for( auto& edge : originalEdges ){
+	for( auto& edge : Edges ){
 		std::unique_ptr<Point> ptr{ intersection(edge, plane) };
 		if( ptr != nullptr )
 			intersections.push_back({ &edge, *ptr });

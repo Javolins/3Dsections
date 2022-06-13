@@ -124,22 +124,22 @@ TEST_CASE("intersectionPoints() testing") {
 }
 
 TEST_CASE("Mesh() testing") {
-	std::vector<OriginalEdge> testEdges;
+	std::vector<Edge> testEdges;
 
-	testEdges.push_back(OriginalEdge(Point(1, 1, 1), Point(1, 1, -1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(1, -1, 1), Point(1, -1, -1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(-1, 1, 1), Point(-1, 1, -1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(-1, -1, 1), Point(-1, -1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(1, 1, 1), Point(1, 1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(1, -1, 1), Point(1, -1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(-1, 1, 1), Point(-1, 1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(-1, -1, 1), Point(-1, -1, -1), Color(0, 0, 0)));
 
-	testEdges.push_back(OriginalEdge(Point(1, 1, 1), Point(1, -1, 1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(1, -1, 1), Point(-1, -1, 1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(-1, -1, 1), Point(-1, 1, 1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(-1, 1, 1), Point(1, 1, 1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(1, 1, 1), Point(1, -1, 1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(1, -1, 1), Point(-1, -1, 1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(-1, -1, 1), Point(-1, 1, 1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(-1, 1, 1), Point(1, 1, 1), Color(0, 0, 0)));
 
-	testEdges.push_back(OriginalEdge(Point(1, 1, -1), Point(1, -1, -1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(1, -1, -1), Point(-1, -1, -1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(-1, -1, -1), Point(-1, 1, -1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(-1, 1, -1), Point(1, 1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(1, 1, -1), Point(1, -1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(1, -1, -1), Point(-1, -1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(-1, -1, -1), Point(-1, 1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(-1, 1, -1), Point(1, 1, -1), Color(0, 0, 0)));
 
 	std::vector<Edge> meshedEdges = triangulate(testEdges);
 	//for (auto& e : meshedEdges) std::cout << e << std::endl;
@@ -148,22 +148,22 @@ TEST_CASE("Mesh() testing") {
 }
 
 TEST_CASE("meshTriangles() testing"){
-	std::vector<OriginalEdge> testEdges;
+	std::vector<Edge> testEdges;
 
-	testEdges.push_back(OriginalEdge(Point(1, 1, 1), Point(1, 1, -1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(1, -1, 1), Point(1, -1, -1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(-1, 1, 1), Point(-1, 1, -1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(-1, -1, 1), Point(-1, -1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(1, 1, 1), Point(1, 1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(1, -1, 1), Point(1, -1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(-1, 1, 1), Point(-1, 1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(-1, -1, 1), Point(-1, -1, -1), Color(0, 0, 0)));
 
-	testEdges.push_back(OriginalEdge(Point(1, 1, 1), Point(1, -1, 1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(1, -1, 1), Point(-1, -1, 1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(-1, -1, 1), Point(-1, 1, 1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(-1, 1, 1), Point(1, 1, 1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(1, 1, 1), Point(1, -1, 1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(1, -1, 1), Point(-1, -1, 1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(-1, -1, 1), Point(-1, 1, 1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(-1, 1, 1), Point(1, 1, 1), Color(0, 0, 0)));
 
-	testEdges.push_back(OriginalEdge(Point(1, 1, -1), Point(1, -1, -1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(1, -1, -1), Point(-1, -1, -1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(-1, -1, -1), Point(-1, 1, -1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(-1, 1, -1), Point(1, 1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(1, 1, -1), Point(1, -1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(1, -1, -1), Point(-1, -1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(-1, -1, -1), Point(-1, 1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(-1, 1, -1), Point(1, 1, -1), Color(0, 0, 0)));
 
 	std::vector<Triangle> meshedEdges = triangulateEdges(testEdges);
 	/*std::cout << "meshedEdges.size(): " << meshedEdges.size() << std::endl;
@@ -180,27 +180,27 @@ TEST_CASE("meshTriangles() testing"){
 TEST_CASE("polygonalChain() testing") {
 	std::vector<std::pair<const Edge*, Point>> testMap;
 
-	testMap.push_back(std::pair<Edge*, Point>(&OriginalEdge(Point(1, 1, 1), Point(1, 1, -1), Color(0, 0, 0)), Point(1, 1, 0)));
-	testMap.push_back(std::pair<Edge*, Point>(&OriginalEdge(Point(1, -1, 1), Point(1, -1, -1), Color(0, 0, 0)), Point(1, -1, 0)));
-	testMap.push_back(std::pair<Edge*, Point>(&OriginalEdge(Point(-1, 1, 1), Point(-1, 1, -1), Color(0, 0, 0)), Point(-1, 1, 0)));
-	testMap.push_back(std::pair<Edge*, Point>(&OriginalEdge(Point(-1, -1, 1), Point(-1, -1, -1), Color(0, 0, 0)), Point(-1, -1, 0)));
+	testMap.push_back(std::pair<Edge*, Point>(&Edge(Point(1, 1, 1), Point(1, 1, -1), Color(0, 0, 0)), Point(1, 1, 0)));
+	testMap.push_back(std::pair<Edge*, Point>(&Edge(Point(1, -1, 1), Point(1, -1, -1), Color(0, 0, 0)), Point(1, -1, 0)));
+	testMap.push_back(std::pair<Edge*, Point>(&Edge(Point(-1, 1, 1), Point(-1, 1, -1), Color(0, 0, 0)), Point(-1, 1, 0)));
+	testMap.push_back(std::pair<Edge*, Point>(&Edge(Point(-1, -1, 1), Point(-1, -1, -1), Color(0, 0, 0)), Point(-1, -1, 0)));
 
-	std::vector<OriginalEdge> testEdges;
+	std::vector<Edge> testEdges;
 
-	testEdges.push_back(OriginalEdge(Point(1, 1, 1), Point(1, 1, -1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(1, -1, 1), Point(1, -1, -1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(-1, 1, 1), Point(-1, 1, -1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(-1, -1, 1), Point(-1, -1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(1, 1, 1), Point(1, 1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(1, -1, 1), Point(1, -1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(-1, 1, 1), Point(-1, 1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(-1, -1, 1), Point(-1, -1, -1), Color(0, 0, 0)));
 
-	testEdges.push_back(OriginalEdge(Point(1, 1, 1), Point(1, -1, 1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(1, -1, 1), Point(-1, -1, 1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(-1, -1, 1), Point(-1, 1, 1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(-1, 1, 1), Point(1, 1, 1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(1, 1, 1), Point(1, -1, 1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(1, -1, 1), Point(-1, -1, 1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(-1, -1, 1), Point(-1, 1, 1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(-1, 1, 1), Point(1, 1, 1), Color(0, 0, 0)));
 
-	testEdges.push_back(OriginalEdge(Point(1, 1, -1), Point(1, -1, -1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(1, -1, -1), Point(-1, -1, -1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(-1, -1, -1), Point(-1, 1, -1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(-1, 1, -1), Point(1, 1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(1, 1, -1), Point(1, -1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(1, -1, -1), Point(-1, -1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(-1, -1, -1), Point(-1, 1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(-1, 1, -1), Point(1, 1, -1), Color(0, 0, 0)));
 
 	ClosedPolygonalChains testCpc = connectNeighboursSection(testMap, testEdges);
 
@@ -212,18 +212,18 @@ TEST_CASE("polygonalChain() testing") {
 TEST_CASE("removeReversed() testing") {
 	std::vector<Edge> testEdges;
 
-	testEdges.push_back(OriginalEdge(Point(1, 1, 1), Point(-1, -1, -1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(-1, -1, -1), Point(1, 1, 1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(1, 1, 1), Point(-1, -1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(-1, -1, -1), Point(1, 1, 1), Color(0, 0, 0)));
 
-	testEdges.push_back(OriginalEdge(Point(2, 2, 2), Point(-2, -2, -2), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(2, 2, 2), Point(-2, -2, -2), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(2, 2, 2), Point(-2, -2, -2), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(2, 2, 2), Point(-2, -2, -2), Color(0, 0, 0)));
 
-	testEdges.push_back(OriginalEdge(Point(3, 3, 3), Point(-3, -3, -3), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(-3, -3, -3), Point(3, 3, 3), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(3, 3, 3), Point(-3, -3, -3), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(-3, -3, -3), Point(3, 3, 3), Color(0, 0, 0)));
 
-	testEdges.push_back(OriginalEdge(Point(4, 4, 4), Point(-4, -4, -4), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(4, 4, 4), Point(-4, -4, -4), Color(0, 0, 0)));
 
-	testEdges.push_back(OriginalEdge(Point(5, 5, 5), Point(-5, -5, -5), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(5, 5, 5), Point(-5, -5, -5), Color(0, 0, 0)));
 
 	std::vector<Edge> outTest = removeReversed(testEdges);
 
@@ -407,22 +407,22 @@ TEST_CASE("triangle setEdge testing") {
 // testing intire pipeline for a cube
 TEST_CASE("triangleInsideSection() testing"){
 
-	std::vector<OriginalEdge> testEdges;
+	std::vector<Edge> testEdges;
 
-	testEdges.push_back(OriginalEdge(Point(1, 1, 1), Point(1, 1, -1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(1, -1, 1), Point(1, -1, -1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(-1, 1, 1), Point(-1, 1, -1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(-1, -1, 1), Point(-1, -1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(1, 1, 1), Point(1, 1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(1, -1, 1), Point(1, -1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(-1, 1, 1), Point(-1, 1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(-1, -1, 1), Point(-1, -1, -1), Color(0, 0, 0)));
 
-	testEdges.push_back(OriginalEdge(Point(1, 1, 1), Point(1, -1, 1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(1, -1, 1), Point(-1, -1, 1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(-1, -1, 1), Point(-1, 1, 1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(-1, 1, 1), Point(1, 1, 1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(1, 1, 1), Point(1, -1, 1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(1, -1, 1), Point(-1, -1, 1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(-1, -1, 1), Point(-1, 1, 1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(-1, 1, 1), Point(1, 1, 1), Color(0, 0, 0)));
 
-	testEdges.push_back(OriginalEdge(Point(1, 1, -1), Point(1, -1, -1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(1, -1, -1), Point(-1, -1, -1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(-1, -1, -1), Point(-1, 1, -1), Color(0, 0, 0)));
-	testEdges.push_back(OriginalEdge(Point(-1, 1, -1), Point(1, 1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(1, 1, -1), Point(1, -1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(1, -1, -1), Point(-1, -1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(-1, -1, -1), Point(-1, 1, -1), Color(0, 0, 0)));
+	testEdges.push_back(Edge(Point(-1, 1, -1), Point(1, 1, -1), Color(0, 0, 0)));
 
 	std::vector<Triangle> solidTriangles = triangulateEdges(testEdges);
 	REQUIRE(solidTriangles.size() == 12);

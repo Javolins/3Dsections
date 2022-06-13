@@ -324,10 +324,10 @@ void MainFrame::playToggleOnToggle(wxCommandEvent& event) {
 
 void MainFrame::fileLoadButtonOnClick(wxCommandEvent& event) {
 	wxFileDialog WxOpenFileDialog(this, wxT("Choose a file"), wxT(""), wxT(""), wxT("Geometry file (*.geo)|*.geo"), wxFD_OPEN | wxFD_FILE_MUST_EXIST);
-	if (WxOpenFileDialog.ShowModal() == wxID_OK) {
+	if (WxOpenFileDialog.ShowModal() == wxID_OK && WxOpenFileDialog.GetPath()[WxOpenFileDialog.GetPath().size()-3] == 'g' ){
 		double xStartPoint, yStartPoint, zStartPoint, xEndPoint, yEndPoint, zEndPoint;
 		int r, g, b;
-
+		geo = true;
 		std::ifstream in(WxOpenFileDialog.GetPath().ToStdString());
 		if (in.is_open()) {
 
@@ -338,7 +338,7 @@ void MainFrame::fileLoadButtonOnClick(wxCommandEvent& event) {
 			dataSegment.clear();
 			while (!in.eof()) {
 				in >> xStartPoint >> yStartPoint >> zStartPoint >> xEndPoint >> yEndPoint >> zEndPoint >> r >> g >> b;
-				dataSegment.push_back(OriginalEdge(Point(xStartPoint, yStartPoint, zStartPoint), Point(xEndPoint, yEndPoint, zEndPoint), Color(r, g, b)));
+				dataSegment.push_back(Edge(Point(xStartPoint, yStartPoint, zStartPoint), Point(xEndPoint, yEndPoint, zEndPoint), Color(r, g, b)));
 				geometricCenter.set(geometricCenter.getX()+xStartPoint+xEndPoint, geometricCenter.getY()+yStartPoint+yEndPoint, geometricCenter.getZ()+zStartPoint+zEndPoint);
 				if( xStartPoint > geoMax.getX() ) geoMax.setX(xStartPoint);
 				if( xStartPoint < geoMin.getX() ) geoMin.setX(xStartPoint);
@@ -359,9 +359,61 @@ void MainFrame::fileLoadButtonOnClick(wxCommandEvent& event) {
 			geoDimensions.set(abs(geoMax.getX()-geoMin.getX()), abs(geoMax.getY()-geoMin.getY()), abs(geoMax.getZ()-geoMin.getZ()) );
 		}
 
+
 		event.Skip();
 	}
+	else if( WxOpenFileDialog.ShowModal() == wxID_OK && WxOpenFileDialog.GetPath()[WxOpenFileDialog.GetPath().size()-3] == 't' ){
+		double x1, y1, z1;
+		double x2, y2, z2;
+		double x3, y3, z3;
+		int r, g, b;
+		geo = false;
+		std::ifstream in(WxOpenFileDialog.GetPath().ToStdString());
+		if( in.is_open() ){
 
+			geometricCenter.set(0, 0, 0);
+			geoMin.set(std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
+			geoMax.set(std::numeric_limits<float>::min(), std::numeric_limits<float>::min(), std::numeric_limits<float>::min());
+
+			dataSegment.clear();
+			while( !in.eof() ){
+				in >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> x3 >> y3 >> z3 >> r >> g >> b;
+				Edge A{ Point(x1,y1,z1), Point(x2,y2,z2), Color(r,g,b) };
+				Edge B{ Point(x2,y2,z2), Point(x3,y3,z3), Color(r,g,b) };
+				Edge C{ Point(x3,y3,z3), Point(x1,y1,z1), Color(r,g,b) };
+				dataSegment.push_back(A);
+				dataSegment.push_back(B);
+				dataSegment.push_back(C);
+				dataTriangle.push_back(Triangle(A, B, C));
+				geometricCenter.set(geometricCenter.getX()+x1+x2+x3, geometricCenter.getY()+y1+y2+y3, geometricCenter.getZ()+z1+z2+z3);
+				if( x1 > geoMax.getX() ) geoMax.setX(x1);
+				if( x1 < geoMin.getX() ) geoMin.setX(x1);
+				if( y1 > geoMax.getY() ) geoMax.setY(y1);
+				if( y1 < geoMin.getY() ) geoMin.setY(y1);
+				if( z1 > geoMax.getZ() ) geoMax.setZ(z1);
+				if( z1 < geoMin.getZ() ) geoMin.setZ(z1);
+				if( x2 > geoMax.getX() ) geoMax.setX(x2);
+				if( x2 < geoMin.getX() ) geoMin.setX(x2);
+				if( y2 > geoMax.getY() ) geoMax.setY(y2);
+				if( y2 < geoMin.getY() ) geoMin.setY(y2);
+				if( z2 > geoMax.getZ() ) geoMax.setZ(z2);
+				if( z2 < geoMin.getZ() ) geoMin.setZ(z2);
+				if( x3 > geoMax.getX() ) geoMax.setX(x3);
+				if( x3 < geoMin.getX() ) geoMin.setX(x3);
+				if( y3 > geoMax.getY() ) geoMax.setY(y3);
+				if( y3 < geoMin.getY() ) geoMin.setY(y3);
+				if( z3 > geoMax.getZ() ) geoMax.setZ(z3);
+				if( z3 < geoMin.getZ() ) geoMin.setZ(z3);
+			}
+			in.close();
+
+			geometricCenter.set(0.5*geometricCenter.getX()/dataSegment.size(), 0.5*geometricCenter.getY()/dataSegment.size(), 0.5*geometricCenter.getZ()/dataSegment.size());
+			geoDimensions.set(abs(geoMax.getX()-geoMin.getX()), abs(geoMax.getY()-geoMin.getY()), abs(geoMax.getZ()-geoMin.getZ()));
+		}
+
+
+		event.Skip();
+	}
 	calculateAnimationlength();
 	repaintGeo();
 	repaintSec();
@@ -435,15 +487,30 @@ void MainFrame::repaintGeo() {
 	buffer.Clear();
 
 	/**/
-	std::vector<Triangle> in = triangulateEdges(dataSegment);
+	std::vector<Triangle> in;
 	std::vector<Edge> polyLine;
-	for( auto& e: in ){
-		polyLine.push_back(e.getEdgeA());
-		polyLine.push_back(e.getEdgeB());
-		polyLine.push_back(e.getEdgeC());
+	if( geo ){
+		if ( moreEdgesCheckBox->IsChecked() ){
+			in = triangulateEdges(dataSegment);
+			for( auto& e: in ){
+				polyLine.push_back(e.getEdgeA());
+				polyLine.push_back(e.getEdgeB());
+				polyLine.push_back(e.getEdgeC());
+			}
+		}
+		else
+			polyLine = dataSegment;
+	}
+	else{
+		in = dataTriangle;
+		for( auto& e: in ){
+			polyLine.push_back(e.getEdgeA());
+			polyLine.push_back(e.getEdgeB());
+			polyLine.push_back(e.getEdgeC());
+		}
 	}
 
-	for (auto& segment : /*dataSegment*/polyLine ){
+	for (auto& segment : polyLine ){
 		buffer.SetPen(wxPen(wxColour(segment.getRgb().getR(), segment.getRgb().getG(), segment.getRgb().getB())));
 
 		Vector4 beginVec, endVec;
@@ -485,12 +552,22 @@ void MainFrame::repaintSec(){
 	std::vector<std::pair<const Edge*, Point>> foundPoints = intersectionPoints(dataSegment, currentPlane);
 	std::vector<Edge> lines;
 
-	if( algorithmChoice->GetSelection() == 0 )
-		lines = connectNeighboursSection(foundPoints, dataSegment).getEdges();
-	else if( algorithmChoice->GetSelection() == 1 )
-		lines = rayTrianglesSection(triangulateIntersectionPoints(foundPoints), triangulateEdges(dataSegment)).getEdges();
-	else if( algorithmChoice->GetSelection() == 2 )
-		lines = quickSection(triangulateEdges(dataSegment), currentPlane).getEdges();
+	if( geo ){
+		if( algorithmChoice->GetSelection() == 0 )
+			lines = connectNeighboursSection(foundPoints, dataSegment).getEdges();
+		if( algorithmChoice->GetSelection() == 1 )
+			lines = rayTrianglesSection(triangulateIntersectionPoints(foundPoints), triangulateEdges(dataSegment)).getEdges();
+		if( algorithmChoice->GetSelection() == 2 )
+			lines = quickSection(triangulateEdges(dataSegment), currentPlane).getEdges();
+	}
+	else{
+		if( algorithmChoice->GetSelection() == 0 )
+			lines = connectNeighboursSection(foundPoints, dataSegment).getEdges();
+		if( algorithmChoice->GetSelection() == 1 )
+			lines = rayTrianglesSection(triangulateIntersectionPoints(foundPoints), dataTriangle).getEdges();
+		if( algorithmChoice->GetSelection() == 2 )
+			lines = quickSection(dataTriangle, currentPlane).getEdges();
+	}
 
 	wxClientDC dc(rightPanel);
 	wxBufferedDC buffer(&dc);

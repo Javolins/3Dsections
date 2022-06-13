@@ -53,7 +53,7 @@
 // All of our headers used in the file. 
 #include "../include/stout.h"
 #include "../include/DataClasses.h"
-#include "../include/OriginalEdge.h"
+#include "../include/Edge.h"
 #include "../include/Vector4.h"
 #include "../include/Matrix4.h"
 
@@ -378,7 +378,10 @@ class MainFrame : public wxFrame {
 		wxStatusBar* statusBar;
 
 		//! Stores edges of loaded solid
-		std::vector<OriginalEdge> dataSegment;
+		std::vector<Edge> dataSegment;
+		std::vector<Triangle> dataTriangle;
+		//! type of file loaded
+		bool geo;
 		//! Stores a section points coordinates (co to, po co, na co?)
 		std::vector<std::array<wxCoord, 4>> cordData;
 		//! Stores the cutting plane

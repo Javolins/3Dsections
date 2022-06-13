@@ -1,5 +1,5 @@
 /*****************************************************************//**
- * @file   OriginalEdge.h
+ * @file   Edge.h
  * @brief  class responsible for storing edges from .geo file
  *
  * @author Aleksander Bartoszek

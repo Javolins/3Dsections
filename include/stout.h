@@ -43,10 +43,10 @@ inline std::vector<Edge> removeReversed(std::vector<Edge> edges){
 * @return vector of all triangles forming solid
 *
 */
-inline std::vector<Triangle> triangulateEdges(std::vector<OriginalEdge>& origin){
+inline std::vector<Triangle> triangulateEdges(std::vector<Edge>& origin){
 	
 	std::vector<Triangle> triangles;
-	std::vector<OriginalEdge> allEdges = origin;
+	std::vector<Edge> allEdges = origin;
 
 	for( int i = 0; i < origin.size(); i++ ){
 		for( int j = i+1; j < origin.size(); j++ ){
@@ -80,7 +80,7 @@ inline std::vector<Triangle> triangulateEdges(std::vector<OriginalEdge>& origin)
 
 				if( add ){
 					triangles.push_back(Triangle(origin[i], origin[j], temp));
-					allEdges.push_back(OriginalEdge{temp.getStart(), temp.getEnd(), temp.getRgb()});
+					allEdges.push_back(Edge{temp.getStart(), temp.getEnd(), temp.getRgb()});
 				}
 			}
 		}
@@ -108,19 +108,19 @@ inline std::vector<Triangle> triangulateEdges(std::vector<OriginalEdge>& origin)
 
 		if( orphan ){
 			for( int i = 0; i<allEdges.size(); i++ ){
-				OriginalEdge second = allEdges[i];
-				OriginalEdge* third = nullptr;
+				Edge second = allEdges[i];
+				Edge* third = nullptr;
 				if( allEdges[i].getStart() == org.getStart() ){
-					third = new OriginalEdge{ allEdges[i].getEnd(), org.getEnd() };
+					third = new Edge{ allEdges[i].getEnd(), org.getEnd() };
 				}
 				else if( allEdges[i].getStart() == org.getEnd() ){
-					third = new OriginalEdge{ allEdges[i].getEnd(), org.getStart() };
+					third = new Edge{ allEdges[i].getEnd(), org.getStart() };
 				} 
 				else if( allEdges[i].getEnd() == org.getStart() ){
-					third = new OriginalEdge{ allEdges[i].getStart(), org.getEnd() };
+					third = new Edge{ allEdges[i].getStart(), org.getEnd() };
 				} 
 				else if( allEdges[i].getEnd() == org.getEnd() ){
-					third = new OriginalEdge{ allEdges[i].getStart(), org.getStart() };
+					third = new Edge{ allEdges[i].getStart(), org.getStart() };
 				}
 				if( third ){
 					for( int j = 0; j<allEdges.size(); j++ ){
@@ -388,7 +388,7 @@ inline ClosedPolygonalChains quickSectionBeta(const std::vector<Triangle> out, c
  * @param origin Edges of the solid
  * @return section formatted for printing
  */
-inline ClosedPolygonalChains connectNeighboursSection(const std::vector<std::pair<const Edge*, Point>> intersections, const std::vector<OriginalEdge> origin){
+inline ClosedPolygonalChains connectNeighboursSection(const std::vector<std::pair<const Edge*, Point>> intersections, const std::vector<Edge> origin){
 	std::vector<Edge> polyLine;
 
 	#pragma omp parallel for collapse(3)
@@ -486,7 +486,7 @@ inline std::vector<Triangle> triangulateIntersectionPoints(std::vector<std::pair
  * @return vector of all original and virtual edges
  *
  */
-inline std::vector<Edge> triangulate(std::vector<OriginalEdge>& origin){
+inline std::vector<Edge> triangulate(std::vector<Edge>& origin){
 	std::vector<Point> points;
 	for( const auto& a : origin ){
 		points.push_back(a.getStart());
