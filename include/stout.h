@@ -404,14 +404,17 @@ inline std::vector<Triangle> meshTriangles(std::vector<OriginalEdge>& origin){
 	return allTriangles;// anotherOne;//allTriangles;*/
 	std::vector<Triangle> triangles;
 
-	for( int i = 0; i < origin.size(); i++ ){
-		for( int j = i+1; j < origin.size(); j++ ){
-			if( !(origin[i] == origin[j]) ){
-				Point xs = origin[i].getStart();
-				Point xe = origin[i].getEnd();
-				Point ys = origin[j].getStart();
-				Point ye = origin[j].getEnd();
-				Edge temp;
+	/*std::vector<OriginalEdge> allEdges = origin;
+	
+	int size = allEdges.size();
+	for( int i = 0; i < size; i++ ){
+		for( int j = i+1; j < size; j++ ){
+			if( !(allEdges[i] == allEdges[j]) ){
+				Point xs = allEdges[i].getStart();
+				Point xe = allEdges[i].getEnd();
+				Point ys = allEdges[j].getStart();
+				Point ye = allEdges[j].getEnd();
+				OriginalEdge temp;
 
 				if( xs == ys ){
 					temp.set(xe, ye);
@@ -437,6 +440,11 @@ inline std::vector<Triangle> meshTriangles(std::vector<OriginalEdge>& origin){
 						break;
 					}
 				}
+				for( auto& e: allEdges )
+					if( areIntersecting(temp, e) ){
+						add = false;
+						break;
+					}
 
 				for( auto& e : origin ){
 					if( temp == e ){
@@ -444,8 +452,11 @@ inline std::vector<Triangle> meshTriangles(std::vector<OriginalEdge>& origin){
 					}
 				}
 
-				if( add )
-					triangles.push_back(Triangle(origin[i], origin[j], temp));
+				if( add ){
+					allEdges.push_back(temp);
+					++size;
+					triangles.push_back(Triangle(allEdges[i], allEdges[j], temp));
+				}
 			}
 		}
 	}
@@ -460,6 +471,101 @@ inline std::vector<Triangle> meshTriangles(std::vector<OriginalEdge>& origin){
 		}
 		if( add )
 			unique.push_back(triangles[i]);
+	}*/
+	std::vector<OriginalEdge> allEdges = origin;
+
+	for( int i = 0; i < origin.size(); i++ ){
+		for( int j = i+1; j < origin.size(); j++ ){
+			if( !(origin[i] == origin[j]) ){
+				Point xs = origin[i].getStart();
+				Point xe = origin[i].getEnd();
+				Point ys = origin[j].getStart();
+				Point ye = origin[j].getEnd();
+				Edge temp;
+
+				if( xs == ys ){
+					temp.set(xe, ye);
+				} else if( xs == ye ){
+					temp.set(xe, ys);
+				} else if( xe == ys ){
+					temp.set(xs, ye);
+				} else if( xe == ye ){
+					temp.set(xs, ys);
+				} else{
+					continue;
+				}
+
+				bool add = true;
+
+				for( auto& e : triangles ){
+					if( areIntersecting(temp, e.getEdgeA()) || areIntersecting(temp, e.getEdgeB()) || areIntersecting(temp, e.getEdgeC()) ){
+						add = false;
+						break;
+					}
+				}
+
+				/*for( auto& e : origin ){
+					if( temp == e ){
+						temp = e;
+					}
+				}*/
+
+				if( add ){
+					triangles.push_back(Triangle(origin[i], origin[j], temp));
+					allEdges.push_back(OriginalEdge{temp.getStart(), temp.getEnd(), temp.getRgb()});
+				}
+			}
+		}
+	}
+	std::vector<Triangle> unique;
+	for( int i = 0; i < triangles.size(); i++ ){
+		bool add = true;
+		for( int j = 0; j < unique.size(); j++ ){
+			if( triangles[i] == unique[j] ){
+				add = false;
+				break;
+			}
+		}
+		if( add )
+			unique.push_back(triangles[i]);
+	}
+	for( const auto& org : origin ){
+		bool orphan = true;
+		for( const auto& trg : unique ){
+			if( org == trg.getEdgeA() || org == trg.getEdgeB() || org == trg.getEdgeC() ){
+				orphan = false;
+				break;
+			}
+		}
+
+		if( orphan ){
+			for( int i = 0; i<allEdges.size(); i++ ){
+				OriginalEdge second = allEdges[i];
+				OriginalEdge* third = nullptr;
+				if( allEdges[i].getStart() == org.getStart() ){
+					third = new OriginalEdge{ allEdges[i].getEnd(), org.getEnd() };
+				}
+				else if( allEdges[i].getStart() == org.getEnd() ){
+					third = new OriginalEdge{ allEdges[i].getEnd(), org.getStart() };
+				} 
+				else if( allEdges[i].getEnd() == org.getStart() ){
+					third = new OriginalEdge{ allEdges[i].getStart(), org.getEnd() };
+				} 
+				else if( allEdges[i].getEnd() == org.getEnd() ){
+					third = new OriginalEdge{ allEdges[i].getStart(), org.getStart() };
+				}
+				if( third ){
+					for( int j = 0; j<allEdges.size(); j++ ){
+						if( allEdges[j] == *third ){
+							unique.push_back(Triangle{org, second, *third});
+							i = allEdges.size();
+							break;
+						}
+					}
+				}
+				delete third;
+			}
+		}
 	}
 
 	return unique;
@@ -679,4 +785,55 @@ inline ClosedPolygonalChains removeTriangles(std::vector<Triangle> in, const std
 
 	ClosedPolygonalChains cpc(polyLine);
 	return cpc;
+}
+
+inline ClosedPolygonalChains godFunction(const std::vector<Triangle> out, const Plane& plane){
+
+	std::vector<Edge> lines;
+	for( const auto& e : out ){
+		if( intersection(e.getEdgeA(), plane) && intersection(e.getEdgeB(), plane) )
+			lines.push_back(Edge{ *intersection(e.getEdgeA(), plane), *intersection(e.getEdgeB(), plane) });
+		else
+		if( intersection(e.getEdgeA(), plane) && intersection(e.getEdgeC(), plane) )
+			lines.push_back(Edge{ *intersection(e.getEdgeA(), plane), *intersection(e.getEdgeC(), plane) });
+		else
+		if( intersection(e.getEdgeB(), plane) && intersection(e.getEdgeC(), plane) )
+			lines.push_back(Edge{ *intersection(e.getEdgeB(), plane), *intersection(e.getEdgeC(), plane) });
+	}
+	return ClosedPolygonalChains{ lines };
+}
+
+inline ClosedPolygonalChains stupidFunction(const std::vector<Triangle> out, const Plane& plane){
+
+	std::vector<Edge> fromTriangles;
+	for( const auto& e: out ){
+		fromTriangles.push_back(e.getEdgeA());
+		fromTriangles.push_back(e.getEdgeB());
+		fromTriangles.push_back(e.getEdgeC());
+	}
+	std::vector<Edge> lines;
+	for( int i = 0; i < fromTriangles.size(); i++ ){
+		for( int j = i+1; j < fromTriangles.size(); j++ ){
+			if( fromTriangles[i] == fromTriangles[j] )
+				continue;
+			bool flag = false;
+			if( intersection(fromTriangles[i], plane) && intersection(fromTriangles[j], plane) ){
+				for( const auto& e : lines ){
+					if( areIntersecting(Edge{ *intersection(fromTriangles[i], plane), *intersection(fromTriangles[j], plane) }, e) )
+						flag = true;
+				}
+				if( flag ) continue;
+			
+				if(fromTriangles[i].getStart() == fromTriangles[j].getStart())
+					lines.push_back(Edge{ *intersection(fromTriangles[i], plane), *intersection(fromTriangles[j], plane) });
+				else if( fromTriangles[i].getStart() == fromTriangles[j].getEnd() )
+					lines.push_back(Edge{ *intersection(fromTriangles[i], plane), *intersection(fromTriangles[j], plane) });
+				else if( fromTriangles[i].getEnd() == fromTriangles[j].getStart() )
+					lines.push_back(Edge{ *intersection(fromTriangles[i], plane), *intersection(fromTriangles[j], plane) });
+				else if( fromTriangles[i].getEnd() == fromTriangles[j].getEnd() )
+					lines.push_back(Edge{ *intersection(fromTriangles[i], plane), *intersection(fromTriangles[j], plane) });
+			}
+		}
+	}
+	return ClosedPolygonalChains{ lines };
 }

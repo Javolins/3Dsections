@@ -46,7 +46,6 @@
     <ClCompile Include="test\Plane-Test.cpp" />
     <ClCompile Include="test\stout-Test.cpp" />
     <ClCompile Include="test\Vector4-Test.cpp" />
-    <ClCompile Include="Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\App.h" />
