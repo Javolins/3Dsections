@@ -433,10 +433,10 @@ void MainFrame::repaintSec(){
 	
 	std::vector<std::pair<const Edge*, Point>> foundPoints = intersectionPoints(dataSegment, currentPlane);
 	//std::vector<Edge> lines = polygonalChain(foundPoints, dataSegment).getEdges();
-	std::vector<Edge> lines = removeTriangles(connectedIntersectionPoints(foundPoints), meshTriangles(dataSegment)).getEdges();
+	//**std::vector<Edge> lines = removeTriangles(connectedIntersectionPoints(foundPoints), meshTriangles(dataSegment)).getEdges();
 	//std::vector<Edge> lines = connectedIntersectionPoints(foundPoints);
 	//std::vector<Edge> lines = stupidFunction(meshTriangles(dataSegment), currentPlane).getEdges();
-	///**/std::vector<Edge> lines = godFunction(meshTriangles(dataSegment), currentPlane).getEdges();
+	std::vector<Edge> lines = godFunction(meshTriangles(dataSegment), currentPlane).getEdges();
 
 	wxClientDC dc(rightPanel);
 	wxBufferedDC buffer(&dc);
@@ -552,7 +552,7 @@ void MainFrame::prevFrameButtonOnClick(wxCommandEvent& event){
 
 void MainFrame::nextFrameButtonOnClick(wxCommandEvent& event){
 	
-	currentPlane.setD(currentPlane.getD() - animationLength/20);
+	currentPlane.setD(currentPlane.getD() - animationLength/200);
 	repaintSec();
 }
 
