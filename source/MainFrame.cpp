@@ -323,7 +323,7 @@ void MainFrame::playToggleOnToggle(wxCommandEvent& event) {
 }
 
 void MainFrame::fileLoadButtonOnClick(wxCommandEvent& event) {
-	wxFileDialog WxOpenFileDialog(this, wxT("Choose a file"), wxT(""), wxT(""), wxT("Geometry file (*.geo)|*.geo"), wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+	wxFileDialog WxOpenFileDialog(this, wxT("Choose a file"), wxT(""), wxT(""), wxT("Geometry file (*.geo, *.trg)|*.geo; *.trg"), wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 	if (WxOpenFileDialog.ShowModal() == wxID_OK && WxOpenFileDialog.GetPath()[WxOpenFileDialog.GetPath().size()-3] == 'g' ){
 		double xStartPoint, yStartPoint, zStartPoint, xEndPoint, yEndPoint, zEndPoint;
 		int r, g, b;
@@ -362,7 +362,7 @@ void MainFrame::fileLoadButtonOnClick(wxCommandEvent& event) {
 
 		event.Skip();
 	}
-	else if( WxOpenFileDialog.ShowModal() == wxID_OK && WxOpenFileDialog.GetPath()[WxOpenFileDialog.GetPath().size()-3] == 't' ){
+	else if(WxOpenFileDialog.GetPath()[WxOpenFileDialog.GetPath().size()-3] == 't' ){
 		double x1, y1, z1;
 		double x2, y2, z2;
 		double x3, y3, z3;
@@ -668,7 +668,7 @@ void MainFrame::planeChoiceOnChoice(wxCommandEvent& event){
 
 	calculateAnimationlength();
 	repaintSec();
-	currentPlane.setD(0); startingPosition = 0; endingPosition = 0;
+	//currentPlane.setD(0); startingPosition = 0; endingPosition = 0;
 }
 
 void MainFrame::backwardButtonOnClick(wxCommandEvent& event){
