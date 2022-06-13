@@ -384,7 +384,7 @@ void MainFrame::repaintGeo() {
 	buffer.Clear();
 
 	/**/
-	std::vector<Triangle> in = meshTriangles(dataSegment);
+	std::vector<Triangle> in = edgesToTriangles(dataSegment);
 	std::vector<Edge> polyLine;
 	for( auto& e: in ){
 		polyLine.push_back(e.getEdgeA());
@@ -436,7 +436,7 @@ void MainFrame::repaintSec(){
 	//**std::vector<Edge> lines = removeTriangles(connectedIntersectionPoints(foundPoints), meshTriangles(dataSegment)).getEdges();
 	//std::vector<Edge> lines = connectedIntersectionPoints(foundPoints);
 	//std::vector<Edge> lines = stupidFunction(meshTriangles(dataSegment), currentPlane).getEdges();
-	std::vector<Edge> lines = godFunction(meshTriangles(dataSegment), currentPlane).getEdges();
+	std::vector<Edge> lines = godFunction(edgesToTriangles(dataSegment), currentPlane).getEdges();
 
 	wxClientDC dc(rightPanel);
 	wxBufferedDC buffer(&dc);

@@ -141,7 +141,7 @@ TEST_CASE("Mesh() testing") {
 	testEdges.push_back(OriginalEdge(Point(-1, -1, -1), Point(-1, 1, -1), Color(0, 0, 0)));
 	testEdges.push_back(OriginalEdge(Point(-1, 1, -1), Point(1, 1, -1), Color(0, 0, 0)));
 
-	std::vector<Edge> meshedEdges = mesh(testEdges);
+	std::vector<Edge> meshedEdges = triangulate(testEdges);
 	//for (auto& e : meshedEdges) std::cout << e << std::endl;
 
 	//TODO add requires
@@ -165,7 +165,7 @@ TEST_CASE("meshTriangles() testing"){
 	testEdges.push_back(OriginalEdge(Point(-1, -1, -1), Point(-1, 1, -1), Color(0, 0, 0)));
 	testEdges.push_back(OriginalEdge(Point(-1, 1, -1), Point(1, 1, -1), Color(0, 0, 0)));
 
-	std::vector<Triangle> meshedEdges = meshTriangles(testEdges);
+	std::vector<Triangle> meshedEdges = edgesToTriangles(testEdges);
 	/*std::cout << "meshedEdges.size(): " << meshedEdges.size() << std::endl;
 	for( auto& e : meshedEdges ){
 		std::cout << "a : " <<  e.getEdgeA() << " ";
@@ -424,7 +424,7 @@ TEST_CASE("triangleInsideSection() testing"){
 	testEdges.push_back(OriginalEdge(Point(-1, -1, -1), Point(-1, 1, -1), Color(0, 0, 0)));
 	testEdges.push_back(OriginalEdge(Point(-1, 1, -1), Point(1, 1, -1), Color(0, 0, 0)));
 
-	std::vector<Triangle> solidTriangles = meshTriangles(testEdges);
+	std::vector<Triangle> solidTriangles = edgesToTriangles(testEdges);
 	REQUIRE(solidTriangles.size() == 12);
 
 	Plane yOz{ 1 };
@@ -434,7 +434,7 @@ TEST_CASE("triangleInsideSection() testing"){
 	std::vector<std::pair<const Edge*, Point>> sectionPoints = intersectionPoints(testEdges, Plane { 0,0,1,-0.044 });
 	REQUIRE(sectionPoints.size() == 4);
 
-	std::vector<Triangle> sectionTriangles = connectedIntersectionPoints(sectionPoints);
+	std::vector<Triangle> sectionTriangles = triangulateIntersectionPoints(sectionPoints);
 	REQUIRE(sectionTriangles.size() == 2);
 
 	int i = 0;
@@ -459,7 +459,7 @@ TEST_CASE("triangleInsideSection() testing"){
 		}
 			
 
-		bool inside = triangleInsideSection(in, solidTriangles);
+		bool inside = sectionTriangleInsideSolid(in, solidTriangles);
 		MESSAGE("i: ", i++, " count: ", counter);
 		//REQUIRE(inside);
 	}

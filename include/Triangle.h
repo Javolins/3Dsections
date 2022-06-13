@@ -9,26 +9,22 @@
 #pragma once
 #include "Plane.h"
 #include "Edge.h"
+#include "VectorOperations.h"
+
 #include <algorithm>
 #include <string>
 
-inline std::array<double, 3> cross(std::array<double, 3> a, std::array<double, 3> b){
-	std::array<double, 3> result;
-	result[0] = a[1]*b[2] - a[2]*b[1];
-	result[1] = a[2]*b[0] - a[0]*b[2];
-	result[2] = a[0]*b[1] - a[1]*b[0];
-	return result;
-}
-
-/**
- * @brief Calculates the norm of a vector.
- *
- * @param vec 3-dimensional vector.
- * @return Norm of the provided vector.
- */
-inline double norm(std::array<double, 3> vec){
-	return sqrt(vec[0]*vec[0] + vec[1]*vec[1] + vec[2]*vec[2]);
-}
+//inline std::array<double, 3> cross(std::array<double, 3> a, std::array<double, 3> b){
+//	std::array<double, 3> result;
+//	result[0] = a[1]*b[2] - a[2]*b[1];
+//	result[1] = a[2]*b[0] - a[0]*b[2];
+//	result[2] = a[0]*b[1] - a[1]*b[0];
+//	return result;
+//}
+//
+//inline double norm(std::array<double, 3> vec){
+//	return sqrt(vec[0]*vec[0] + vec[1]*vec[1] + vec[2]*vec[2]);
+//}
 
 class Triangle : public Plane{
 

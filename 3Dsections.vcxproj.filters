@@ -136,5 +136,11 @@
     <ClInclude Include="include\Ray.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Intersections.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VectorOperations.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

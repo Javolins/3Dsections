@@ -52,6 +52,7 @@
     <ClInclude Include="include\ClosedPolygonalChains.h" />
     <ClInclude Include="include\DataClasses.h" />
     <ClInclude Include="include\Edge.h" />
+    <ClInclude Include="include\Intersections.h" />
     <ClInclude Include="include\MainFrame.h" />
     <ClInclude Include="include\Matrix4.h" />
     <ClInclude Include="include\MeshEdge.h" />
@@ -61,6 +62,7 @@
     <ClInclude Include="include\stout.h" />
     <ClInclude Include="include\Triangle.h" />
     <ClInclude Include="include\Vector4.h" />
+    <ClInclude Include="include\VectorOperations.h" />
     <ClInclude Include="test\doctest.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
