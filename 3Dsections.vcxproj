@@ -31,6 +31,11 @@
     <None Include="resource\geo\prostopadloscian.geo" />
     <None Include="resource\geo\prostopoadłoscian_lite.geo" />
     <None Include="resource\geo\Tetrahedron.geo" />
+    <None Include="resource\trg\dwudziestoscian_new.trg" />
+    <None Include="resource\trg\dwunastoscian_new.trg" />
+    <None Include="resource\trg\graniastoslup_pochylony_new.trg" />
+    <None Include="resource\trg\ostroslup_nieforemny_new.trg" />
+    <None Include="resource\trg\szescian_new.trg" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\App.cpp" />

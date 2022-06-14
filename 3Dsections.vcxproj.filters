@@ -51,6 +51,21 @@
     <None Include="resource\geo\Tetrahedron.geo">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="resource\trg\dwudziestoscian_new.trg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\trg\dwunastoscian_new.trg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\trg\graniastoslup_pochylony_new.trg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\trg\ostroslup_nieforemny_new.trg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\trg\szescian_new.trg">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\App.cpp">
