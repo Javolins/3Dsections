@@ -18,7 +18,7 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 	topMenuBar = new wxMenuBar(0);
 	quitMenu = new wxMenu();
 	topMenuBar->Append(quitMenu, wxT("&Quit"));
-	quitMenu->Append(TOP_MENU_QUIT_WOUT_SAVE_ID, wxT("Quit Without Saving"), wxEmptyString, wxITEM_NORMAL);
+	quitMenu->Append(TOP_MENU_QUIT_WOUT_SAVE_ID, wxT("Quit"), wxEmptyString, wxITEM_NORMAL);
 
 
 	helpMenu = new wxMenu();
@@ -280,7 +280,7 @@ MainFrame::~MainFrame() {
 }
 
 void MainFrame::onExit(){
-	if (wxMessageDialog(NULL, "Are you sure to quit?", "Question", wxOK | wxCANCEL).ShowModal() == wxID_OK) Destroy();
+	if (wxMessageDialog(NULL, "Are you really want to quit?\nDo not give up on me :(", "Question", wxOK | wxCANCEL).ShowModal() == wxID_OK) Destroy();
 }
 
 void MainFrame::viewDocumentationOnMenuSelection(wxCommandEvent& event) {
@@ -803,4 +803,9 @@ void MainFrame::saveAnimationButtonOnClick(wxCommandEvent& event){
 		bitMapToSave.ConvertToImage().SaveFile(newFilePath, wxBITMAP_TYPE_JPEG);
 		currentPlane.setD(currentPlane.getD() - animationLength/frameNumberSpin->GetValue());
 	}
+}
+
+void MainFrame::controlSliderOnScroll(wxScrollEvent& event){
+	currentPlane.setD(-startingPosition - controlSlider->GetValue()* animationLength/frameNumberSpin->GetValue());
+	repaintSec();
 }

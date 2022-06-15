@@ -5,13 +5,13 @@
  * C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
  * http://www.wxformbuilder.org/
  * 
- * @author Michał Rutkowski @P4ndaM1x
+ * @author Michał Rutkowski @P4ndaM1x, Aleksander Bartoszek @AleksanderBartoszek
  * @date   May 2022
  *********************************************************************/
 
 #pragma once
 
-// All needed wxWidgets' modules.
+// All required wxWidgets' modules.
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/string.h>
@@ -44,17 +44,13 @@
 #include <wx/colordlg.h>
 #include <wx/spinctrl.h>
 
-// All needed STL's modules.
+// All required STL's modules.
 #include <fstream>
 #include <vector>
-#include <map>
 #include <limits>
 
-// All of our headers used in the file. 
+// All required headers. 
 #include "../include/stout.h"
-#include "../include/DataClasses.h"
-#include "../include/Edge.h"
-#include "../include/Vector4.h"
 #include "../include/Matrix4.h"
 
 // Identifiers of all UI items.
@@ -101,7 +97,7 @@ class MainFrame : public wxFrame {
 		MainFrame(wxWindow* parent = nullptr, wxWindowID id = MAIN_FRAME_ID, const wxString& title = wxT("3Dsections"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize(960, 640), long style = wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL);
 
 		/**
-		 * @brief Disconnects all event handlers.
+		 * @brief Disconnects all event handlers and deletes @ref animationTimer.
 		 *
 		 */
 		~MainFrame();
@@ -112,10 +108,9 @@ class MainFrame : public wxFrame {
 		 * @brief After clicking @ref viewDocumentation menu item, 
 		 * launches default browser and opens code documentation site of the project.
 		 * 
-		 * If the browser wasn't successfully launched, a modal dialog with error message would be shown.
-		 * 
 		 * @param event Binded event, in this case: wxEVT_COMMAND_MENU_SELECTED.
 		 * @see viewDocumentation
+		 * @note If the browser wasn't successfully launched, a modal dialog with an error message would be shown.
 		 */
 		virtual void viewDocumentationOnMenuSelection(wxCommandEvent& event);
 
@@ -123,10 +118,9 @@ class MainFrame : public wxFrame {
 		 * @brief After clicking @ref sendFeedback menu item, 
 		 * launches default mail client with a new letter to the project authors.
 		 * 
-		 * If the client wasn't successfully launched, a modal dialog with error message would be shown.
-		 * 
 		 * @param event Binded event, in this case: wxEVT_COMMAND_MENU_SELECTED.
 		 * @see sendFeedback
+		 * @note If the client wasn't successfully launched, a modal dialog with error message would be shown.
 		 */
 		virtual void sendFeedbackOnMenuSelection(wxCommandEvent& event);
 
@@ -134,22 +128,20 @@ class MainFrame : public wxFrame {
 		 * @brief After clicking @ref about3Dsections menu item, 
 		 * launches default browser and opens a site with basic info about the project.
 		 * 
-		 * If the browser wasn't successfully launched, a modal dialog with error message would be shown.
-		 * 
 		 * @param event Binded event, in this case: wxEVT_COMMAND_MENU_SELECTED.
 		 * @see about3Dsections
+		 * @note If the browser wasn't successfully launched, a modal dialog with error message would be shown.
 		 */
 		virtual void about3DsectionsOnMenuSelection(wxCommandEvent& event);
 
 		/**
-		 * @brief Sets @ref currentPlane position.
+		 * @brief Sets @ref currentPlane position and repaints the section.
 		 * 
-		 * @param event
+		 * @param event Binded events, in this case: wxEVT_SCROLL_TOP, wxEVT_SCROLL_BOTTOM, wxEVT_SCROLL_LINEUP, 
+		 * wxEVT_SCROLL_LINEDOWN, wxEVT_SCROLL_PAGEUP, wxEVT_SCROLL_PAGEDOWN, wxEVT_SCROLL_THUMBTRACK,
+		 * wxEVT_SCROLL_THUMBRELEASE, wxEVT_SCROLL_CHANGED.
 		 */
-		virtual void controlSliderOnScroll(wxScrollEvent& event){
-			currentPlane.setD(-startingPosition - controlSlider->GetValue()* animationLength/frameNumberSpin->GetValue());
-			repaintSec();
-		}
+		virtual void controlSliderOnScroll(wxScrollEvent& event);
 
 		/**
 		 * @brief After clicking @ref backwardButton, changes @ref currentPlane position 
@@ -174,7 +166,8 @@ class MainFrame : public wxFrame {
 		 *
 		 * Actions include:
 		 *	- changing @ref playToggle label,
-		 *	- changing @ref progressGauge visibility.
+		 *  - changing @ref animationTimer state and interval,
+		 *  - repaints the section.
 		 *
 		 * @param event Connected event, in this case: wxEVT_COMMAND_TOGGLEBUTTON_CLICKED.
 		 * @see playToggle
@@ -183,7 +176,7 @@ class MainFrame : public wxFrame {
 		virtual void playToggleOnToggle(wxCommandEvent& event);
 
 		/**
-		 * @brief Show a exit dialog window with a question whether user is sure to quit.
+		 * @brief Show an exit dialog window with a question whether user is sure to quit.
 		 * 
 		 * Actions include:
 		 *	- accept exit, then main window and dialog window is closed
@@ -334,6 +327,7 @@ class MainFrame : public wxFrame {
 
 		//! A bar on top of the window, contains: @ref quitMenu, @ref helpMenu.
 		wxMenuBar* topMenuBar;
+
 		wxMenu* quitMenu;
 		//! Expands to the list of menu items: @ref viewDocumentation, @ref sendFeedback, @ref about3Dsections.
 		wxMenu* helpMenu;
@@ -343,6 +337,7 @@ class MainFrame : public wxFrame {
 		wxPanel* rightPanel;
 		//! Optically separates right toolbar
 		wxStaticLine* horizontalStaticLine;
+		//! Dragging it sets @ref currentPlane position
 		wxSlider* controlSlider;
 		//! Indicates state of the played animation.
 		wxGauge* progressGauge;
