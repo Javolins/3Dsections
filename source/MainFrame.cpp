@@ -154,7 +154,7 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 	algorithmChoiceLabel->Wrap(-1);
 	mainFrameRightSizer->Add(algorithmChoiceLabel, 0, wxALIGN_CENTER_HORIZONTAL|wxLEFT|wxRIGHT|wxTOP, 5);
 
-	wxString algorithmChoiceChoices[] = { wxT("Algorithm 1"), wxT("Algorithm 2"), wxT("Algorithm 3") };
+	wxString algorithmChoiceChoices[] = { wxT("Quick"), wxT("RayCasting"), wxT("StatisticalRay"),wxT("Neighbors")};
 	int algorithmChoiceNChoices = sizeof(algorithmChoiceChoices) / sizeof(wxString);
 	algorithmChoice = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, algorithmChoiceNChoices, algorithmChoiceChoices, 0);
 	algorithmChoice->SetSelection(0);
@@ -221,15 +221,15 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 	controlSlider->Connect(wxEVT_SCROLL_CHANGED, wxScrollEventHandler(MainFrame::controlSliderOnScroll), NULL, this);
 	backwardButton->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::backwardButtonOnClick), NULL, this);
 	prevFrameButton->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::prevFrameButtonOnClick), NULL, this);
-	playToggle->Connect(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler(MainFrame::playToggleOnToggle), NULL, this);
+	playToggle->Connect(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler(MainFrame::playOnToggle), NULL, this);
 	nextFrameButton->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::nextFrameButtonOnClick), NULL, this);
 	forewardButton->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::forewardButtonOnClick), NULL, this);
 	fileLoadButton->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::fileLoadButtonOnClick), NULL, this);
 	saveAnimationButton->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::saveAnimationButtonOnClick), NULL, this);
-	algorithmChoice->Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(MainFrame::algorithmChoiceOnChoice), NULL, this);
+	algorithmChoice->Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(MainFrame::algorithmOnChoice), NULL, this);
 	moreEdgesCheckBox->Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(MainFrame::moreEdgesCheckBoxOnCheck), NULL, this);
-	frameNumberSpin->Connect(wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler(MainFrame::frameNumberSpinonSpin), NULL, this);
-	planeChoice->Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(MainFrame::planeChoiceOnChoice), NULL, this);
+	frameNumberSpin->Connect(wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler(MainFrame::frameNumberOnSpin), NULL, this);
+	planeChoice->Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(MainFrame::planeOnChoice), NULL, this);
 	speedSlider->Connect(wxEVT_SCROLL_TOP, wxScrollEventHandler(MainFrame::speedSliderOnScroll), NULL, this);
 	speedSlider->Connect(wxEVT_SCROLL_BOTTOM, wxScrollEventHandler(MainFrame::speedSliderOnScroll), NULL, this);
 	speedSlider->Connect(wxEVT_SCROLL_LINEUP, wxScrollEventHandler(MainFrame::speedSliderOnScroll), NULL, this);
@@ -256,15 +256,15 @@ MainFrame::~MainFrame() {
 	controlSlider->Disconnect(wxEVT_SCROLL_CHANGED, wxScrollEventHandler(MainFrame::controlSliderOnScroll), NULL, this);
 	backwardButton->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::backwardButtonOnClick), NULL, this);
 	prevFrameButton->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::prevFrameButtonOnClick), NULL, this);
-	playToggle->Disconnect(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler(MainFrame::playToggleOnToggle), NULL, this);
+	playToggle->Disconnect(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler(MainFrame::playOnToggle), NULL, this);
 	nextFrameButton->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::nextFrameButtonOnClick), NULL, this);
 	forewardButton->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::forewardButtonOnClick), NULL, this);
 	fileLoadButton->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::fileLoadButtonOnClick), NULL, this);
 	saveAnimationButton->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::saveAnimationButtonOnClick), NULL, this);
-	algorithmChoice->Disconnect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(MainFrame::algorithmChoiceOnChoice), NULL, this);
+	algorithmChoice->Disconnect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(MainFrame::algorithmOnChoice), NULL, this);
 	moreEdgesCheckBox->Disconnect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(MainFrame::moreEdgesCheckBoxOnCheck), NULL, this);
-	frameNumberSpin->Disconnect(wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler(MainFrame::frameNumberSpinonSpin), NULL, this);
-	planeChoice->Disconnect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(MainFrame::planeChoiceOnChoice), NULL, this);
+	frameNumberSpin->Disconnect(wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler(MainFrame::frameNumberOnSpin), NULL, this);
+	planeChoice->Disconnect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(MainFrame::planeOnChoice), NULL, this);
 	speedSlider->Disconnect(wxEVT_SCROLL_TOP, wxScrollEventHandler(MainFrame::speedSliderOnScroll), NULL, this);
 	speedSlider->Disconnect(wxEVT_SCROLL_BOTTOM, wxScrollEventHandler(MainFrame::speedSliderOnScroll), NULL, this);
 	speedSlider->Disconnect(wxEVT_SCROLL_LINEUP, wxScrollEventHandler(MainFrame::speedSliderOnScroll), NULL, this);
@@ -305,7 +305,7 @@ void MainFrame::about3DsectionsOnMenuSelection(wxCommandEvent& event) {
 	}
 }
 
-void MainFrame::playToggleOnToggle(wxCommandEvent& event) {
+void MainFrame::playOnToggle(wxCommandEvent& event) {
 	if (playToggle->GetValue()) {
 
 		playToggle->SetLabel("Stop");
@@ -324,18 +324,17 @@ void MainFrame::playToggleOnToggle(wxCommandEvent& event) {
 
 void MainFrame::fileLoadButtonOnClick(wxCommandEvent& event) {
 	wxFileDialog WxOpenFileDialog(this, wxT("Choose a file"), wxT(""), wxT(""), wxT("Geometry file (*.geo, *.trg)|*.geo; *.trg"), wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+	dataSegment.clear();
+	dataTriangle.clear();
+	geometricCenter.set(0, 0, 0);
+	geoMin.set(std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
+	geoMax.set(std::numeric_limits<float>::min(), std::numeric_limits<float>::min(), std::numeric_limits<float>::min());
 	if (WxOpenFileDialog.ShowModal() == wxID_OK && WxOpenFileDialog.GetPath()[WxOpenFileDialog.GetPath().size()-3] == 'g' ){
 		double xStartPoint, yStartPoint, zStartPoint, xEndPoint, yEndPoint, zEndPoint;
 		int r, g, b;
 		geo = true;
 		std::ifstream in(WxOpenFileDialog.GetPath().ToStdString());
 		if (in.is_open()) {
-
-			geometricCenter.set(0, 0, 0);
-			geoMin.set(std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
-			geoMax.set(std::numeric_limits<float>::min(), std::numeric_limits<float>::min(), std::numeric_limits<float>::min());
-
-			dataSegment.clear();
 			while (!in.eof()) {
 				in >> xStartPoint >> yStartPoint >> zStartPoint >> xEndPoint >> yEndPoint >> zEndPoint >> r >> g >> b;
 				dataSegment.push_back(Edge(Point(xStartPoint, yStartPoint, zStartPoint), Point(xEndPoint, yEndPoint, zEndPoint), Color(r, g, b)));
@@ -370,12 +369,6 @@ void MainFrame::fileLoadButtonOnClick(wxCommandEvent& event) {
 		geo = false;
 		std::ifstream in(WxOpenFileDialog.GetPath().ToStdString());
 		if( in.is_open() ){
-
-			geometricCenter.set(0, 0, 0);
-			geoMin.set(std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
-			geoMax.set(std::numeric_limits<float>::min(), std::numeric_limits<float>::min(), std::numeric_limits<float>::min());
-
-			dataSegment.clear();
 			while( !in.eof() ){
 				in >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> x3 >> y3 >> z3 >> r >> g >> b;
 				Edge A{ Point(x1,y1,z1), Point(x2,y2,z2), Color(r,g,b) };
@@ -542,7 +535,6 @@ void MainFrame::repaintGeo() {
 		}
 
 		std::array<wxCoord, 4> cordArr{ beginVec.getX(), beginVec.getY(), endVec.getX(), endVec.getY() } ;
-		cordData.push_back(cordArr);
 		buffer.DrawLine(beginVec.getX(), beginVec.getY(), endVec.getX(), endVec.getY());
 	}
 }
@@ -553,19 +545,23 @@ void MainFrame::repaintSec(){
 	std::vector<Edge> lines;
 
 	if( geo ){
-		if( algorithmChoice->GetSelection() == 0 )
+		if( algorithmChoice->GetSelection() == 3 )
 			lines = connectNeighboursSection(foundPoints, dataSegment).getEdges();
-		if( algorithmChoice->GetSelection() == 1 )
-			lines = rayTrianglesSection(triangulateIntersectionPoints(foundPoints), triangulateEdges(dataSegment)).getEdges();
 		if( algorithmChoice->GetSelection() == 2 )
+			lines = rayTrianglesSection(triangulateIntersectionPoints(foundPoints), triangulateEdges(dataSegment), true).getEdges();
+		if( algorithmChoice->GetSelection() == 1 )
+			lines = rayTrianglesSection(triangulateIntersectionPoints(foundPoints), triangulateEdges(dataSegment), false).getEdges();
+		if( algorithmChoice->GetSelection() == 0 )
 			lines = quickSection(triangulateEdges(dataSegment), currentPlane).getEdges();
 	}
 	else{
-		if( algorithmChoice->GetSelection() == 0 )
+		if( algorithmChoice->GetSelection() == 3 )
 			lines = connectNeighboursSection(foundPoints, dataSegment).getEdges();
-		if( algorithmChoice->GetSelection() == 1 )
-			lines = rayTrianglesSection(triangulateIntersectionPoints(foundPoints), dataTriangle).getEdges();
 		if( algorithmChoice->GetSelection() == 2 )
+			lines = rayTrianglesSection(triangulateIntersectionPoints(foundPoints), dataTriangle, true).getEdges();
+		if( algorithmChoice->GetSelection() == 1 )
+			lines = rayTrianglesSection(triangulateIntersectionPoints(foundPoints), dataTriangle, false).getEdges();
+		if( algorithmChoice->GetSelection() == 0 )
 			lines = quickSection(dataTriangle, currentPlane).getEdges();
 	}
 
@@ -649,11 +645,11 @@ void MainFrame::repaintSec(){
 		);
 	}
 
-	progressGauge->SetValue( 10000 * (-currentPlane.getD()-startingPosition) / animationLength );
-	controlSlider->SetValue(frameNumberSpin->GetValue() * (-currentPlane.getD()-startingPosition) / animationLength);
+	progressGauge->SetValue( 10000 * (-currentPlane.getD()-startingPosition) / animationDistance );
+	controlSlider->SetValue(frameNumberSpin->GetValue() * (-currentPlane.getD()-startingPosition) / animationDistance);
 }
 
-void MainFrame::planeChoiceOnChoice(wxCommandEvent& event){
+void MainFrame::planeOnChoice(wxCommandEvent& event){
 	
 	unsigned planeIndex = planeChoice->GetSelection();
 	// plane: xOy
@@ -679,13 +675,13 @@ void MainFrame::backwardButtonOnClick(wxCommandEvent& event){
 
 void MainFrame::prevFrameButtonOnClick(wxCommandEvent& event){
 
-	currentPlane.setD(currentPlane.getD() + animationLength/frameNumberSpin->GetValue());
+	currentPlane.setD(currentPlane.getD() + animationDistance/frameNumberSpin->GetValue());
 	repaintSec();
 }
 
 void MainFrame::nextFrameButtonOnClick(wxCommandEvent& event){
 	
-	currentPlane.setD(currentPlane.getD() - animationLength/frameNumberSpin->GetValue());
+	currentPlane.setD(currentPlane.getD() - animationDistance/frameNumberSpin->GetValue());
 	repaintSec();
 }
 
@@ -720,12 +716,12 @@ void MainFrame::calculateAnimationlength(){
 			min = (edge.getEnd().*get_z)();
 	}
 
-	animationLength = abs(max - min);
+	animationDistance = abs(max - min);
 	startingPosition = min;
 	endingPosition = max;
 
 	currentPlane.setD(-startingPosition);
-	progressGauge->SetValue(10000 * (-currentPlane.getD()-startingPosition) / animationLength);
+	progressGauge->SetValue(10000 * (-currentPlane.getD()-startingPosition) / animationDistance);
 }
 
 void MainFrame::statusBarUpdate(wxUpdateUIEvent& event){
@@ -752,7 +748,7 @@ void MainFrame::statusBarUpdate(wxUpdateUIEvent& event){
 
 void MainFrame::onTimerNotify(wxTimerEvent& event){
 	if( -currentPlane.getD() < endingPosition ){
-		currentPlane.setD(currentPlane.getD() - animationLength/frameNumberSpin->GetValue());
+		currentPlane.setD(currentPlane.getD() - animationDistance/frameNumberSpin->GetValue());
 		repaintSec();
 	}
 }
@@ -801,11 +797,26 @@ void MainFrame::saveAnimationButtonOnClick(wxCommandEvent& event){
 		newFilePath.Replace(fileName, newFileName);
 
 		bitMapToSave.ConvertToImage().SaveFile(newFilePath, wxBITMAP_TYPE_JPEG);
-		currentPlane.setD(currentPlane.getD() - animationLength/frameNumberSpin->GetValue());
+		currentPlane.setD(currentPlane.getD() - animationDistance/frameNumberSpin->GetValue());
 	}
 }
 
-void MainFrame::controlSliderOnScroll(wxScrollEvent& event){
-	currentPlane.setD(-startingPosition - controlSlider->GetValue()* animationLength/frameNumberSpin->GetValue());
+inline void MainFrame::controlSliderOnScroll(wxScrollEvent& event){
+	currentPlane.setD(-startingPosition - controlSlider->GetValue()* animationDistance/frameNumberSpin->GetValue());
 	repaintSec();
+}
+
+inline void MainFrame::algorithmOnChoice(wxCommandEvent& event){
+	repaintSec();
+}
+
+inline void MainFrame::moreEdgesCheckBoxOnCheck(wxCommandEvent& event){
+	repaintGeo();
+}
+
+void MainFrame::frameNumberOnSpin(wxSpinEvent& event){
+	if( animationTimer->IsRunning() ){
+		animationTimer->Start(1000000/speedSlider->GetValue()/frameNumberSpin->GetValue());
+	}
+	controlSlider->SetMax(frameNumberSpin->GetValue());
 }

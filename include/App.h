@@ -2,7 +2,7 @@
  * @file   App.h
  * @brief  Header file of the class representing 3Dsections app
  * 
- * @author Michał Rutkowski @P4ndaM1x
+ * @author Michał Rutkowski @P4ndaM1x, Aleksander Bartoszek @AleksanderBartoszek
  * @date   May 2022
  *********************************************************************/
 

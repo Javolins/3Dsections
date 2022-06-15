@@ -242,21 +242,33 @@ inline bool samePlaneEdges(const Edge& a, const Edge& b){
  * @param out triangles from outer faces of processed solid
  * @return section formatted for printing
  */
-inline ClosedPolygonalChains rayTrianglesSection(const std::vector<Triangle> in, const std::vector<Triangle> out){
+inline ClosedPolygonalChains rayTrianglesSection(const std::vector<Triangle> in, const std::vector<Triangle> out, bool statistical){
 
 	std::vector<Triangle> unique = in;
 
 	for( int i = 0; i < in.size(); i++ ){
 
 		bool a_inside = false;
-		if( sectionTriangleInsideSolid(in[i], out) )
-			a_inside = true;
+		if( statistical ) {
+			if( sectionTriangleInsideSolidStatistically(in[i], out) )
+				a_inside = true;
+		}	
+		else{
+			if( sectionTriangleInsideSolid(in[i], out) )
+				a_inside = true;
+		}
 
 		for( int j = i+1; j < in.size(); j++ ){
 
 			bool b_inside = false;
-			if( sectionTriangleInsideSolid(in[j], out) )
-				b_inside = true;
+			if( statistical ) {
+				if( sectionTriangleInsideSolidStatistically(in[i], out) )
+					b_inside = true;
+			}	
+			else{
+				if( sectionTriangleInsideSolid(in[i], out) )
+					b_inside = true;
+			}
 
 			if( a_inside == b_inside ){
 				if( in[i].getEdgeA() == in[j].getEdgeA() ){
@@ -312,6 +324,7 @@ inline ClosedPolygonalChains rayTrianglesSection(const std::vector<Triangle> in,
 	}
 
 	ClosedPolygonalChains cpc(polyLine);
+
 	return cpc;
 }
 
@@ -328,12 +341,10 @@ inline ClosedPolygonalChains quickSection(const std::vector<Triangle> out, const
 	for( const auto& e : out ){
 		if( intersection(e.getEdgeA(), plane) && intersection(e.getEdgeB(), plane) )
 			lines.push_back(Edge{ *intersection(e.getEdgeA(), plane), *intersection(e.getEdgeB(), plane) });
-		else
-			if( intersection(e.getEdgeA(), plane) && intersection(e.getEdgeC(), plane) )
-				lines.push_back(Edge{ *intersection(e.getEdgeA(), plane), *intersection(e.getEdgeC(), plane) });
-			else
-				if( intersection(e.getEdgeB(), plane) && intersection(e.getEdgeC(), plane) )
-					lines.push_back(Edge{ *intersection(e.getEdgeB(), plane), *intersection(e.getEdgeC(), plane) });
+		if( intersection(e.getEdgeA(), plane) && intersection(e.getEdgeC(), plane) )
+			lines.push_back(Edge{ *intersection(e.getEdgeA(), plane), *intersection(e.getEdgeC(), plane) });
+		if( intersection(e.getEdgeB(), plane) && intersection(e.getEdgeC(), plane) )
+			lines.push_back(Edge{ *intersection(e.getEdgeB(), plane), *intersection(e.getEdgeC(), plane) });
 	}
 	return ClosedPolygonalChains{ lines };
 }
@@ -454,7 +465,7 @@ inline std::vector<Triangle> triangulateIntersectionPoints(std::vector<std::pair
 				Edge ab(a, b);
 				Edge bc(b, c);
 				Edge ca(c, a);
-
+				Triangle temp(ab, bc, ca);
 				bool add = true;
 				for( auto& e : unique ){
 					if( areIntersecting(ab, e.getEdgeA()) || areIntersecting(ab, e.getEdgeB()) || areIntersecting(ab, e.getEdgeC()) ){
@@ -464,6 +475,9 @@ inline std::vector<Triangle> triangulateIntersectionPoints(std::vector<std::pair
 						add = false;
 						break;
 					} else if( areIntersecting(ca, e.getEdgeA()) || areIntersecting(ca, e.getEdgeB()) || areIntersecting(ca, e.getEdgeC()) ){
+						add = false;
+						break;
+					} else if( temp == e ){
 						add = false;
 						break;
 					}

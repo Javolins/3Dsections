@@ -1,9 +1,9 @@
 /*****************************************************************//**
  * @file   Intersections.h
- * @brief  small lib for functions calculating intersections
+ * @brief  Small library for functions calculating intersections.
  *
- * @author Michał Rutkowski, Aleksander Bartoszek
- * @date   May 2022
+ * @author Michał Rutkowski @P4ndaM1x, Aleksander Bartoszek @AleksanderBartoszek
+ * @date   June 2022
  *********************************************************************/
 
 #pragma once
@@ -17,11 +17,11 @@
 #include "../include/Plane.h"
 
 /**
- * @brief Calculates the intersection point of @ref line and @ref plane
+ * @brief Calculates the intersection point of @ref Edge and @ref Plane.
  *
  * @param line Segment of the line used in an algorithm.
  * @param plane Plane used in an algorithm.
- * @return If there is exactly one point of itersection it will be returned, in other case - nullptr.
+ * @return If there is exactly one point of intersection it will be returned, in other case - nullptr.
  */
 inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane){
 
@@ -57,15 +57,13 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 	std::array<double, 3> endVec{ end.getX() - onPlane.getX(), end.getY() - onPlane.getY(), end.getZ() - onPlane.getZ() };
 	std::array<double, 3> planeVec{ plane.getNormalVector() };
 
-	//#include <limits>
-	if( sgn(dot(startVec, planeVec)) == sgn(dot(endVec, planeVec)) )// && !(line.getEnd() == Point{std::numeric_limits<float>::max(),std::numeric_limits<float>::max(),std::numeric_limits<float>::max()}) )
+	if( sgn(dot(startVec, planeVec)) == sgn(dot(endVec, planeVec)) )
 		return nullptr;
 
 	// calculate intersection point
 	std::array<double, 3> lineVec = line.getDirectionalVector();
 
 	if( (plane.getA() * lineVec[0] + plane.getB() * lineVec[1] + plane.getC() * lineVec[2]) == 0 )
-		//throw;  // zakomentowanie linijki poniżej a odkomentowanie tej, pozwala śledzić kiedy dzielimy przez zero
 		return nullptr;
 
 	double t = -(plane.getA() * start.getX() + plane.getB() * start.getY() + plane.getC() * start.getZ() + plane.getD())
@@ -80,16 +78,16 @@ inline std::unique_ptr<Point> intersection(const Edge& line, const Plane& plane)
 }
 
 /**
- * @brief Function calculating all intersections between given edges and plane
+ * @brief Function calculating all intersections between vector of @ref Edge and @ref Plane.
  *
- * @param Edges 3D solid defined as edges
- * @param plane intersecting with 3D solid
- * @return collection of intersection points with edges that created them
+ * @param edges 3D solid defined as edges.
+ * @param plane intersecting with 3D solid.
+ * @return Vector of intersection points with const pointers to edges that created them.
  */
-inline std::vector<std::pair<const Edge*, Point>> intersectionPoints(const std::vector<Edge>& Edges, const Plane& plane){
+inline std::vector<std::pair<const Edge*, Point>> intersectionPoints(const std::vector<Edge>& edges, const Plane& plane){
 
 	std::vector<std::pair<const Edge*, Point>> intersections;
-	for( auto& edge : Edges ){
+	for( auto& edge : edges ){
 		std::unique_ptr<Point> ptr{ intersection(edge, plane) };
 		if( ptr != nullptr )
 			intersections.push_back({ &edge, *ptr });
@@ -98,11 +96,11 @@ inline std::vector<std::pair<const Edge*, Point>> intersectionPoints(const std::
 }
 
 /**
- * @brief Function checking if two given edges intersect.
+ * @brief Function checking if two given edges intersect at exactly one point.
  *
- * @param a first Edge
- * @param b second Edge
- * @return true if edges are intersecting, false otherwise
+ * @param a First Edge.
+ * @param b Second Edge.
+ * @return True if edges are intersecting, false otherwise.
  */
 inline bool areIntersecting(const Edge& a, const Edge& b){
 

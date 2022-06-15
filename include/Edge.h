@@ -1,18 +1,18 @@
 /*****************************************************************//**
  * @file   Edge.h
- * @brief  Base class for describing edges of processed solid
+ * @brief  Basic class for describing edges of processed solid.
  *
- * @author Aleksander Bartoszek, Michał Rutkowski
+ * @author Michał Rutkowski @P4ndaM1x, Aleksander Bartoszek @AleksanderBartoszek
+ * @date   May 2022
  *********************************************************************/
 
 #pragma once
 #include "../include/DataClasses.h"
 #include <utility>
 #include <array>
-#include <iostream>
 
 /**
- * @brief Class storing two points and color of the line connecting them.
+ * @brief Container for two points and a color of the line connecting them.
  */
 class Edge {
 	public:
@@ -44,7 +44,7 @@ class Edge {
 };
 
 /**
- * @brief struct for comparing Edges in algorithms
+ * @brief Functional object for comparing Edges in algorithms.
  */
 struct compareEdges {
 	bool operator()(const Edge& a, const Edge& b) const{
