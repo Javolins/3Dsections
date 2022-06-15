@@ -391,7 +391,7 @@ void MainFrame::repaintGeo(){
 	std::vector<Edge> polyLine;
 	if( geo ){
 		if( moreEdgesCheckBox->IsChecked() ){
-			in = triangulateEdges(dataSegment);
+			in = stout::triangulateEdges(dataSegment);
 			for( auto& e: in ){
 				polyLine.push_back(e.getEdgeA());
 				polyLine.push_back(e.getEdgeB());
@@ -443,27 +443,27 @@ void MainFrame::repaintGeo(){
 
 void MainFrame::repaintSec(){
 
-	std::vector<std::pair<const Edge*, Point>> foundPoints = intersectionPoints(dataSegment, currentPlane);
+	std::vector<std::pair<const Edge*, Point>> foundPoints = intersections::edgesWithPlane(dataSegment, currentPlane);
 	std::vector<Edge> lines;
 
 	if( geo ){
 		if( algorithmChoice->GetSelection() == 3 )
-			lines = connectNeighboursSection(foundPoints, dataSegment).getEdges();
+			lines = stout::connectNeighboursSection(foundPoints, dataSegment).getEdges();
 		if( algorithmChoice->GetSelection() == 2 )
-			lines = rayTrianglesSection(triangulateIntersectionPoints(foundPoints), triangulateEdges(dataSegment), true).getEdges();
+			lines = stout::rayTrianglesSection(stout::triangulateIntersectionPoints(foundPoints), stout::triangulateEdges(dataSegment), true).getEdges();
 		if( algorithmChoice->GetSelection() == 1 )
-			lines = rayTrianglesSection(triangulateIntersectionPoints(foundPoints), triangulateEdges(dataSegment), false).getEdges();
+			lines = stout::rayTrianglesSection(stout::triangulateIntersectionPoints(foundPoints), stout::triangulateEdges(dataSegment), false).getEdges();
 		if( algorithmChoice->GetSelection() == 0 )
-			lines = quickSection(triangulateEdges(dataSegment), currentPlane).getEdges();
+			lines = stout::quickSection(stout::triangulateEdges(dataSegment), currentPlane).getEdges();
 	} else{
 		if( algorithmChoice->GetSelection() == 3 )
-			lines = connectNeighboursSection(foundPoints, dataSegment).getEdges();
+			lines = stout::connectNeighboursSection(foundPoints, dataSegment).getEdges();
 		if( algorithmChoice->GetSelection() == 2 )
-			lines = rayTrianglesSection(triangulateIntersectionPoints(foundPoints), dataTriangle, true).getEdges();
+			lines = stout::rayTrianglesSection(stout::triangulateIntersectionPoints(foundPoints), dataTriangle, true).getEdges();
 		if( algorithmChoice->GetSelection() == 1 )
-			lines = rayTrianglesSection(triangulateIntersectionPoints(foundPoints), dataTriangle, false).getEdges();
+			lines = stout::rayTrianglesSection(stout::triangulateIntersectionPoints(foundPoints), dataTriangle, false).getEdges();
 		if( algorithmChoice->GetSelection() == 0 )
-			lines = quickSection(dataTriangle, currentPlane).getEdges();
+			lines = stout::quickSection(dataTriangle, currentPlane).getEdges();
 	}
 
 	wxClientDC dc(rightPanel);
@@ -661,7 +661,6 @@ void MainFrame::saveAnimationButtonOnClick(wxCommandEvent& event){
 	int i = 0;
 	currentPlane.setD(-startingPosition);
 	while( -currentPlane.getD() < endingPosition ){
-
 		repaintSec();
 		Refresh();
 		wxClientDC dcClient{ rightPanel };

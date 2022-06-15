@@ -98,6 +98,12 @@
     <ClCompile Include="test\intersections-Test.cpp">
       <Filter>Test Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\Triangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\DataClasses-Test.cpp">
+      <Filter>Test Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="test\doctest.h">

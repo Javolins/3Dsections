@@ -8,7 +8,6 @@
 
 #pragma once
 #include "../test/doctest.h"
-#include "../include/Matrix4.h"
 #include "../include/Vector4.h"
 
 TEST_CASE("Vector4") {

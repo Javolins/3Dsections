@@ -41,7 +41,9 @@
     <ClCompile Include="source\MainFrame.cpp" />
     <ClCompile Include="source\Matrix4.cpp" />
     <ClCompile Include="source\Ray.cpp" />
+    <ClCompile Include="source\Triangle.cpp" />
     <ClCompile Include="source\Vector4.cpp" />
+    <ClCompile Include="test\DataClasses-Test.cpp" />
     <ClCompile Include="test\intersections-Test.cpp" />
     <ClCompile Include="test\Matrix4-Test.cpp" />
     <ClCompile Include="test\Plane-Test.cpp" />
