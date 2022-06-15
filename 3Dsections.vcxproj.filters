@@ -42,19 +42,19 @@
     <None Include="resource\geo\heptagonal_pyramid.geo">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="resource\trg\icosahedron.trg">
+    <None Include="resource\trg\irregular_pyramid.trg">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="resource\trg\dodecahedron.trg">
+    <None Include="resource\trg\cube.trg">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="resource\trg\inclined_prism.trg">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="resource\trg\irregular_pyramid.trg">
+    <None Include="resource\trg\icosahedron.trg">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="resource\trg\cube.trg">
+    <None Include="resource\trg\dodecahedron.trg">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

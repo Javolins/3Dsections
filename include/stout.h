@@ -333,11 +333,11 @@ namespace stout{
 		std::vector<Edge> lines;
 		for( const auto& e : out ){
 			if( intersections::edgeWithPlane(e.getEdgeA(), plane) && intersections::edgeWithPlane(e.getEdgeB(), plane) )
-				lines.push_back(Edge{ *intersections::edgeWithPlane(e.getEdgeA(), plane), *intersections::edgeWithPlane(e.getEdgeB(), plane) });
+				lines.push_back(Edge{ *intersections::edgeWithPlane(e.getEdgeA(), plane), *intersections::edgeWithPlane(e.getEdgeB(), plane), e.getEdgeA().getRgb() });
 			if( intersections::edgeWithPlane(e.getEdgeA(), plane) && intersections::edgeWithPlane(e.getEdgeC(), plane) )
-				lines.push_back(Edge{ *intersections::edgeWithPlane(e.getEdgeA(), plane), *intersections::edgeWithPlane(e.getEdgeC(), plane) });
+				lines.push_back(Edge{ *intersections::edgeWithPlane(e.getEdgeA(), plane), *intersections::edgeWithPlane(e.getEdgeC(), plane), e.getEdgeA().getRgb() });
 			if( intersections::edgeWithPlane(e.getEdgeB(), plane) && intersections::edgeWithPlane(e.getEdgeC(), plane) )
-				lines.push_back(Edge{ *intersections::edgeWithPlane(e.getEdgeB(), plane), *intersections::edgeWithPlane(e.getEdgeC(), plane) });
+				lines.push_back(Edge{ *intersections::edgeWithPlane(e.getEdgeB(), plane), *intersections::edgeWithPlane(e.getEdgeC(), plane), e.getEdgeA().getRgb() });
 		}
 		return ClosedPolygonalChains{ lines };
 	}

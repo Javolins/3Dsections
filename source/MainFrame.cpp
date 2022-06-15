@@ -528,7 +528,11 @@ void MainFrame::repaintSec(){
 
 	// draw lines
 	for( const auto& element : lines ){
-
+		buffer.SetPen(wxColour{
+			static_cast<wxColourBase::ChannelType>(element.getRgb().getR()),
+			static_cast<wxColourBase::ChannelType>(element.getRgb().getG()),
+			static_cast<wxColourBase::ChannelType>(element.getRgb().getB())
+		});
 		double x_start = (element.getStart().*get_x)() - min_x;
 		double y_start = (element.getStart().*get_y)() - min_y;
 		double x_end = (element.getEnd().*get_x)() - min_x;
