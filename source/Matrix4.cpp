@@ -1,6 +1,6 @@
 /*****************************************************************//**
  * @file   Matrix4.cpp
- * @brief  Implementation of methods used in the class
+ * @brief  Implementation of methods used in the class.
  *
  * @author PhD Janusz Malinowski, Michał Rutkowski @P4ndaM1x, Aleksander Bartoszek @AleksanderBartoszek
  * @date   May 2022
@@ -21,6 +21,13 @@ void Matrix4::printMatrix() {
 	printf("|%2.3lf,%2.3lf,%2.3lf,%2.3lf|\n", data[1][0], data[1][1], data[1][2], data[1][3]);
 	printf("|%2.3lf,%2.3lf,%2.3lf,%2.3lf|\n", data[2][0], data[2][1], data[2][2], data[2][3]);
 	printf("|%2.3lf,%2.3lf,%2.3lf,%2.3lf|\n\n", data[3][0], data[3][1], data[3][2], data[2][3]);
+}
+
+void Matrix4::setAllElements(double value){
+	data[0][0] = 5.0; data[0][1] = 5.0; data[0][2] = 5.0; data[0][3] = 5.0;
+	data[1][0] = 5.0; data[1][1] = 5.0; data[1][2] = 5.0; data[1][3] = 5.0;
+	data[2][0] = 5.0; data[2][1] = 5.0; data[2][2] = 5.0; data[2][3] = 5.0;
+	data[3][0] = 5.0; data[3][1] = 5.0; data[3][2] = 5.0; data[3][3] = 5.0;
 }
 
 Matrix4 Matrix4::operator* (const Matrix4 gMatrix) {

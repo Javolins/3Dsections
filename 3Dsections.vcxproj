@@ -20,36 +20,33 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
-    <None Include="resource\.geo files\a10a_4.geo" />
-    <None Include="resource\.geo files\szescian.geo" />
-    <None Include="resource\geo\czworoscian.geo" />
-    <None Include="resource\geo\Dodecahedron.geo" />
-    <None Include="resource\geo\Icosahedron.geo" />
-    <None Include="resource\geo\maly_szescian.geo" />
-    <None Include="resource\geo\ostroslup.geo" />
-    <None Include="resource\geo\Ostrosłup7.geo" />
-    <None Include="resource\geo\prostopadloscian.geo" />
-    <None Include="resource\geo\prostopoadłoscian_lite.geo" />
-    <None Include="resource\geo\Tetrahedron.geo" />
-    <None Include="resource\trg\dwudziestoscian_new.trg" />
-    <None Include="resource\trg\dwunastoscian_new.trg" />
-    <None Include="resource\trg\graniastoslup_pochylony_new.trg" />
-    <None Include="resource\trg\ostroslup_nieforemny_new.trg" />
-    <None Include="resource\trg\szescian_new.trg" />
+    <None Include="resource\geo\tetrahedron.geo" />
+    <None Include="resource\geo\dodecahedron.geo" />
+    <None Include="resource\geo\icosahedron.geo" />
+    <None Include="resource\geo\cube.geo" />
+    <None Include="resource\geo\pyramid.geo" />
+    <None Include="resource\geo\heptagonal_pyramid.geo" />
+    <None Include="resource\geo\cuboid.geo" />
+    <None Include="resource\geo\simple_cuboid.geo" />
+    <None Include="resource\trg\icosahedron.trg" />
+    <None Include="resource\trg\dodecahedron.trg" />
+    <None Include="resource\trg\inclined_prism.trg" />
+    <None Include="resource\trg\irregular_pyramid.trg" />
+    <None Include="resource\trg\cube.trg" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\App.cpp" />
-    <ClCompile Include="source\ClosedPolygonalChains.cpp" />
     <ClCompile Include="source\doctest.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\MainFrame.cpp" />
     <ClCompile Include="source\Matrix4.cpp" />
-    <ClCompile Include="source\Plane.cpp" />
+    <ClCompile Include="source\Ray.cpp" />
     <ClCompile Include="source\Vector4.cpp" />
-    <ClCompile Include="test\MainFrame-Test.cpp" />
+    <ClCompile Include="test\intersections-Test.cpp" />
     <ClCompile Include="test\Matrix4-Test.cpp" />
     <ClCompile Include="test\Plane-Test.cpp" />
     <ClCompile Include="test\stout-Test.cpp" />
+    <ClCompile Include="test\Triangle-Test.cpp" />
     <ClCompile Include="test\Vector4-Test.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -57,17 +54,15 @@
     <ClInclude Include="include\ClosedPolygonalChains.h" />
     <ClInclude Include="include\DataClasses.h" />
     <ClInclude Include="include\Edge.h" />
-    <ClInclude Include="include\Intersections.h" />
+    <ClInclude Include="include\intersections.h" />
     <ClInclude Include="include\MainFrame.h" />
     <ClInclude Include="include\Matrix4.h" />
-    <ClInclude Include="include\MeshEdge.h" />
-    <ClInclude Include="include\OriginalEdge.h" />
     <ClInclude Include="include\Plane.h" />
     <ClInclude Include="include\Ray.h" />
     <ClInclude Include="include\stout.h" />
     <ClInclude Include="include\Triangle.h" />
     <ClInclude Include="include\Vector4.h" />
-    <ClInclude Include="include\VectorOperations.h" />
+    <ClInclude Include="include\vectorOperations.h" />
     <ClInclude Include="test\doctest.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

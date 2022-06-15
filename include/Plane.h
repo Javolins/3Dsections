@@ -1,8 +1,8 @@
 /*****************************************************************//**
  * @file   Plane.h
- * @brief  class representing plane used in 3D transformations
+ * @brief  Class representing a plane used in 3D transformations.
  *
- * @author Michał Rutkowski @P4ndaM1x
+ * @author Michał Rutkowski @P4ndaM1x, Aleksander Bartoszek @AleksanderBartoszek
  * @date   May 2022
  *********************************************************************/
 
@@ -10,11 +10,13 @@
 #include <array>
 #include "DataClasses.h"
 
+/**
+ * Type and container for 4 paramters unambiguously defining a plane.
+ */
 class Plane {
 
 	public:
 		Plane(const double a = 0, const double b = 0, const double c = 0, const double d = 0) : parameters{ a, b, c, d } {}
-		//Plane(const std::array<double, 3> v, const double d = 0) : parameters{ v[0], v[1], v[2], d} {}
 		~Plane() = default;
 
 		double getParameter(const short i) const { return parameters.at(i); }
@@ -30,13 +32,14 @@ class Plane {
 		void setD(const double input) { parameters[3] = input; }
 		void set(const double a, const double b, const double c, const double d) { setA(a); setB(b); setC(c); setD(d); }
 
+		//! Returns a normal vector to the plane.
 		std::array<double, 3> getNormalVector() const { return std::array<double, 3> {parameters[0], parameters[1], parameters[2]}; }
+
+		//! Returns true if given point is on the plane.
 		bool containsPoint(const Point& point) const{
-			if( getA()*point.getX() + getB()*point.getY() + getC()*point.getZ() + getD() == 0 )
-				return true;
-			else
-				return false;
+			if( getA()*point.getX() + getB()*point.getY() + getC()*point.getZ() + getD() == 0 ) return true; else return false;
 		}
+
 		friend std::ostream& operator<<(std::ostream& s, const Plane& p);
 
 	private:

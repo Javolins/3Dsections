@@ -1,8 +1,8 @@
 /*****************************************************************//**
  * @file   Triangle.h
- * @brief  Class representing a triangle built from three edges
+ * @brief  Class representing a triangle built from three edges.
  * 
- * @author Michał Rutkowski @P4ndaM1x
+ * @author Michał Rutkowski @P4ndaM1x, Aleksander Bartoszek @AleksanderBartoszek
  * @date   June 2022
  *********************************************************************/
 
@@ -14,6 +14,9 @@
 #include <algorithm>
 #include <string>
 
+/**
+ * Custom type representing triangle.
+ */
 class Triangle : public Plane{
 
 	public:
@@ -27,7 +30,6 @@ class Triangle : public Plane{
 			set(crossProduct[0], 
 				crossProduct[1],
 				crossProduct[2],
-				//0  // zakomentowanie linijki poniżej a odkomentowanie tej, powraca do poprzedniej wersji
 				-(crossProduct[0]*getPointInside().getX() + crossProduct[1]*getPointInside().getY() + crossProduct[2]*getPointInside().getZ())
 			);
 		}
@@ -44,6 +46,15 @@ class Triangle : public Plane{
 
 		Plane getPlane() const{ return Plane{ getA(), getB(), getC(), getD() }; }
 		double getArea() const { return 0.5*abs(norm(getNormalVector())); }
+
+		/**
+		 * @brief Checks if given point is inside this triangle.
+		 * 
+		 * @note Inside also includes edges.
+		 * 
+		 * @param pointP Given point.
+		 * @return True if point is inside, otherwise false.
+		 */
 		bool containsPoint(const Point& pointP) const{
 			std::array<double, 3> vecPA = { pointP.getX() - getPointA().getX(), pointP.getY() - getPointA().getY(), pointP.getZ() - getPointA().getZ() };
 			std::array<double, 3> vecPB = { pointP.getX() - getPointB().getX(), pointP.getY() - getPointB().getY(), pointP.getZ() - getPointB().getZ() };
@@ -55,28 +66,39 @@ class Triangle : public Plane{
 				return true;
 			return false;
 		}
+
+		/**
+		 * @brief Overloaded operator "==" comparing two triangles.
+		 * 
+		 * @param e Given triangle to compare.
+		 * @return True if given triangle has the same points as this triangle, otherwise false.
+		 */
 		bool operator==(const Triangle& e) const {
-			//if( this != nullptr && getA() == e.getA() && getB() == e.getB() && getC() == e.getC() && getD() == e.getD() ) return true; else return false;
 			if( this != nullptr ){
 				std::array<Point, 3> thisPoints{ getPointA(), getPointB(), getPointC() };
 				std::sort(thisPoints.begin(), thisPoints.end(), comparePoints());
-
 				std::array<Point, 3> thatPoints{ e.getPointA(), e.getPointB(), e.getPointC() };
 				std::sort(thatPoints.begin(), thatPoints.end(), comparePoints());
-
-				if( thisPoints[0] == thatPoints[0] && thisPoints[1] == thatPoints[1] && thisPoints[2] == thatPoints[2] ){
+				if( thisPoints[0] == thatPoints[0] && thisPoints[1] == thatPoints[1] && thisPoints[2] == thatPoints[2] )
 					return true;
-				}
-				else{
+				else
 					return false;
-				}
 			}
 		};
+
+		/**
+		 * @brief Function for finding a point inside this triangle.
+		 * 
+		 * @note Inside do not include edges.
+		 * 
+		 * @return Point object which is definitely inside this triangle.
+		 */
 		Point getPointInside() const{
 			Point centerAB{ (pointA.getX()+pointB.getX())/2, (pointA.getY()+pointB.getY())/2, (pointA.getZ()+pointB.getZ())/2 };
 			return Point{ (centerAB.getX()+pointC.getX())/2, (centerAB.getY()+pointC.getY())/2, (centerAB.getZ()+pointC.getZ())/2 };
 		}
 		friend std::ostream& operator<<(std::ostream& s, const Triangle& t);
+
 	private:
 		Edge edgeA, edgeB, edgeC;
 		Point pointA, pointB, pointC;
@@ -87,7 +109,9 @@ inline std::ostream& operator<<(std::ostream& s, const Triangle& t){
 }
 
 /**
- * @brief class for hashing triangles to be used in std::unordered_set.
+ * @brief Function object for hashing triangles to be used in std::unordered_set.
+ * 
+ * @note Use with caution! It may behave wildly.
  */
 class hashTriangles{
 	public:
@@ -109,4 +133,3 @@ class hashTriangles{
 			return out;
 		}
 };
-

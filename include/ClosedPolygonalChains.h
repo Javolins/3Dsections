@@ -7,8 +7,8 @@
  *********************************************************************/
 
 #pragma once
-#include "../include/MeshEdge.h"
 #include <vector>
+#include "../include/Edge.h"
 
 /**
  * Container for vector of @ref Edge to be drawn on @ref rightPanel.

@@ -5,7 +5,7 @@
  * C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
  * http://www.wxformbuilder.org/
  * 
- * @author Michał Rutkowski @P4ndaM1x, Aleksander Bartoszek @AleksanderBartoszek
+ * @author Michał Rutkowski @P4ndaM1x, Aleksander Bartoszek @AleksanderBartoszek, Mateusz Olejnik @MATT6007
  * @date   May 2022
  *********************************************************************/
 
@@ -189,7 +189,6 @@ class MainFrame : public wxFrame {
 		 * @brief Draws a .geo or .trg file representing solid on the @ref leftPanel.
 		 * 
 		 * @see leftPanel
-		 *
 		 */
 		virtual void repaintGeo();
 

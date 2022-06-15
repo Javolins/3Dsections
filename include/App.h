@@ -15,6 +15,15 @@
  */
 class App : public wxApp {
 	public:
+		/**
+		 * @brief Defines behavior of the app, right after launching
+		 *
+		 * @return Always returns true
+		 */
 		virtual bool OnInit();
+		/**
+		 * @brief Opens console for logging and runs all tests
+		 *
+		 */
 		void initializeTests();
 };

@@ -1,8 +1,8 @@
 /*****************************************************************//**
  * @file   VectorOperations.h
- * @brief  small library of mathematical functions operating on vectors
+ * @brief  Small library of simple mathematical functions.
  *
- * @author Michał Rutkowski @P4ndaM1x
+ * @author Michał Rutkowski @P4ndaM1x, Aleksander Bartoszek @AleksanderBartoszek
  * @date   June 2022
  *********************************************************************/
 
@@ -14,7 +14,7 @@
   * @brief Simple signum function.
   *
   * @param val Checked value.
-  * @return 1 if @ref val is positive, -1 if @ref val is negative, 0 if @ref val is a zero
+  * @return 1 if @ref val is positive, -1 if @ref val is negative, 0 if @ref val is a zero.
   */
 inline int sgn(double val){
 	return (val>0) - (val<0);
@@ -23,9 +23,9 @@ inline int sgn(double val){
 /**
  * @brief Calculates the cross product of 2 given vectors.
  * 
- * @param a 3-dimensional vector
- * @param b 3-dimensional vector
- * @return Cross product of provided vectors
+ * @param a First 3-dimensional vector.
+ * @param b Second 3-dimensional vector.
+ * @return Cross product of given vectors.
  */
 inline std::array<double, 3> cross(std::array<double, 3> a, std::array<double, 3> b){
 	std::array<double, 3> result;
@@ -39,7 +39,7 @@ inline std::array<double, 3> cross(std::array<double, 3> a, std::array<double, 3
  * @brief Calculates the norm of a vector.
  *
  * @param vec 3-dimensional vector.
- * @return Norm of the provided vector.
+ * @return Norm of the given vector.
  */
 inline double norm(std::array<double, 3> vec){
 	return sqrt(vec[0]*vec[0] + vec[1]*vec[1] + vec[2]*vec[2]);
@@ -50,7 +50,7 @@ inline double norm(std::array<double, 3> vec){
  *
  * @param a First 3-dimensional vector.
  * @param b Second 3-dimensional vector.
- * @return Dot product of provided vectors.
+ * @return Dot product of given vectors.
  */
 inline double dot(std::array<double, 3> a, std::array<double, 3> b){
 	return a[0]*b[0] + a[1]*b[1] + a[2]*b[2];

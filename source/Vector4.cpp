@@ -1,8 +1,8 @@
 /*****************************************************************//**
  * @file   Vector4.cpp
- * @brief  Implementation of methods used in the class
+ * @brief  Implementation of methods used in the class.
  *
- * @author Aleksander Bartoszek
+ * @author PhD Janusz Malinowski, Michał Rutkowski @P4ndaM1x, Aleksander Bartoszek @AleksanderBartoszek
  * @date   May 2022
  *********************************************************************/
 
@@ -10,19 +10,10 @@
 #include "../include/Matrix4.h"
 #include <stdio.h>
 
-/**
- * @brief Method printing formatted data from Vector4
- */
 void Vector4::printVector() {
 	printf("(%2.3lf,%2.3lf,%2.3lf,%2.3lf)\n", data[0], data[1], data[2], data[3]);
 }
 
-/**
- * @brief Overloaded operator responsible for vector subtraction
- * 
- * \param gVector subtrahend
- * \return result of subtraction [Vector4]
- */
 Vector4 Vector4::operator- (const Vector4& gVector) {
 	unsigned int i;
 	Vector4 Result;
@@ -30,13 +21,6 @@ Vector4 Vector4::operator- (const Vector4& gVector) {
 	return Result;
 }
 
-/**
- * @brief  Overloaded operator responsible for vector multiplication
- * 
- * \param gVector vector to be multiplied
- * \param val multiplier
- * \return result of multiplication [Vector4]
- */
 Vector4 operator* (const Vector4& gVector, double val) {
 	unsigned int i;
 	Vector4 Result;

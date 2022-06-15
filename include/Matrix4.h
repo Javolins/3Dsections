@@ -34,6 +34,10 @@ class Matrix4 {
 		 * @brief Simple setter function for Matrix4.
 		 */
 		void setElement(int x, int y, double value) { data[x][y] = value; };
+		/**
+		 * @brief Sets all elements of this matrix to given value.
+		 */
+		void setAllElements(double value);
 
 		/**
 		 * @brief Overloaded "*" operator as a member function.

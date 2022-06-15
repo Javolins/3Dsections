@@ -1,17 +1,28 @@
 /*****************************************************************//**
  * @file   Vector4.h
- * @brief  class representing vector used in 3D transformations
+ * @brief  Class representing vector used in 3D transformations.
  *
- * @author Aleksander Bartoszek
+ * @author PhD Janusz Malinowski, Michał Rutkowski @P4ndaM1x, Aleksander Bartoszek @AleksanderBartoszek
+ * @date   May 2022
  *********************************************************************/
 
 #pragma once
 
+/**
+ * Type representing 4-dimensional vector.
+ */
 class Vector4 {
 	
 	public:
+		/**
+		 * @brief Constructor setting up default values.
+		 * 
+		 * All values are set to 0 except for element[3] which is set to 1.
+		 */
 		Vector4() { data[0] = 0.0; data[1] = 0.0; data[2] = 0.0; data[3] = 1.0; };
+		//! Method printing formatted data from Vector4.
 		void printVector();
+
 		double getElement(int x) const { return data[x]; };
 		double getX() const { return data[0]; };
 		double getY() const { return data[1]; };
@@ -23,28 +34,28 @@ class Vector4 {
 		void setZ(double input) { data[2] = input; };
 
 		/**
-		 * @brief Overloaded "-" operator
+		 * @brief Overloaded "-" operator.
 		 *
-		 * @note Operator allow substraction Vector4 coordinates
-		 * from other Vector4 coordinates
+		 * @note Operator allows substraction of Vector4 coordinates
+		 * from other Vector4 coordinates.
 		 *
-		 * @param const reference to Vector4 object
-		 * @return Vector4 object
+		 * @param Const reference to the Vector4 object.
+		 * @return Vector4 object.
 		 */
 		Vector4 operator-(const Vector4&);
 		
 		/**
-		 * @brief The friend delaration beetwen class Vector4
-		 * and overloaded "*" operator
+		 * @brief The friend declaration between Vector4 class
+		 * and overloaded "*" operator.
 		 *
-		 * @param const reference to Vector4 object,
-		 * @param vector multiplier
+		 * @param Const reference to the Vector4 object.
+		 * @param Vector multiplier.
 		 *
-		 * @return Vector4 object
+		 * @return Vector4 object.
 		 */
 		friend Vector4 operator*(const Vector4&, double);
 	
 	private:
-		//! One dimensional Array of double which contains a vector coordinates X,Y,Z
+		//! One dimensional array of doubles containing a vector of coordinates: X,Y,Z.
 		double data[4];
 };
