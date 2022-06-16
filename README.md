@@ -2,6 +2,8 @@
 
 --------------
 
+![link](https://drive.google.com/file/d/1dKtH5dOIqWatakFEqmzbwo2ItoWisopJ/view?usp=sharing)
+
 Project for university course on computer graphics.
 
 Its main purpose is to draw animation of solid sections.
