@@ -2,7 +2,7 @@
 
 --------------
 
-![link](https://drive.google.com/file/d/1dKtH5dOIqWatakFEqmzbwo2ItoWisopJ/view?usp=sharing)
+![link](https://3dsections.p4m1.top/firstLogo-64px.png)
 
 Project for university course on computer graphics.
 
