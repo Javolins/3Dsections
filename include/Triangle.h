@@ -14,9 +14,7 @@
 #include <algorithm>
 #include <string>
 
-/**
- * Custom type representing triangle.
- */
+//! Custom type representing triangle.
 class Triangle : public Plane{
 
 	public:

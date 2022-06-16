@@ -1,6 +1,6 @@
 /*****************************************************************//**
  * @file   App.cpp
- * @brief  Implementation of methods used in the class.
+ * @brief  Implementation of methods used in the App class.
  * 
  * @author Michał Rutkowski @P4ndaM1x, Aleksander Bartoszek @AleksanderBartoszek
  * @date   May 2022

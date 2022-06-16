@@ -2,7 +2,7 @@
  * @file   MainFrame.h
  * @brief  Hedear file of the class representing main 3Dsections app window.
  * 
- * C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+ * Some of C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
  * http://www.wxformbuilder.org/
  * 
  * @author Michał Rutkowski @P4ndaM1x, Aleksander Bartoszek @AleksanderBartoszek, Mateusz Olejnik @MATT6007
@@ -294,15 +294,14 @@ class MainFrame : public wxFrame {
 		 * @see statusBar
 		 */
 		virtual void statusBarUpdate(wxUpdateUIEvent& event);
-	
-	private:
 
 		/**
 		 * @brief Calculates @ref animationLength, @ref startingPosition, @ref endingPosition.
 		 * Also updates @ref currentPlane position and @ref progressGauge value.
 		 * 
 		 */
-		void MainFrame::calculateAnimationlength();
+		void calculateAnimationlength();
+
 		//! Stores distance between the most distant points in @ref currentPlane normal vector direction.
 		double animationDistance = 0;
 		//! Stores the starting position of cutting plane.
@@ -388,6 +387,8 @@ class MainFrame : public wxFrame {
 		Plane currentPlane{ 0,0,1,0 };
 		//! Stores solid's center of mass.
 		Point geometricCenter;
+
+	private:
 		//! Stores extremes of the solid.
 		Point geoMin, geoMax, geoDimensions;
 };

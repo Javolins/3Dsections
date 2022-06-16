@@ -1,6 +1,6 @@
 /*****************************************************************//**
  * @file   Triangle.cpp
- * @brief  Implementation of methods used in the class.
+ * @brief  Implementation of methods used in the Triangle class.
  *
  * @author Michał Rutkowski @P4ndaM1x, Aleksander Bartoszek @AleksanderBartoszek
  * @date   June 2022

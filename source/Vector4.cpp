@@ -1,6 +1,6 @@
 /*****************************************************************//**
  * @file   Vector4.cpp
- * @brief  Implementation of methods used in the class.
+ * @brief  Implementation of methods used in the Vector4 class.
  *
  * @author PhD Janusz Malinowski, Michał Rutkowski @P4ndaM1x, Aleksander Bartoszek @AleksanderBartoszek
  * @date   May 2022

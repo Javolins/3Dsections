@@ -10,9 +10,7 @@
 #include <vector>
 #include "../include/Edge.h"
 
-/**
- * Container for vector of @ref Edge to be drawn on @ref rightPanel.
- */
+//! Container for vector of @ref Edge to be drawn on @ref rightPanel.
 class ClosedPolygonalChains {
 
 	public:

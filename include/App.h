@@ -10,9 +10,7 @@
 #include <wx/wxprec.h>
 #include "../include/MainFrame.h"
 
-/**
- * Simple class with actions that are happening right after opening an app.
- */
+//! Simple class with actions that are happening right after opening an app.
 class App : public wxApp {
 	public:
 		/**

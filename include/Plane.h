@@ -10,9 +10,7 @@
 #include <array>
 #include "DataClasses.h"
 
-/**
- * Type and container for 4 paramters unambiguously defining a plane.
- */
+//! Type and container for 4 paramters unambiguously defining a plane.
 class Plane {
 
 	public:

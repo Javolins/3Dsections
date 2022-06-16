@@ -1,5 +1,5 @@
 /*****************************************************************//**
- * @file   Vector4.h
+ * @file   Matrix4.h
  * @brief  Class representing matrix used in 3D transformations.
  *
  * @author PhD Janusz Malinowski, Michał Rutkowski @P4ndaM1x, Aleksander Bartoszek @AleksanderBartoszek
@@ -9,9 +9,7 @@
 #pragma once
 #include "../include/Vector4.h"
 
-/**
- * Type representing 4-dimensional matrix.
- */
+//! Type representing 4-dimensional matrix.
 class Matrix4 {
 	
 	public:

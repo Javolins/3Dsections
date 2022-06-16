@@ -9,9 +9,7 @@
 #pragma once
 #include "Edge.h"
 
-/**
- * Specific edge representing a half-line.
- */
+//! Specific edge representing a half-line.
 class Ray : public Edge{
 
 	public:

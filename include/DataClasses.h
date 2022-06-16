@@ -60,10 +60,7 @@ class Point {
 		float _x, _y, _z;
 };
 
-/**
- * @brief Functional object for comparing Points in algorithms.
- *
- */
+//! Functional object for comparing Points in algorithms.
 struct comparePoints {
 	bool operator()(const Point& a, const Point& b) const {
 		if (a.getX() < b.getX()) return true;

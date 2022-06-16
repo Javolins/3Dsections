@@ -1,6 +1,6 @@
 /*****************************************************************//**
  * @file   Ray.cpp
- * @brief  Implementation of methods used in the class.
+ * @brief  Implementation of methods used in the Ray class.
  *
  * @author Michał Rutkowski @P4ndaM1x, Aleksander Bartoszek @AleksanderBartoszek
  * @date   June 2022

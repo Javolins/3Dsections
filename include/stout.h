@@ -418,7 +418,8 @@ namespace stout{
 					if( samePlaneEdges(*(intersections[i].first), *(intersections[j].first)) ) secondCondition = true;
 
 					if( firstCondition && secondCondition ){
-						e = &Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
+						Edge temp = Edge(intersections[i].second, intersections[j].second, Color(0, 0, 0));
+						e = &temp;
 					} else continue;
 
 					#pragma omp critical

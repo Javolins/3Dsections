@@ -8,9 +8,7 @@
 
 #pragma once
 
-/**
- * Type representing 4-dimensional vector.
- */
+//! Type representing 4-dimensional vector.
 class Vector4 {
 	
 	public:
