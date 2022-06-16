@@ -17,19 +17,49 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="resource\.geo files\a10a_4.geo">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="resource\.geo files\szescian.geo">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include=".editorconfig" />
+    <None Include="resource\geo\tetrahedron.geo">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\geo\cube.geo">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\geo\pyramid.geo">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\geo\cuboid.geo">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\geo\simple_cuboid.geo">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\geo\dodecahedron.geo">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\geo\icosahedron.geo">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\geo\heptagonal_pyramid.geo">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\trg\irregular_pyramid.trg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\trg\cube.trg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\trg\inclined_prism.trg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\trg\icosahedron.trg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\trg\dodecahedron.trg">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\App.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\ClosedPolygonalChains.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\doctest.cpp">
@@ -44,14 +74,8 @@
     <ClCompile Include="source\Matrix4.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\Plane.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\Vector4.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="test\MainFrame-Test.cpp">
-      <Filter>Test Files</Filter>
     </ClCompile>
     <ClCompile Include="test\Matrix4-Test.cpp">
       <Filter>Test Files</Filter>
@@ -63,6 +87,21 @@
       <Filter>Test Files</Filter>
     </ClCompile>
     <ClCompile Include="test\Vector4-Test.cpp">
+      <Filter>Test Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Ray.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\Triangle-Test.cpp">
+      <Filter>Test Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\intersections-Test.cpp">
+      <Filter>Test Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Triangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\DataClasses-Test.cpp">
       <Filter>Test Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -88,12 +127,6 @@
     <ClInclude Include="include\Matrix4.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\MeshEdge.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\OriginalEdge.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\Plane.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -101,6 +134,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Vector4.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Triangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Ray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\intersections.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\vectorOperations.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,17 +1,14 @@
 /*****************************************************************//**
  * @file   Matrix4.cpp
- * @brief  Implementation of methods used in the class
+ * @brief  Implementation of methods used in the class.
  *
- * @author Aleksander Bartoszek
+ * @author PhD Janusz Malinowski, Michał Rutkowski @P4ndaM1x, Aleksander Bartoszek @AleksanderBartoszek
  * @date   May 2022
  *********************************************************************/
 
 #include "../include/Matrix4.h"
 #include <stdio.h>
 
-/**
- * @brief Constructor setting up default values
- */
 Matrix4::Matrix4() {
 	data[0][0] = 0.0; data[0][1] = 0.0; data[0][2] = 0.0; data[0][3] = 0.0;
 	data[1][0] = 0.0; data[1][1] = 0.0; data[1][2] = 0.0; data[1][3] = 0.0;
@@ -19,9 +16,6 @@ Matrix4::Matrix4() {
 	data[3][0] = 0.0; data[3][1] = 0.0; data[3][2] = 0.0; data[3][3] = 1.0;
 }
 
-/**
- * @brief Method printing formatted data from Matrix4
- */
 void Matrix4::printMatrix() {
 	printf("\n|%2.3lf,%2.3lf,%2.3lf,%2.3lf|\n", data[0][0], data[0][1], data[0][2], data[0][3]);
 	printf("|%2.3lf,%2.3lf,%2.3lf,%2.3lf|\n", data[1][0], data[1][1], data[1][2], data[1][3]);
@@ -29,12 +23,13 @@ void Matrix4::printMatrix() {
 	printf("|%2.3lf,%2.3lf,%2.3lf,%2.3lf|\n\n", data[3][0], data[3][1], data[3][2], data[2][3]);
 }
 
-/**
- * @brief operator responsible for Matrix-Matrix multiplication
- * 
- * \param gMatrix second component to multiply
- * \return result of multiplication [Matrix4]
- */
+void Matrix4::setAllElements(double value){
+	data[0][0] = 5.0; data[0][1] = 5.0; data[0][2] = 5.0; data[0][3] = 5.0;
+	data[1][0] = 5.0; data[1][1] = 5.0; data[1][2] = 5.0; data[1][3] = 5.0;
+	data[2][0] = 5.0; data[2][1] = 5.0; data[2][2] = 5.0; data[2][3] = 5.0;
+	data[3][0] = 5.0; data[3][1] = 5.0; data[3][2] = 5.0; data[3][3] = 5.0;
+}
+
 Matrix4 Matrix4::operator* (const Matrix4 gMatrix) {
 	int i; 
 	int j; 
@@ -49,13 +44,6 @@ Matrix4 Matrix4::operator* (const Matrix4 gMatrix) {
 	return tmp;
 }
 
-/**
- * @brief operator responsible for Vector-Matrix multiplication
- * 
- * \param gMatrix matrix to multiply
- * \param gVector vector to multiply
- * \return result of multiplication [Vector4]
- */
 Vector4 operator* (const Matrix4 gMatrix, const Vector4 gVector) {
 	unsigned int i, j;
 	Vector4 tmp;

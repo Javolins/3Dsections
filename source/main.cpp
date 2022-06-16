@@ -1,8 +1,8 @@
 /*****************************************************************//**
  * @file   main.cpp
- * @brief  File in which 3Dsections app start point is implemented
+ * @brief  File in which 3Dsections app start point is implemented.
  * 
- * @author Michał Rutkowski @P4ndaM1x
+ * @author Michał Rutkowski @P4ndaM1x, Aleksander Bartoszek @AleksanderBartoszek
  * @date   May 2022
  *********************************************************************/
 

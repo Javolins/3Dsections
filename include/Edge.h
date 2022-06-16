@@ -1,19 +1,22 @@
 /*****************************************************************//**
  * @file   Edge.h
- * @brief  Base class for describing edges of processed solid
+ * @brief  Basic class for describing edges of processed solid.
  *
- * @author Aleksander Bartoszek, Michał Rutkowski
+ * @author Michał Rutkowski @P4ndaM1x, Aleksander Bartoszek @AleksanderBartoszek
+ * @date   May 2022
  *********************************************************************/
 
 #pragma once
 #include "../include/DataClasses.h"
 #include <utility>
 #include <array>
-#include <iostream>
 
+/**
+ * @brief Container for two points and a color of the line connecting them.
+ */
 class Edge {
 	public:
-		Edge(Point start, Point end, Color rgb = {0,0,0}) : ends(std::pair<Point, Point>(start, end)), color(rgb){}
+		Edge(Point start = {0,0,0}, Point end = {0,0,0}, Color rgb = {0,0,0}) : ends(std::pair<Point, Point>(start, end)), color(rgb){ }
 		Point getStart() const { return ends.first; }
 		Point getEnd() const { return ends.second; }
 		Color getRgb() const { return color; }
@@ -24,33 +27,32 @@ class Edge {
 				static_cast<double>(getEnd().getZ() - getStart().getZ())
 			};
 		}
-		bool operator==(const Edge& e) { if (this != nullptr && getStart() == e.getStart() && getEnd() == e.getEnd()) return true; else return false; };
+		bool operator==(const Edge& e) const { 
+			if (this != nullptr && ((getStart() == e.getStart() && getEnd() == e.getEnd()) || (getStart() == e.getEnd() && getEnd() == e.getStart()))) 
+				return true; 
+			else 
+				return false; 
+		};
+		void set(Point a, Point b){
+			ends.first = a; 
+			ends.second = b;
+		}
 		friend std::ostream& operator<<(std::ostream& os, const Point& p);
 	private:
 		std::pair<Point, Point>	ends;
 		Color color;
 };
 
+/**
+ * @brief Functional object for comparing Edges in algorithms.
+ */
 struct compareEdges {
 	bool operator()(const Edge& a, const Edge& b) const{
-		if (b.getStart().getX() < a.getStart().getX()) return false;
-		if (a.getStart().getX() < b.getStart().getX()) return true;
 
-		if (b.getStart().getY() < a.getStart().getY()) return false;
-		if (a.getStart().getY() < b.getStart().getY()) return true;
+		if((a.getStart() == b.getStart() || a.getStart() == b.getEnd()) && (a.getEnd() == b.getStart() || a.getEnd() == b.getEnd()))
+			return false;
 
-		if (b.getStart().getZ() < a.getStart().getZ()) return false;
-		if (a.getStart().getZ() < b.getStart().getZ()) return true;
-
-		if (b.getEnd().getX() < a.getEnd().getX()) return false;
-		if (a.getEnd().getX() < b.getEnd().getX()) return true;
-
-		if (b.getEnd().getY() < a.getEnd().getY()) return false;
-		if (a.getEnd().getY() < b.getEnd().getY()) return true;
-
-		if (b.getEnd().getZ() < a.getEnd().getZ()) return false;
-		if (a.getEnd().getZ() < b.getEnd().getZ()) return true;
-		return false;
+		return true;
 	}
 };
 

@@ -1,8 +1,9 @@
 /*****************************************************************//**
  * @file   DataClasses.h
- * @brief  classes decomposing loaded file for processing
+ * @brief  Classes decomposing loaded file for processing.
  *
- * @author Aleksander Bartoszek, Michał Rutkowski
+ * @author Michał Rutkowski @P4ndaM1x, Aleksander Bartoszek @AleksanderBartoszek
+ * @date   May 2022
  *********************************************************************/
 
 #pragma once
@@ -11,7 +12,7 @@
 /**
 * @brief Simple class representing a R,G,B color.
 * 
-* @note RGB components represented by three unsigned short values
+* @note RGB components are represented by three unsigned short values.
 */
 class Color {
 
@@ -32,7 +33,7 @@ class Color {
 /**
  * @brief Simple class representing a math point in three-dimensional space X,Y,Z.
  * 
- * @note Point coordinates are represented by three float values, one for each dimension
+ * @note Point coordinates are represented by three float values, one for each dimension.
  */
 class Point {
 
@@ -59,6 +60,10 @@ class Point {
 		float _x, _y, _z;
 };
 
+/**
+ * @brief Functional object for comparing Points in algorithms.
+ *
+ */
 struct comparePoints {
 	bool operator()(const Point& a, const Point& b) const {
 		if (a.getX() < b.getX()) return true;

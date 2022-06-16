@@ -5,13 +5,13 @@
  * C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
  * http://www.wxformbuilder.org/
  * 
- * @author Michał Rutkowski @P4ndaM1x
+ * @author Michał Rutkowski @P4ndaM1x, Aleksander Bartoszek @AleksanderBartoszek, Mateusz Olejnik @MATT6007
  * @date   May 2022
  *********************************************************************/
 
 #pragma once
 
-// All needed wxWidgets' modules.
+// All required wxWidgets' modules.
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/string.h>
@@ -40,18 +40,17 @@
 #include <wx/msgdlg.h>
 #include <wx/dcbuffer.h>
 #include <wx/timer.h>
+#include <wx/wxprec.h>
+#include <wx/colordlg.h>
+#include <wx/spinctrl.h>
 
-// All needed STL's modules.
+// All required STL's modules.
 #include <fstream>
 #include <vector>
-#include <map>
 #include <limits>
 
-// All of our headers used in the file. 
+// All required headers. 
 #include "../include/stout.h"
-#include "../include/DataClasses.h"
-#include "../include/OriginalEdge.h"
-#include "../include/Vector4.h"
 #include "../include/Matrix4.h"
 
 // Identifiers of all UI items.
@@ -98,7 +97,7 @@ class MainFrame : public wxFrame {
 		MainFrame(wxWindow* parent = nullptr, wxWindowID id = MAIN_FRAME_ID, const wxString& title = wxT("3Dsections"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize(960, 640), long style = wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL);
 
 		/**
-		 * @brief Disconnects all event handlers.
+		 * @brief Disconnects all event handlers and deletes @ref animationTimer.
 		 *
 		 */
 		~MainFrame();
@@ -109,10 +108,9 @@ class MainFrame : public wxFrame {
 		 * @brief After clicking @ref viewDocumentation menu item, 
 		 * launches default browser and opens code documentation site of the project.
 		 * 
-		 * If the browser wasn't successfully launched, a modal dialog with error message would be shown.
-		 * 
 		 * @param event Binded event, in this case: wxEVT_COMMAND_MENU_SELECTED.
 		 * @see viewDocumentation
+		 * @note If the browser wasn't successfully launched, a modal dialog with an error message would be shown.
 		 */
 		virtual void viewDocumentationOnMenuSelection(wxCommandEvent& event);
 
@@ -120,10 +118,9 @@ class MainFrame : public wxFrame {
 		 * @brief After clicking @ref sendFeedback menu item, 
 		 * launches default mail client with a new letter to the project authors.
 		 * 
-		 * If the client wasn't successfully launched, a modal dialog with error message would be shown.
-		 * 
 		 * @param event Binded event, in this case: wxEVT_COMMAND_MENU_SELECTED.
 		 * @see sendFeedback
+		 * @note If the client wasn't successfully launched, a modal dialog with error message would be shown.
 		 */
 		virtual void sendFeedbackOnMenuSelection(wxCommandEvent& event);
 
@@ -131,12 +128,20 @@ class MainFrame : public wxFrame {
 		 * @brief After clicking @ref about3Dsections menu item, 
 		 * launches default browser and opens a site with basic info about the project.
 		 * 
-		 * If the browser wasn't successfully launched, a modal dialog with error message would be shown.
-		 * 
 		 * @param event Binded event, in this case: wxEVT_COMMAND_MENU_SELECTED.
 		 * @see about3Dsections
+		 * @note If the browser wasn't successfully launched, a modal dialog with error message would be shown.
 		 */
 		virtual void about3DsectionsOnMenuSelection(wxCommandEvent& event);
+
+		/**
+		 * @brief Sets @ref currentPlane position and repaints the section.
+		 * 
+		 * @param event Binded events, in this case: wxEVT_SCROLL_TOP, wxEVT_SCROLL_BOTTOM, wxEVT_SCROLL_LINEUP, 
+		 * wxEVT_SCROLL_LINEDOWN, wxEVT_SCROLL_PAGEUP, wxEVT_SCROLL_PAGEDOWN, wxEVT_SCROLL_THUMBTRACK,
+		 * wxEVT_SCROLL_THUMBRELEASE, wxEVT_SCROLL_CHANGED.
+		 */
+		virtual void controlSliderOnScroll(wxScrollEvent& event);
 
 		/**
 		 * @brief After clicking @ref backwardButton, changes @ref currentPlane position 
@@ -161,16 +166,17 @@ class MainFrame : public wxFrame {
 		 *
 		 * Actions include:
 		 *	- changing @ref playToggle label,
-		 *	- changing @ref progressGauge visibility.
+		 *  - changing @ref animationTimer state and interval,
+		 *  - repaints the section.
 		 *
 		 * @param event Connected event, in this case: wxEVT_COMMAND_TOGGLEBUTTON_CLICKED.
 		 * @see playToggle
 		 * @note Function will execute every time button is clicked, no matter of button being a toggle type.
 		 */
-		virtual void playToggleOnToggle(wxCommandEvent& event);
+		virtual void playOnToggle(wxCommandEvent& event);
 
 		/**
-		 * @brief Show a exit dialog window with a question whether user is sure to quit.
+		 * @brief After clicking @ref quitMenu shows an exit dialog window to confirm.
 		 * 
 		 * Actions include:
 		 *	- accept exit, then main window and dialog window is closed
@@ -180,18 +186,16 @@ class MainFrame : public wxFrame {
 		virtual void onExit();
 
 		/**
-		 * @brief Draw a .geo file contents
+		 * @brief Draws a .geo or .trg file representing solid on the @ref leftPanel.
 		 * 
-		 * @note Function display .geo file content on the left main window panel.
-		 * It is executed every time .geo file to load is chosen, no matter of graphic is
-		 * already loaded.
-		 *
+		 * @see leftPanel
 		 */
 		virtual void repaintGeo();
 
 		/**
-		 * @brief Draws points where edges are intersecting with a plane, on the @ref rightPanel.
+		 * @brief Draws points and polyline where edges are intersecting with a plane, on the @ref rightPanel.
 		 * 
+		 * @see rightPanel
 		 */
 		virtual void repaintSec();
 
@@ -214,25 +218,58 @@ class MainFrame : public wxFrame {
 		virtual void forewardButtonOnClick(wxCommandEvent& event);
 
 		/**
-		 * @brief After clicking @ref fileLoadButton open a default folder browser dialog 
-		 * to select .geo file which is expected to load.
+		 * @brief After clicking @ref fileLoadButton opens a default folder browser dialog 
+		 * to select .geo or .trg file which is to load.
 		 * 
 		 * @param event Connected event, in this case: wxEVT_COMMAND_BUTTON_CLICKED.
 		 * @see fileLoadButton
-		 * @note Function will execute every time button is clicked, no matter .geo file loaded before.
-		 * .
 		 */
 		virtual void fileLoadButtonOnClick(wxCommandEvent& event);
 
-		virtual void saveAnimationButtonOnClick(wxCommandEvent& event) { event.Skip(); }
+		/**
+		 * @brief After clicking @ref saveAnimationButton saves animation frames as .jpg images to the selected destination.
+		 * 
+		 * @param event Connected event, in this case: wxEVT_COMMAND_BUTTON_CLICKED.
+		 * @see saveAnimationButton
+		 */
+		virtual void saveAnimationButtonOnClick(wxCommandEvent& event);
 
 		/**
-		 * @brief Changes orientation of @ref currentPlane.
+		 * @brief Changes current working algorithm and repaints the section on the @ref rightPanel.
+		 * 
+		 * @param event Connected event, in this case: wxEVT_COMMAND_CHOICE_SELECTED.
+		 * @see rightPanel
+		 * @see algorithmChoice
+		 */
+		virtual void algorithmOnChoice(wxCommandEvent& event);
+		
+		/**
+		 * @brief After checking @ref moreEdgesCheckBox repaints the @ref leftPanel with additional edges provided .geo file is loaded.
+		 * 
+		 * Additional edges are calculated with @ref triangulateEdges.
+		 * 
+		 * @param event Connected event, in this case: wxEVT_COMMAND_CHECKBOX_CLICKED.
+		 * @see moreEdgesCheckBox
+		 */
+		virtual void moreEdgesCheckBoxOnCheck(wxCommandEvent& event);
+
+		/**
+		 * @brief Sets interval of @ref animationTimer and ensures correct behaviour of @ref controlSlider.
+		 * 
+		 * @param event Connected event, in this case: wxEVT_COMMAND_SPINCTRL_UPDATED.
+		 * @see animationTimer
+		 * @see controlSlider
+		 */
+		virtual void frameNumberOnSpin(wxSpinEvent& event);
+
+		/**
+		 * @brief Changes orientation of @ref currentPlane and calculates @ref animationDistance.
 		 * 
 		 * @param event Connected event, in this case: wxEVT_COMMAND_CHOICE_SELECTED.
 		 * @see currentPlane
+		 * @see animationDistance
 		 */
-		virtual void planeChoiceOnChoice(wxCommandEvent& event);
+		virtual void planeOnChoice(wxCommandEvent& event);
 
 		/**
 		 * @brief Changes animation speed to be appropriate with the value of @ref speedSlider.
@@ -243,15 +280,14 @@ class MainFrame : public wxFrame {
 		virtual void speedSliderOnScroll(wxScrollEvent& event);
 
 		/**
-		 * @brief Handler for class event
+		 * @brief Repaints both @ref leftPanel and @ref rightPanel.
 		 * 
 		 * @param event Connected event, in this case: wxEVT_UPDATE_UI.
-		 * @note Refresh wxPanel when updating UIEvent
 		 */
 		virtual void wxPanelRepaint(wxPaintEvent& event);
 
 		/**
-		 * @brief Displays info about @ref currentPlane position as well as
+		 * @brief Displays informations about @ref currentPlane position as well as
 		 * @ref startingPosition and @ref endingPosition values.
 		 * 
 		 * @param event Connected event, in this case: wxEVT_UPDATE_UI.
@@ -267,64 +303,92 @@ class MainFrame : public wxFrame {
 		 * 
 		 */
 		void MainFrame::calculateAnimationlength();
-		//! Stores distance between distance between the most distant points in @ref currentPlane normal vector direction.
-		double animationLength = 0;
-		//! Stores the starting position of cutting plane
+		//! Stores distance between the most distant points in @ref currentPlane normal vector direction.
+		double animationDistance = 0;
+		//! Stores the starting position of cutting plane.
 		double startingPosition = 0;
-		//! Stores the ending position of cutting plane
+		//! Stores the ending position of cutting plane.
 		double endingPosition = 0;
 
 		/**
 		 * @brief Periodically paints a next animation frame on @ref rightPlane, every time @ref animationTimer notifies.
 		 * 
 		 * @param event Connected event, in this case: wxEVT_TIMER.
+		 * @see rightPlane
+		 * @see animationTimer
 		 */
 		void onTimerNotify(wxTimerEvent& event);
-		//! Counts down to the repaint of a next animation frame
+		//! Counts down to the repaint of a next animation frame.
 		wxTimer* animationTimer;
 
 		//! A bar on top of the window, contains: @ref quitMenu, @ref helpMenu.
 		wxMenuBar* topMenuBar;
+		//! Expands to numerous possibilities of quitting. One to be exact.
 		wxMenu* quitMenu;
 		//! Expands to the list of menu items: @ref viewDocumentation, @ref sendFeedback, @ref about3Dsections.
 		wxMenu* helpMenu;
-		//! Displays loaded solid
+		//! Displays loaded solid.
 		wxPanel* leftPanel;
-		//! Displays sections of the solid
+		//! Displays sections of the solid.
 		wxPanel* rightPanel;
-		//! Optically separates right toolbar
+		//! Optically separates right toolbar.
 		wxStaticLine* horizontalStaticLine;
+		//! Dragging it sets @ref currentPlane position.
+		wxSlider* controlSlider;
 		//! Indicates state of the played animation.
 		wxGauge* progressGauge;
-		//! Advances the animation to the start
+		//! Rewinds the animation to the start.
 		wxButton* backwardButton;
-		//! Rewinds the animation by one frame
+		//! Rewinds the animation by one frame.
 		wxButton* prevFrameButton;
 		//! Controls if animation is being played.
 		wxToggleButton* playToggle;
-		//! Advances the animation by one frame
+		//! Advances the animation by one frame.
 		wxButton* nextFrameButton;
-		//! Advances the animation to the end
+		//! Advances the animation to the end.
 		wxButton* forewardButton;
+		//! Optically separates @ref leftPlane and @ref rightPlane from bottom toolbar.
 		wxStaticLine* verticalStaticLine;
+		//! Label of @ref fileLoadButton.
 		wxStaticText* fileLoadLabel;
 		//! Opens a file selection dialog.
 		wxButton* fileLoadButton;
+		//! Label of @ref saveAnimationButton.
 		wxStaticText* saveAnimationLabel;
+		//! Opens a file save dialog.
 		wxButton* saveAnimationButton;
+		//! Label of @ref algorithmChoice.
+		wxStaticText* algorithmChoiceLabel;
+		//! Expands to the list of possible algorithms to calculate the section.
+		wxChoice* algorithmChoice;
+		//! Enables additional edges on the solid representation on the @ref leftPanel.
+		wxCheckBox* moreEdgesCheckBox;
+		//! Label of @ref frameNumberSpin.
+		wxStaticText* frameNumberSpinLabel;
+		//! Indicates the number of animation frames.
+		wxSpinCtrl* frameNumberSpin;
+		//! Label of @ref planeChoice.
 		wxStaticText* planeChoiceLabel;
-		//! Expands to the list of three planes: xOy, xOz, yOz
+		//! Expands to the list of three cutting planes: xOy, xOz, yOz.
 		wxChoice* planeChoice;
+		//! Label of @ref speedSlider.
 		wxStaticText* speedChoiceLabel;
-		//! Controls animation speed
+		//! Controls animation speed.
 		wxSlider* speedSlider;
+		//! Displays info about ref @currentPlane positioning.
 		wxStatusBar* statusBar;
 
-		//! Stores edges of loaded solid
-		std::vector<OriginalEdge> dataSegment;
-		//! Stores a section points coordinates (co to, po co, na co?)
-		std::vector<std::array<wxCoord, 4>> cordData;
-		//! Stores the cutting plane
+		//! Stores edges of loaded solid.
+		std::vector<Edge> dataSegment;
+		//! Stores triangles of loaded solid.
+		std::vector<Triangle> dataTriangle;
+		//! Indicates a type of file loaded, true if .geo file was loaded.
+		bool geo;
+		//! Stores the cutting plane.
 		Plane currentPlane{ 0,0,1,0 };
+		//! Stores solid's center of mass.
+		Point geometricCenter;
+		//! Stores extremes of the solid.
+		Point geoMin, geoMax, geoDimensions;
 };
 
