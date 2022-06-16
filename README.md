@@ -1,8 +1,9 @@
+
 # 3Dsections App
 
 --------------
 
-![link](https://3dsections.p4m1.top/firstLogo-64px.png)
+<img src="https://3dsections.p4m1.top/3DsectionsLogo.jpg" width="200px" height="200px"/>
 
 Project for university course on computer graphics.
 
