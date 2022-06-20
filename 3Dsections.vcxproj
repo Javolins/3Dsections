@@ -18,6 +18,67 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <None Include=".editorconfig" />
+    <None Include="resource\geo\tetrahedron.geo" />
+    <None Include="resource\geo\dodecahedron.geo" />
+    <None Include="resource\geo\icosahedron.geo" />
+    <None Include="resource\geo\cube.geo" />
+    <None Include="resource\geo\pyramid.geo" />
+    <None Include="resource\geo\heptagonal_pyramid.geo" />
+    <None Include="resource\geo\cuboid.geo" />
+    <None Include="resource\geo\simple_cuboid.geo" />
+    <None Include="resource\trg\dodecahedron.trg" />
+    <None Include="resource\trg\icosahedron.trg" />
+    <None Include="resource\trg\inclined_prism.trg" />
+    <None Include="resource\trg\irregular_pyramid.trg" />
+    <None Include="resource\trg\cube.trg" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\App.cpp" />
+    <ClCompile Include="source\doctest.cpp" />
+    <ClCompile Include="source\main.cpp" />
+    <ClCompile Include="source\MainFrame.cpp" />
+    <ClCompile Include="source\Matrix4.cpp" />
+    <ClCompile Include="source\Ray.cpp" />
+    <ClCompile Include="source\Triangle.cpp" />
+    <ClCompile Include="source\Vector4.cpp" />
+    <ClCompile Include="test\DataClasses-Test.cpp" />
+    <ClCompile Include="test\intersections-Test.cpp" />
+    <ClCompile Include="test\Matrix4-Test.cpp" />
+    <ClCompile Include="test\Plane-Test.cpp" />
+    <ClCompile Include="test\stout-Test.cpp" />
+    <ClCompile Include="test\Triangle-Test.cpp" />
+    <ClCompile Include="test\Vector4-Test.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\App.h" />
+    <ClInclude Include="include\ClosedPolygonalChains.h" />
+    <ClInclude Include="include\DataClasses.h" />
+    <ClInclude Include="include\Edge.h" />
+    <ClInclude Include="include\intersections.h" />
+    <ClInclude Include="include\MainFrame.h" />
+    <ClInclude Include="include\Matrix4.h" />
+    <ClInclude Include="include\Plane.h" />
+    <ClInclude Include="include\Ray.h" />
+    <ClInclude Include="include\resource.h" />
+    <ClInclude Include="include\stout.h" />
+    <ClInclude Include="include\Triangle.h" />
+    <ClInclude Include="include\Vector4.h" />
+    <ClInclude Include="include\vectorOperations.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
+    <ClInclude Include="resource2.h" />
+    <ClInclude Include="resource3.h" />
+    <ClInclude Include="resource4.h" />
+    <ClInclude Include="test\doctest.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="3Dsections.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resource\3DsectionsLogo.ico" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -72,9 +133,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>D:\Libraries\wxWidgets-3.0.5\include\msvc;D:\Libraries\wxWidgets-3.0.5\include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>D:\Libraries\wxWidgets-3.0.5\lib\vc_x64_lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>D:\Libraries\wxWidgets-3.0.5\include\msvc;D:\Libraries\wxWidgets-3.0.5\include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>D:\Libraries\wxWidgets-3.0.5\lib\vc_x64_lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -83,13 +148,15 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>D:\Libraries\wxWidgets-3.0.5\include\msvc;D:\Libraries\wxWidgets-3.0.5\include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>D:\Libraries\wxWidgets-3.0.5\lib\vc_x64_lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
+      <ConformanceMode>false</ConformanceMode>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -103,7 +170,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
+      <ConformanceMode>false</ConformanceMode>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -119,6 +186,7 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -132,7 +200,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
+      <ConformanceMode>false</ConformanceMode>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -141,31 +210,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="App.cpp" />
-    <ClCompile Include="doctest.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="MainFrame-Test.cpp" />
-    <ClCompile Include="MainFrame.cpp" />
-    <ClCompile Include="Matrix4-Test.cpp" />
-    <ClCompile Include="Matrix4.cpp" />
-    <ClCompile Include="Plane-Test.cpp" />
-    <ClCompile Include="Vector4-Test.cpp" />
-    <ClCompile Include="Vector4.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="App.h" />
-    <ClInclude Include="ClosedPolygonalChains.h" />
-    <ClInclude Include="doctest.h" />
-    <ClInclude Include="Edge.h" />
-    <ClInclude Include="MainFrame.h" />
-    <ClInclude Include="DataClasses.h" />
-    <ClInclude Include="Matrix4.h" />
-    <ClInclude Include="MeshEdge.h" />
-    <ClInclude Include="OriginalEdge.h" />
-    <ClInclude Include="Plane.h" />
-    <ClInclude Include="Vector4.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

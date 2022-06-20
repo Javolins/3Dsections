@@ -13,75 +13,158 @@
       <UniqueIdentifier>{8f93c6b0-1aee-48d4-a172-10c497fc7d7a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+      <UniqueIdentifier>{c63d5a8b-2585-495f-9659-c8bab9bdcd28}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <None Include=".editorconfig" />
+    <None Include="resource\geo\tetrahedron.geo">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\geo\cube.geo">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\geo\pyramid.geo">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\geo\cuboid.geo">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\geo\simple_cuboid.geo">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\geo\dodecahedron.geo">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\geo\icosahedron.geo">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\geo\heptagonal_pyramid.geo">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\trg\irregular_pyramid.trg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\trg\cube.trg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\trg\inclined_prism.trg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\trg\icosahedron.trg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\trg\dodecahedron.trg">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\App.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MainFrame.cpp">
+    <ClCompile Include="source\doctest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="App.cpp">
+    <ClCompile Include="source\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="doctest.cpp">
+    <ClCompile Include="source\MainFrame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Matrix4.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Vector4.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\Matrix4-Test.cpp">
       <Filter>Test Files</Filter>
     </ClCompile>
-    <ClCompile Include="MainFrame-Test.cpp">
+    <ClCompile Include="test\Plane-Test.cpp">
       <Filter>Test Files</Filter>
     </ClCompile>
-    <ClCompile Include="Vector4.cpp">
+    <ClCompile Include="test\stout-Test.cpp">
+      <Filter>Test Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\Vector4-Test.cpp">
+      <Filter>Test Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Ray.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Matrix4.cpp">
+    <ClCompile Include="test\Triangle-Test.cpp">
+      <Filter>Test Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\intersections-Test.cpp">
+      <Filter>Test Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Triangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Vector4-Test.cpp">
-      <Filter>Test Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Matrix4-Test.cpp">
-      <Filter>Test Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Plane-Test.cpp">
+    <ClCompile Include="test\DataClasses-Test.cpp">
       <Filter>Test Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MainFrame.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="App.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="doctest.h">
+    <ClInclude Include="test\doctest.h">
       <Filter>Test Files</Filter>
     </ClInclude>
-    <ClInclude Include="DataClasses.h">
+    <ClInclude Include="include\App.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Vector4.h">
+    <ClInclude Include="include\ClosedPolygonalChains.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Matrix4.h">
+    <ClInclude Include="include\DataClasses.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Edge.h">
+    <ClInclude Include="include\Edge.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="OriginalEdge.h">
+    <ClInclude Include="include\MainFrame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MeshEdge.h">
+    <ClInclude Include="include\Matrix4.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Plane.h">
+    <ClInclude Include="include\Plane.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ClosedPolygonalChains.h">
+    <ClInclude Include="include\stout.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Vector4.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Triangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Ray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\intersections.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\vectorOperations.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
+    <ClInclude Include="resource2.h" />
+    <ClInclude Include="resource3.h" />
+    <ClInclude Include="resource4.h" />
+    <ClInclude Include="include\resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="3Dsections.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resource\3DsectionsLogo.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
